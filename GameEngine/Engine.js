@@ -53,24 +53,6 @@ function addDrawnSprite(Sprite) {
     drawnSprites.push(Sprite);
 }
 
-function update() {
-    if(dragging){
-       dragSprite();
-    }
-}
-    
-function draw() {
-    canvas.width = canvas.width;
-    
-  addText("15px","Verdana","Image count: " + drawnSprites.length);
-    
-    //draw selected outline
-    selectedOutline();
-    ////draw everything in drawnSprites array
-   	drawSprites();
-   
-}
-
 
 ////////////////////myfunctions///////////////////
 
@@ -170,32 +152,6 @@ var collisonArray = new Array();
     }
    }
    return collisonArray;
-}
-
-function mix(array){
-	var num = array[0].ID + array[1].ID;
-	if(num <= sprites.length) {
-  	var alreadyMixed = false;
-  	for(var iter = 0; iter < drawnSprites.length; iter++){
-    	if(drawnSprites[iter].ID == num){
-      	alreadyMixed = true;
-        break;
-      }
-    }
-  	if(!alreadyMixed){
-    	var tempDrawn = new Array();
-      loopNum = drawnSprites.length;
-      for(var iter = 0; iter < loopNum; iter++){
-      	tempDrawn.push(drawnSprites.pop());
-      }
-      for(var iter = 0; iter < loopNum; iter++){
-      	addDrawnSprite(tempDrawn.pop());
-      }
-      addDrawnSprite(sprites[num-1]);
-    	//drawnSprites.push(sprites[2]);
-    }
-  }
-  collided = false;
 }
 
 
