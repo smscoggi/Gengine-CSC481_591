@@ -1,3 +1,10 @@
+//Samantha Scoggins: smscoggi
+//Giovanni Espinosa: gespino
+//George Yang: ggyang
+
+
+
+
 setInterval(game_loop, 30);
 
 canvas.addEventListener("mousedown",mousedown);

@@ -1,3 +1,8 @@
+//Samantha Scoggins: smscoggi
+//Giovanni Espinosa: gespino
+//George Yang: ggyang
+
+
 canvas = document.getElementById("whyupdate");
 context = canvas.getContext('2d');
 
