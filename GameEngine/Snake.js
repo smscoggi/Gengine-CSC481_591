@@ -114,7 +114,7 @@ function Snake(numSegments, posX, posY){
     }
     
     if (this.deadState == 'dead') {
-    	snake = new Snake(5, canvas.width/cellWidth/2-1, canvas.height/cellHeight/2-1);
+    	snake = new Snake(5, Math.floor(canvas.width/cellWidth/2)-1, Math.floor(canvas.height/cellHeight/2)-1);
       direction = 'none'
       score = 0;
       
@@ -215,7 +215,7 @@ var score = 0;
 var highscore = 0;
 var amountFood = 3;
 var amountWalls = 3;
-var snake = new Snake(5, canvas.width/cellWidth/2-1, canvas.height/cellHeight/2-1);
+var snake = new Snake(5, Math.floor(canvas.width/cellWidth/2)-1, Math.floor(canvas.height/cellHeight/2)-1);
 var foodArray = new Array();
 var wallArray = new Array();
 for(var iter = 0; iter < amountFood; iter++) {
