@@ -4,9 +4,6 @@
 
 
 
-
-setInterval(game_loop, 30);
-
 canvas.addEventListener("mousedown",mousedown);
 
 addSprite("https://i.imgur.com/KKigDQ5.jpg", 1);
@@ -102,3 +99,11 @@ function mix(array){
   }
   collided = false;
 }
+
+
+function game_loop() {
+    update();
+    draw();
+}
+
+setInterval(game_loop, 30);

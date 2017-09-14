@@ -159,8 +159,3 @@ var collisonArray = new Array();
    return collisonArray;
 }
 
-
-function game_loop() {
-    update();
-    draw();
-}
