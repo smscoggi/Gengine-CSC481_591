@@ -1,5 +1,5 @@
-var cellWidth = 20;
-var cellHeight = 20;
+var cellWidth = 15;
+var cellHeight = 15;
 var xcellCount = Math.floor(canvas.width/cellWidth);
 var ycellCount = Math.floor(canvas.height/cellHeight);
 var direction = 'none';
@@ -85,10 +85,10 @@ function Snake(numLinks, posX, posY){
 		for(var iter = 0; iter < this.snakeArray.length-1; iter++) {
 			if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, this.posX, this.posY, 0) && direction != 'none') {
 				//make snake shorter
-				this.snakeLinks = this.snakeLinks - this.snakeArray[iter].sP;
+				/*this.snakeLinks = this.snakeLinks - this.snakeArray[iter].sP;
 				if (this.snakeLinks < 3) {
 					this.snakeLinks = 3;
-				}
+				}*/
 				//restart game
 				this.deadState = 'dead';
 			}
@@ -149,18 +149,25 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 				this.yfood = Math.floor(Math.random()*ycellCount);
 			}
 
-			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer > foodSpoilTime) { 
-				snake.deadState = 'dead';
+			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer >= foodSpoilTime) { 
+				snake.snakeLinks = snake.snakeLinks - 1;
+				if (snake.snakeLinks < 2) {
+					snake.deadState = 'dead';
+				}
+				score--;
+				this.spoilTimer = 0;
+				this.xfood = Math.floor(Math.random()*xcellCount);
+				this.yfood = Math.floor(Math.random()*ycellCount);
 			}
 
-			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0)) { 
+			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer < foodSpoilTime) { 
 				snake.snakeLinks++;
 				score++;
 				this.spoilTimer = 0;
 				this.xfood = Math.floor(Math.random()*xcellCount);
 				this.yfood = Math.floor(Math.random()*ycellCount);
 			}
-
+			console.log(snake.snakeLinks);
 
 		}
 
@@ -182,8 +189,10 @@ makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
 //Wall Objects
 var wallArray = new Array();
 wallArray.push(new Wall(0,0,3,1));
-wallArray.push(new Wall(5,4,3,1));
-wallArray.push(new Wall(15,16,1,3));
+wallArray.push(new Wall(6,4,4,1));
+wallArray.push(new Wall(20,25,1,3));
+wallArray.push(new Wall(2,24,5,1));
+wallArray.push(new Wall(24,2,1,4));
 
 
 for(var iter = 0; iter < wallArray.length; iter++){
@@ -238,4 +247,4 @@ function game_loop(){
 	draw();
 	//console.log(snake.snakeLinks);
 }
-setInterval(game_loop, 60);
+setInterval(game_loop, 50);

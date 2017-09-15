@@ -11,6 +11,10 @@ addSprite("http://i.imgur.com/CuQvdVG.png", 4);
 addDrawnSprite(sprites[0])
 addDrawnSprite(sprites[1])
 
+var direction = 'none';
+var selectedImage = -1;
+var draggingImage = false;
+
 function onmousedown(){
 	for (var iter = 0; iter < sprites.length; iter++) {
 		if (checkSprite(sprites[iter], xcoord, ycoord)) {
@@ -40,11 +44,33 @@ function update() {
 	}
 	if(mouseisup == 'yes') {
 		checkMyCollisions();
-		selectedImage = -1;
 	}
 	if(draggingImage == true){
 		dragSprite();
 	}  
+	
+	switch(direction){
+	case 'right':
+		if (selectedImage < drawnSprites.length-1)
+	    	selectedImage = Math.abs(selectedImage + 1);
+		direction = 'none';
+		break;
+	case 'left':
+		if (selectedImage > 0)
+    		selectedImage = Math.abs(selectedImage - 1);
+		direction = 'none';
+		break;
+	case 'up':
+		if (selectedImage > 0)
+    		selectedImage = Math.abs(selectedImage - 1);
+		direction = 'none';
+		break;
+	case 'down':
+		if (selectedImage < drawnSprites.length-1)
+	    	selectedImage = Math.abs(selectedImage + 1);
+		direction = 'none';
+		break;
+	}
 }
 
 function draw() {
@@ -52,7 +78,9 @@ function draw() {
 	context.fillStyle="#ffdead";
 	context.fillRect(0,0,canvas.width,canvas.height);
 
-	addText("15px","Verdana","Image count: " + drawnSprites.length);
+	addText("15px","Verdana","Image count: " + drawnSprites.length, canvas.width/3, 50);
+	
+	//addText("15px","Verdana","image" + selectedImage, canvas.width/3, 100);
 
 	//draw selected outline
 	selectedOutline();

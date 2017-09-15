@@ -6,11 +6,6 @@
 canvas = document.getElementById("whyupdate");
 context = canvas.getContext('2d');
 
-var dragX = 0;
-var dragY = 0;
-var selectedImage = -1;
-var draggingImage = false;
-
 var sprites = new Array();
 var drawnSprites = new Array();
 
@@ -31,16 +26,13 @@ function checkSprite(sprite, x, y) {
 	var maxY = sprite.Y + sprite.image.height;
 	var mx = x;
 	var my = y;
-	//console.log(minX + " " + maxX);
 	if (mx >= minX && mx <= maxX && my >= minY && my <= maxY) {
-
 		return true;
 	}
 	return false;
 }
 
 function addSprite(path, ID){
-
 	tempSprite = new Sprite(20, 0, 100, 100, path, ID);
 	sprites.push(tempSprite);
 }
@@ -61,10 +53,10 @@ function addDrawnSprite(Sprite) {
 
 ////////////////////myfunctions///////////////////
 
-function addText(size,font,text){
+function addText(size,font,text, xLocation, yLocation){
 	context.font = size+" "+font;
 	context.fillStyle="#000000";
-	context.fillText(text, canvas.width/3, 50);
+	context.fillText(text, xLocation, yLocation);
 }
 
 function selectedOutline(){
@@ -172,6 +164,7 @@ function checkdistance(x1, y1, x2, y2, distance) {
 canvas.addEventListener("mousedown",mousedown);
 canvas.addEventListener("mouseup",mouseup);
 canvas.addEventListener("mousemove",mousemove);
+document.addEventListener('keydown', handleKeypress);
 
 var xcoord = 0;
 var ycoord = 0;
@@ -194,9 +187,6 @@ function mousemove(e) {
 	ycoord = e.clientY;
 	mouseismoving = 'yes';
 }
-
-//New Snake Stuff
-document.addEventListener('keydown', handleKeypress);
 
 function handleKeypress(e){
 
