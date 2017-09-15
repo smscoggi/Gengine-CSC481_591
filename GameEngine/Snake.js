@@ -4,13 +4,18 @@ var xcellCount = Math.floor(canvas.width/cellWidth);
 var ycellCount = Math.floor(canvas.height/cellHeight);
 var direction = 'none';
 
+var score = 0;
+var highscore = 0;
 
-function Snake(numSegments, posX, posY){
+//Snake
+var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
+
+function Snake(numLinks, posX, posY){
 	var segPos = 0;
 	var backwardsDirection = 'none';
 	this.posX = posX;
 	this.posY = posY;
-	this.segments = numSegments;
+	this.snakeLinks = numLinks;
 	this.snakeArray = new Array();
 	this.deadState = 'notDead';
 
@@ -73,16 +78,16 @@ function Snake(numSegments, posX, posY){
 		for(var iter = 0; iter < this.snakeArray.length; iter++) {
 			this.snakeArray[iter].sP = segPos++;
 		}
-		while(this.snakeArray.length > this.segments) {
+		while(this.snakeArray.length > this.snakeLinks) {
 			this.snakeArray.shift();
 		}
 
 		for(var iter = 0; iter < this.snakeArray.length-1; iter++) {
 			if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, this.posX, this.posY, 0) && direction != 'none') {
 				//make snake shorter
-				this.segments = this.segments - this.snakeArray[iter].sP;
-				if (this.segments < 3) {
-					this.segments = 3;
+				this.snakeLinks = this.snakeLinks - this.snakeArray[iter].sP;
+				if (this.snakeLinks < 3) {
+					this.snakeLinks = 3;
 				}
 				//restart game
 				this.deadState = 'dead';
@@ -95,9 +100,9 @@ function Snake(numSegments, posX, posY){
 				score = 0;
 
 			for(var iter = 0; iter < amountFood; iter++) {
-				foodArray.shift();
-				foodArray.push(new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), 50, 100))	
+				foodArray.shift();	
 			}
+			makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
 
 			deadState = 'notDead';
 		}
@@ -121,87 +126,90 @@ function Snake(numSegments, posX, posY){
 
 
 
-} //snake
+} //Snake
 
-function Food(x, y, spoilTime, maxTimeLife) {
-	this.xfood = x;
-	this.yfood = y;
-	this.spoilTimer = 0;
-	this.maxTimeLife = maxTimeLife;
 
-	this.update = function() {
-		//console.log(snake.deadState);
-		if (this.spoilTimer < maxTimeLife) {
-			this.spoilTimer++;
+//Food Objects
+var amountFood = 3;
+var foodMaxLifeTime = 100;
+var foodSpoilTime = 50;
+var foodArray = new Array();
+
+function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
+	for(var iter = 0; iter < amountFood; iter++) {
+		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime);
+		food.update = function() {
+			//console.log(snake.deadState);
+			if (this.spoilTimer < foodMaxLifeTime) {
+				this.spoilTimer++;
+			}
+			if (this.spoilTimer == foodMaxLifeTime) {
+				this.spoilTimer = 0;
+				this.xfood = Math.floor(Math.random()*xcellCount);
+				this.yfood = Math.floor(Math.random()*ycellCount);
+			}
+
+			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer > foodSpoilTime) { 
+				snake.deadState = 'dead';
+			}
+
+			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0)) { 
+				snake.snakeLinks++;
+				score++;
+				this.spoilTimer = 0;
+				this.xfood = Math.floor(Math.random()*xcellCount);
+				this.yfood = Math.floor(Math.random()*ycellCount);
+			}
+
+
 		}
-		if (this.spoilTimer == maxTimeLife) {
-			this.spoilTimer = 0;
-			this.xfood = Math.floor(Math.random()*xcellCount);
-			this.yfood = Math.floor(Math.random()*ycellCount);
+
+		food.draw = function() {
+			context.fillStyle='red';
+			if (this.spoilTimer >= foodSpoilTime) {
+				context.fillStyle='purple';
+			}
+			context.fillRect(this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight);
 		}
-
-		if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer > spoilTime) { 
-			snake.deadState = 'dead';
-		}
-
-		if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0)) { 
-			snake.segments++;
-			score++;
-			this.spoilTimer = 0;
-			this.xfood = Math.floor(Math.random()*xcellCount);
-			this.yfood = Math.floor(Math.random()*ycellCount);
-		}
-
-
-	}
-
-	this.draw = function() {
-		context.fillStyle='red';
-		if (this.spoilTimer >= spoilTime) {
-			context.fillStyle='purple';
-		}
-		context.fillRect(this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight);
+		foodArray.push(food);
 	}
 }
 
-function Wall(xWall, yWall, xcellWidth, ycellLength) {
-	this.xWall = xWall;
-	this.yWall = yWall;
-	this.xcellWidth = xcellWidth;
-	this.ycellLength = ycellLength;
+makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
+//Food Objects
 
-	this.update = function() {
-		for (var iter = 0; iter < xcellWidth; iter++) {
-			for (var jter = 0; jter < ycellLength; jter++) {
-				if (checkdistance(this.xWall+iter, this.yWall+jter, snake.posX, snake.posY, 0)) { 	
+
+//Wall Objects
+var wallArray = new Array();
+wallArray.push(new Wall(0,0,3,1));
+wallArray.push(new Wall(5,4,3,1));
+wallArray.push(new Wall(15,16,1,3));
+
+
+for(var iter = 0; iter < wallArray.length; iter++){
+	wallArray[iter].update = function wallUpdate(xWall, yWall, xcellWidth, ycellLength){
+		for (var jter = 0; jter < xcellWidth; jter++) {
+			for (var kter = 0; kter < ycellLength; kter++) {
+				if (checkdistance(xWall+jter, yWall+kter, snake.posX, snake.posY, 0)) { 	
 					snake.deadState = 'dead';
 				}
 			}
 		}
 	}
-
-	this.draw = function() {
-		context.fillStyle='blue';
-		context.fillRect(this.xWall*cellWidth, this.yWall*cellHeight, cellWidth*xcellWidth, cellHeight*ycellLength);
+	
+	wallArray[iter].draw = function wallDraw(xWall, yWall, xcellWidth, ycellLength) {
+			context.fillStyle='blue';
+			context.fillRect(xWall*cellWidth, yWall*cellHeight, cellWidth*xcellWidth, cellHeight*ycellLength);
+		
 	}
+} //Wall Objects
 
-}
 
-var score = 0;
-var highscore = 0;
-var amountFood = 3;
-var amountWalls = 3;
-var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
-var foodArray = new Array();
-var wallArray = new Array();
-for(var iter = 0; iter < amountFood; iter++) {
-	var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), 50, 100);
-	foodArray.push(food);
-}
 
-wallArray.push(new Wall(0,0,3,1));
-wallArray.push(new Wall(5,4,3,1));
-wallArray.push(new Wall(15,16,1,3));
+
+
+
+
 
 function draw() {
 	var score_text = "Score: " + score ;
@@ -224,10 +232,10 @@ function game_loop(){
 		foodArray[iter].draw();
 	}
 	for(var iter = 0; iter < wallArray.length; iter++){
-		wallArray[iter].update();
-		wallArray[iter].draw();
+		wallArray[iter].update(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
+		wallArray[iter].draw(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
 	}
 	draw();
-	//console.log(snake.segments);
+	//console.log(snake.snakeLinks);
 }
 setInterval(game_loop, 60);

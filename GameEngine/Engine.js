@@ -216,3 +216,26 @@ function handleKeypress(e){
 	}
 
 }
+
+function Wall(xWall, yWall, xcellWidth, ycellLength) {
+	this.xWall = xWall;
+	this.yWall = yWall;
+	this.xcellWidth = xcellWidth;
+	this.ycellLength = ycellLength;
+
+	this.update;
+
+	this.draw;
+
+}
+
+function Food(x, y, spoilTime, maxTimeLife) {
+	this.xfood = x;
+	this.yfood = y;
+	this.spoilTimer = 0;
+	this.maxTimeLife = maxTimeLife;
+
+	this.update;
+
+	this.draw;
+}
