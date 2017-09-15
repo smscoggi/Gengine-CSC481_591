@@ -78,8 +78,7 @@ function Snake(numSegments, posX, posY){
 		}
 
 		for(var iter = 0; iter < this.snakeArray.length-1; iter++) {
-			//if (this.snakeArray[iter].x == this.posX && this.snakeArray[iter].y == this.posY && direction != 'none') {
-			if (this.snakeArray[iter].x == this.posX && this.snakeArray[iter].y == this.posY && direction != 'none') {
+			if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, this.posX, this.posY, 0) && direction != 'none') {
 				//make snake shorter
 				this.segments = this.segments - this.snakeArray[iter].sP;
 				if (this.segments < 3) {
@@ -141,11 +140,11 @@ function Food(x, y, spoilTime, maxTimeLife) {
 			this.yfood = Math.floor(Math.random()*ycellCount);
 		}
 
-		if (this.xfood == snake.posX && this.yfood == snake.posY && this.spoilTimer > spoilTime) { 
+		if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer > spoilTime) { 
 			snake.deadState = 'dead';
 		}
 
-		if (this.xfood == snake.posX && this.yfood == snake.posY) { 
+		if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0)) { 
 			snake.segments++;
 			score++;
 			this.spoilTimer = 0;
@@ -174,7 +173,7 @@ function Wall(xWall, yWall, xcellWidth, ycellLength) {
 	this.update = function() {
 		for (var iter = 0; iter < xcellWidth; iter++) {
 			for (var jter = 0; jter < ycellLength; jter++) {
-				if (this.xWall+iter == snake.posX && this.yWall+jter == snake.posY) { 
+				if (checkdistance(this.xWall+iter, this.yWall+jter, snake.posX, snake.posY, 0)) { 	
 					snake.deadState = 'dead';
 				}
 			}
