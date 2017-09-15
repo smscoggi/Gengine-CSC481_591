@@ -148,7 +148,7 @@ function checkAllCollisions() {
 	var collisonArray = new Array();
 	for (var iter = 0; iter < drawnSprites.length; iter++) {
 		for (var jter = 0; jter < drawnSprites.length; jter++) {
-			if(drawnSprites[iter].ID != drawnSprites[jter].ID && checkOverlap(drawnSprites[iter].X, drawnSprites[iter].Y, drawnSprites[jter].X,drawnSprites[jter].Y) == 1) {
+			if(drawnSprites[iter].ID != drawnSprites[jter].ID && checkdistance(drawnSprites[iter].X, drawnSprites[iter].Y, drawnSprites[jter].X,drawnSprites[jter].Y, 20) == 1) {
 				collided = true;
 				collisonArray.push(drawnSprites[iter]);
 				collisonArray.push(drawnSprites[jter]);
@@ -158,8 +158,10 @@ function checkAllCollisions() {
 	return collisonArray;
 }
 
-function checkOverlap(x1, y1, x2, y2) {
-	if(Math.abs(x1-x2) < 20 && Math.abs(y1-y2) < 20) {
+//This checks for collision between two points and the distance between two points.
+//If the distance between two points is less than the desired distance then they are considered to be collided objects.
+function checkdistance(x1, y1, x2, y2, distance) {
+	if(Math.abs(x1-x2) <= distance && Math.abs(y1-y2) <= distance) {
 		return 1;
 	}
 
