@@ -132,7 +132,7 @@ function Snake(numLinks, posX, posY){
 //Food Objects
 var amountFood = 3;
 var foodMaxLifeTime = 100;
-var foodSpoilTime = 50;
+var foodSpoilTime = 65;
 var foodArray = new Array();
 
 function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
@@ -167,7 +167,6 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 				this.xfood = Math.floor(Math.random()*xcellCount);
 				this.yfood = Math.floor(Math.random()*ycellCount);
 			}
-			console.log(snake.snakeLinks);
 
 		}
 
@@ -213,11 +212,28 @@ for(var iter = 0; iter < wallArray.length; iter++){
 	}
 } //Wall Objects
 
+var localhighscore = 0;
 
-
-
-
-
+function update() {
+	if (highscore < score) {
+		highscore = score;
+	}
+	
+	localhighscore = localStorage.getItem("localhighscore");
+	if(localhighscore !== null){
+	    if (score > localhighscore) {
+	        localStorage.setItem("localhighscore", score);      
+	    }
+	}
+	else{
+	    localStorage.setItem("localhighscore", score);
+	}
+	
+	if(mouseisdown == 'yes') {
+		if(checkdistance(canvas.width-(110/2), 20/2, xcoord, ycoord, 50))
+			localStorage.setItem("localhighscore", 0);
+	}
+}
 
 
 function draw() {
@@ -225,12 +241,17 @@ function draw() {
 	context.fillStyle="#FFFFFF";
 	context.fillText(score_text, 5, canvas.height-5);
 
-	if (highscore < score) {
-		highscore = score;
-	}
-	var highscore_text = "Highscore: " + highscore ;
+	var highscore_text = "Session Highscore: " + highscore ;
 	context.fillStyle="#FFFFFF";
 	context.fillText(highscore_text, 5, canvas.height-20);
+	
+	var highscore_text2 = "Alltime Highscore: " + localhighscore;
+	context.fillStyle="#FFFFFF";
+	context.fillText(highscore_text2, 5, canvas.height-45);
+	
+	var reset = "Reset Alltime Highscore";
+	context.fillStyle="#FFFFFF";
+	context.fillText(reset, canvas.width-110, 20);
 }
 
 function game_loop(){
@@ -244,7 +265,8 @@ function game_loop(){
 		wallArray[iter].update(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
 		wallArray[iter].draw(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
 	}
+	update();
 	draw();
 	//console.log(snake.snakeLinks);
 }
-setInterval(game_loop, 50);
+setInterval(game_loop, 80);
