@@ -78,7 +78,7 @@ function draw() {
 	context.fillStyle="#ffdead";
 	context.fillRect(0,0,canvas.width,canvas.height);
 
-	addText("15px","Verdana","Image count: " + drawnSprites.length, canvas.width/3, 50);
+	addText("15px","Verdana","Image count: " + drawnSprites.length, canvas.width/3, 50,"#000000");
 	
 	//addText("15px","Verdana","image" + selectedImage, canvas.width/3, 100);
 
