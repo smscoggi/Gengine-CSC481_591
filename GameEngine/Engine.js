@@ -84,9 +84,9 @@ function findSprite(spritearray,id){
 
 ///////////////////////////////////////
 
-function addText(size,font,text, xLocation, yLocation){
+function addText(size,font,text, xLocation, yLocation,fillstyle){
 	context.font = size+" "+font;
-	context.fillStyle="#000000";
+	context.fillStyle=fillstyle;
 	context.fillText(text, xLocation, yLocation);
 }
 

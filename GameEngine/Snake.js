@@ -185,14 +185,7 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 
 		}
 
-		food.draw = function() {
-			context.fillStyle='red';
-			if (this.spoilTimer >= foodSpoilTime) {
-				context.fillStyle='purple';
-			}
-			context.fillRect(this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight);
-		}
-
+		
 		food.reset=function(){
 			this.spoilTimer = 0;
 			this.xfood = Math.floor(Math.random()*xcellCount);
@@ -239,9 +232,51 @@ for(var iter = 0; iter < wallArray.length; iter++){
 	}
 } //Wall Objects
 
+
+function drawStats(){
+	
+		var textfont ="verdana";
+		var textfillstyle = "#FFFFFF";
+		var textsize = 10;
+	
+		var score_text = "Score: " + score ;
+			//context.fillStyle="#FFFFFF";
+			//context.fillText(score_text, 5, canvas.height-5);
+		addText(textsize,textfont,score_text,5, canvas.height-5,textfillstyle);
+	
+		var highscore_text = "Session Highscore: " + highscore ;
+			//context.fillStyle="#FFFFFF";
+			//context.fillText(highscore_text, 5, canvas.height-20);
+		addText(textsize,textfont,highscore_text,5, canvas.height-20,textfillstyle);
+	
+	
+		var highscore_text2 = "Alltime Highscore: " + localhighscore;
+			//context.fillStyle="#FFFFFF";
+			//context.fillText(highscore_text2, 5, canvas.height-45);
+		addText(textsize,textfont,highscore_text2,5, canvas.height-45,textfillstyle);
+		
+		var reset = "Reset Alltime Highscore";
+			//context.fillStyle="#FFFFFF";
+			//context.fillText(reset, canvas.width-110, 20);
+		addText(textsize,textfont,reset, canvas.height-110,20,textfillstyle);
+	
+	}
+
+
+/////////////////////////////////////////////////////////UPDATE + Draw
 var localhighscore = 0;
 
 function update() {
+	
+	////moved from game_loop
+	snake.update();
+	for(var iter = 0; iter < foodArray.length; iter++){
+		foodArray[iter].update();
+		//foodArray[iter].draw();
+	}
+
+
+
 	if (highscore < score) {
 		highscore = score;
 	}
@@ -263,45 +298,32 @@ function update() {
 }
 
 
+
+
+
 function draw() {
 	testDrawnSprites();
 	testSprites();
+
+	snake.draw();
 	drawSprites();
 
-	var score_text = "Score: " + score ;
-	context.fillStyle="#FFFFFF";
-	context.fillText(score_text, 5, canvas.height-5);
+	drawStats();
 
-	var highscore_text = "Session Highscore: " + highscore ;
-	context.fillStyle="#FFFFFF";
-	context.fillText(highscore_text, 5, canvas.height-20);
 	
-	var highscore_text2 = "Alltime Highscore: " + localhighscore;
-	context.fillStyle="#FFFFFF";
-	context.fillText(highscore_text2, 5, canvas.height-45);
-	
-	var reset = "Reset Alltime Highscore";
-	context.fillStyle="#FFFFFF";
-	context.fillText(reset, canvas.width-110, 20);
 }
 
 
-
-
-
 function game_loop(){
-	snake.update();
-	snake.draw();
-	for(var iter = 0; iter < foodArray.length; iter++){
-		foodArray[iter].update();
-		//foodArray[iter].draw();
-	}
+	
+	update();
+	draw();
+	
 	for(var iter = 0; iter < wallArray.length; iter++){
 		wallArray[iter].update(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
 		wallArray[iter].draw(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
 	}
-	update();
-	draw();
+	
 	//console.log(snake.snakeLinks);
 }
 setInterval(game_loop, 80);
