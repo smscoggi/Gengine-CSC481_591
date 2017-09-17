@@ -36,7 +36,7 @@ function addSprite(path, ID){
 	tempSprite = new Sprite(20, 0, 100, 100, path, ID);
 	sprites.push(tempSprite);
 }
-
+/////can't use really for snake... need to generalize////
 function addDrawnSprite(Sprite) {
 	var newY = 0;
 	if(drawnSprites.length > 0){
@@ -50,8 +50,39 @@ function addDrawnSprite(Sprite) {
 	drawnSprites.push(Sprite);
 }
 
+function addDrawnSprites(oldSprite,newX,newY,newHeight,newWidth,newid) {
+	var tempSprite = new Sprite(newX,newY,newWidth,newHeight,oldSprite.image.src,newid);
+	drawnSprites.push(tempSprite);
 
-////////////////////myfunctions///////////////////
+
+}
+
+function removeDrawnSprite(oldSprite){
+	for(var i=0; i<drawnSprites.length; i++){
+		if(drawnSprites[i].ID == oldSprite.ID){
+			drawnSprites.splice(i,1);
+		}
+	}
+
+
+}
+
+function findSprite(spritearray,id){
+	
+	for(var i=0; i<spritearray.length; i++){
+		if(spritearray[i].ID == id){
+			
+
+			return spritearray[i];
+			
+		}
+	}
+	return null;
+
+}
+
+
+///////////////////////////////////////
 
 function addText(size,font,text, xLocation, yLocation){
 	context.font = size+" "+font;
@@ -219,7 +250,8 @@ function Wall(xWall, yWall, xcellWidth, ycellLength) {
 
 }
 
-function Food(x, y, spoilTime, maxTimeLife) {
+function Food(x, y, spoilTime, maxTimeLife,id) {
+	this.id=id;
 	this.xfood = x;
 	this.yfood = y;
 	this.spoilTimer = 0;
@@ -228,4 +260,24 @@ function Food(x, y, spoilTime, maxTimeLife) {
 	this.update;
 
 	this.draw;
+	this.reset;
+}
+
+////////////////////////////Testing/Validation functions//// for debugging////
+
+function testDrawnSprites(){
+	var testString= "";
+
+	for(var i=0; i<drawnSprites.length; i++){
+		testString = testString+ " " +drawnSprites[i].ID;
+	}
+	console.log(testString);
+}
+function testSprites(){
+	var testString= "";
+	
+		for(var i=0; i<sprites.length; i++){
+			testString = testString+ " " +sprites[i].ID;
+		}
+		console.log(testString);
 }

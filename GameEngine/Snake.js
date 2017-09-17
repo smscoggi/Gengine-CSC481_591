@@ -134,19 +134,38 @@ var amountFood = 3;
 var foodMaxLifeTime = 100;
 var foodSpoilTime = 65;
 var foodArray = new Array();
+addSprite("https://i.imgur.com/590VJ3b.jpg","redapple");
+addSprite("https://i.imgur.com/L3GW36P.jpg","greenapple");
+var redApple = findSprite(sprites,"redapple");
+var greenApple = findSprite(sprites,"greenapple");
 
 function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 	for(var iter = 0; iter < amountFood; iter++) {
-		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime);
+		var foodid= "f"+iter;
+		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
+		var ThisFoodSprite;
+		
 		food.update = function() {
+			ThisFoodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
+
+			if(ThisFoodSprite==null){
+				console.log("null founddddddd");
+				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
+			}
+			else if(this.spoilTimer == foodSpoilTime){
+
+				console.log("spoillllleedddd!!!!!!!!!!!!!!");
+				removeDrawnSprite(ThisFoodSprite);
+				addDrawnSprites(greenApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+
+			}
 			//console.log(snake.deadState);
 			if (this.spoilTimer < foodMaxLifeTime) {
 				this.spoilTimer++;
 			}
 			if (this.spoilTimer == foodMaxLifeTime) {
-				this.spoilTimer = 0;
-				this.xfood = Math.floor(Math.random()*xcellCount);
-				this.yfood = Math.floor(Math.random()*ycellCount);
+				this.reset();
+				
 			}
 
 			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer >= foodSpoilTime) { 
@@ -155,17 +174,13 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 					snake.deadState = 'dead';
 				}
 				score--;
-				this.spoilTimer = 0;
-				this.xfood = Math.floor(Math.random()*xcellCount);
-				this.yfood = Math.floor(Math.random()*ycellCount);
+				this.reset();
 			}
 
 			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer < foodSpoilTime) { 
 				snake.snakeLinks++;
 				score++;
-				this.spoilTimer = 0;
-				this.xfood = Math.floor(Math.random()*xcellCount);
-				this.yfood = Math.floor(Math.random()*ycellCount);
+				this.reset();
 			}
 
 		}
@@ -177,6 +192,18 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 			}
 			context.fillRect(this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight);
 		}
+
+		food.reset=function(){
+			this.spoilTimer = 0;
+			this.xfood = Math.floor(Math.random()*xcellCount);
+			this.yfood = Math.floor(Math.random()*ycellCount);
+			if(ThisFoodSprite !=null){
+				removeDrawnSprite(ThisFoodSprite);
+				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+			}
+		}
+
+
 		foodArray.push(food);
 	}
 }
@@ -218,7 +245,7 @@ function update() {
 	if (highscore < score) {
 		highscore = score;
 	}
-	
+	//////////////////Note: Local storage does not work correctly with Edge browser!!! Use Google chrome...///////////
 	localhighscore = localStorage.getItem("localhighscore");
 	if(localhighscore !== null){
 	    if (score > localhighscore) {
@@ -237,6 +264,10 @@ function update() {
 
 
 function draw() {
+	testDrawnSprites();
+	testSprites();
+	drawSprites();
+
 	var score_text = "Score: " + score ;
 	context.fillStyle="#FFFFFF";
 	context.fillText(score_text, 5, canvas.height-5);
@@ -254,12 +285,16 @@ function draw() {
 	context.fillText(reset, canvas.width-110, 20);
 }
 
+
+
+
+
 function game_loop(){
 	snake.update();
 	snake.draw();
 	for(var iter = 0; iter < foodArray.length; iter++){
 		foodArray[iter].update();
-		foodArray[iter].draw();
+		//foodArray[iter].draw();
 	}
 	for(var iter = 0; iter < wallArray.length; iter++){
 		wallArray[iter].update(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
