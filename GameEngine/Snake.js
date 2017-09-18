@@ -134,10 +134,11 @@ var amountFood = 3;
 var foodMaxLifeTime = 100;
 var foodSpoilTime = 65;
 var foodArray = new Array();
-addSprite("https://i.imgur.com/590VJ3b.jpg","redapple");
-addSprite("https://i.imgur.com/L3GW36P.jpg","greenapple");
+addSprite("https://i.imgur.com/2IhGuoJ.png","redapple");
+addSprite("https://i.imgur.com/dIPgiDN.png","greenapple");
 var redApple = findSprite(sprites,"redapple");
 var greenApple = findSprite(sprites,"greenapple");
+
 
 function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 	for(var iter = 0; iter < amountFood; iter++) {
@@ -206,6 +207,8 @@ makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
 
 
 //Wall Objects
+addSprite("https://i.imgur.com/3vugqUb.jpg","walltexture");
+var wallSprite = findSprite(sprites,"walltexture");
 var wallArray = new Array();
 wallArray.push(new Wall(0,0,3,1));
 wallArray.push(new Wall(6,4,4,1));
@@ -213,24 +216,39 @@ wallArray.push(new Wall(20,25,1,3));
 wallArray.push(new Wall(2,24,5,1));
 wallArray.push(new Wall(24,2,1,4));
 
-
 for(var iter = 0; iter < wallArray.length; iter++){
-	wallArray[iter].update = function wallUpdate(xWall, yWall, xcellWidth, ycellLength){
-		for (var jter = 0; jter < xcellWidth; jter++) {
-			for (var kter = 0; kter < ycellLength; kter++) {
-				if (checkdistance(xWall+jter, yWall+kter, snake.posX, snake.posY, 0)) { 	
+
+	addDrawnSprites(wallSprite,wallArray[iter].xWall*cellWidth, wallArray[iter].yWall*cellHeight, cellWidth*wallArray[iter].xcellWidth, cellHeight*wallArray[iter].ycellLength,wallSprite.ID);
+
+	/*wallArray[iter].draw = function wallDraw(xWall, yWall, xcellWidth, ycellLength) {
+			context.fillStyle='blue';
+			context.fillRect(xWall*cellWidth, yWall*cellHeight, cellWidth*xcellWidth, cellHeight*ycellLength);
+		
+	}*//////////// for block walls
+} //Wall Objects
+
+
+function makeWalls(){
+	for(var iter = 0; iter < wallArray.length; iter++) {
+		var wallid = "w"+iter;
+		var wall = new Wall()
+		var ThisWallSprite;
+
+		for (var jter = 0; jter < wallArray[iter].xcellWidth; jter++) {
+			for (var kter = 0; kter < wallArray[iter].ycellLength; kter++) {
+				if (checkdistance(wallArray[iter].xWall+jter, wallArray[iter].yWall+kter, snake.posX, snake.posY, 0)) { 	
 					snake.deadState = 'dead';
 				}
 			}
 		}
+
+		}
 	}
-	
-	wallArray[iter].draw = function wallDraw(xWall, yWall, xcellWidth, ycellLength) {
-			context.fillStyle='blue';
-			context.fillRect(xWall*cellWidth, yWall*cellHeight, cellWidth*xcellWidth, cellHeight*ycellLength);
-		
-	}
-} //Wall Objects
+
+
+
+
+
 
 
 function drawStats(){
@@ -270,12 +288,13 @@ function update() {
 	
 	////moved from game_loop
 	snake.update();
+	makeWalls();
 	for(var iter = 0; iter < foodArray.length; iter++){
 		foodArray[iter].update();
 		//foodArray[iter].draw();
 	}
-
-
+	
+	//////////////////////////
 
 	if (highscore < score) {
 		highscore = score;
@@ -318,12 +337,7 @@ function game_loop(){
 	
 	update();
 	draw();
-	
-	for(var iter = 0; iter < wallArray.length; iter++){
-		wallArray[iter].update(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
-		wallArray[iter].draw(wallArray[iter].xWall, wallArray[iter].yWall, wallArray[iter].xcellWidth, wallArray[iter].ycellLength);
-	}
-	
+		
 	//console.log(snake.snakeLinks);
 }
 setInterval(game_loop, 80);

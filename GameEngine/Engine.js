@@ -50,7 +50,7 @@ function addDrawnSprite(Sprite) {
 	drawnSprites.push(Sprite);
 }
 
-function addDrawnSprites(oldSprite,newX,newY,newHeight,newWidth,newid) {
+function addDrawnSprites(oldSprite,newX,newY,newWidth,newHeight,newid) {
 	var tempSprite = new Sprite(newX,newY,newWidth,newHeight,oldSprite.image.src,newid);
 	drawnSprites.push(tempSprite);
 
