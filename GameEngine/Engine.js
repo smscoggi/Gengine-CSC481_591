@@ -196,6 +196,15 @@ canvas.addEventListener("mousedown",mousedown);
 canvas.addEventListener("mouseup",mouseup);
 canvas.addEventListener("mousemove",mousemove);
 document.addEventListener('keydown', handleKeypress);
+//////prevents window scrolling for arrows...
+window.addEventListener("keydown", function(e) {
+    // space and arrow keys
+    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+}, false);
+
+
 
 var xcoord = 0;
 var ycoord = 0;
