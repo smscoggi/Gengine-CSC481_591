@@ -8,6 +8,18 @@ context = canvas.getContext('2d');
 
 var sprites = new Array();
 var drawnSprites = new Array();
+/////Gamestate- "camera view grid" variables
+var cellWidth = 15;
+var cellHeight = 15;
+var xcellCount = Math.floor(canvas.width/cellWidth);
+var ycellCount = Math.floor(canvas.height/cellHeight);
+
+function setCanvasGrid(newcellWidth,newcellHeight,newxcellCount,newycellCount){
+		cellWidth=newcellWidth;
+		cellHeight=newcellHeight;
+		xcellCount=newxcellCount;
+		ycellCount=newycellCount;	
+}
 
 function Sprite(x, y, width, height, src, ID) {
 	this.X = x;
@@ -362,6 +374,8 @@ function testSprites(){
 ////LocalHighScore
 //////////////////Note: Local storage does not work correctly with Edge browser!!! Use Google chrome...///////////
 var localhighscore = 0;
+var score = 0;
+var highscore = 0;
 
 function checkHighscore(score) {
 	localhighscore = localStorage.getItem("localhighscore");

@@ -1,13 +1,5 @@
-var cellWidth = 15;
-var cellHeight = 15;
-var xcellCount = Math.floor(canvas.width/cellWidth);
-var ycellCount = Math.floor(canvas.height/cellHeight);
+/////Snake
 var direction = 'none';
-
-var score = 0;
-var highscore = 0;
-
-//Snake
 var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
 
 function Snake(numLinks, posX, posY){
@@ -128,9 +120,7 @@ function Snake(numLinks, posX, posY){
 	};
 
 	this.draw = function(){
-		canvas.width = canvas.width;
-		context.fillStyle="black";
-		context.fillRect(0,0,canvas.width,canvas.height);
+		
 
 		for(var iter=0; iter<this.snakeArray.length; iter++){
 			context.fillStyle='green';
@@ -156,11 +146,6 @@ addSprite("https://i.imgur.com/dIPgiDN.png","greenapple");
 var redApple = findSprite(sprites,"redapple");
 var greenApple = findSprite(sprites,"greenapple");
 
-
-
-
-
-
 makeFood(amountFood,foodSpoilTime,foodMaxLifeTime,redApple,greenApple);
 //Food Objects
 
@@ -184,7 +169,7 @@ for(var iter = 0; iter < wallArray.length; iter++){
 			context.fillRect(xWall*cellWidth, yWall*cellHeight, cellWidth*xcellWidth, cellHeight*ycellLength);
 		
 	}*//////////// for block walls
-} //Wall Objects
+} 
 
 
 function makeWalls(){
@@ -201,9 +186,9 @@ function makeWalls(){
 			}
 		}
 
-		}
 	}
-
+}
+//Wall Objects
 
 
 
@@ -259,8 +244,12 @@ function update() {
 
 
 function draw() {
-	testDrawnSprites();
-	testSprites();
+	canvas.width = canvas.width;
+	context.fillStyle="black";
+	context.fillRect(0,0,canvas.width,canvas.height);
+
+	//testDrawnSprites();
+	//testSprites();
 
 	snake.draw();
 	drawSprites();
