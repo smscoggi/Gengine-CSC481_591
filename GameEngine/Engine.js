@@ -280,7 +280,7 @@ function testDrawnSprites(){
 	for(var i=0; i<drawnSprites.length; i++){
 		testString = testString+ " " +drawnSprites[i].ID;
 	}
-	console.log(testString);
+	//console.log(testString);
 }
 function testSprites(){
 	var testString= "";
@@ -288,5 +288,26 @@ function testSprites(){
 		for(var i=0; i<sprites.length; i++){
 			testString = testString+ " " +sprites[i].ID;
 		}
-		console.log(testString);
+		//console.log(testString);
+}
+
+
+////LocalHighScore
+//////////////////Note: Local storage does not work correctly with Edge browser!!! Use Google chrome...///////////
+var localhighscore = 0;
+
+function checkHighscore(score) {
+	localhighscore = localStorage.getItem("localhighscore");
+	if(localhighscore !== null){
+	    if (score > localhighscore) {
+	        localStorage.setItem("localhighscore", score);      
+	    }
+	}
+	else{
+	    localStorage.setItem("localhighscore", score);
+	}
+}
+
+function resetHighscore() {
+    localStorage.setItem("localhighscore", 00);
 }

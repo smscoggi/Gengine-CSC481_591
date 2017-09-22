@@ -99,10 +99,7 @@ function Snake(numLinks, posX, posY){
 			direction = 'none'
 				score = 0;
 
-			for(var iter = 0; iter < amountFood; iter++) {
-				foodArray.shift();	
-			}
-			makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
+			resetFood();
 
 			deadState = 'notDead';
 		}
@@ -144,19 +141,19 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 	for(var iter = 0; iter < amountFood; iter++) {
 		var foodid= "f"+iter;
 		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
-		var ThisFoodSprite;
+		this.foodSprite = null;
 		
 		food.update = function() {
-			ThisFoodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
+			this.foodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
 
-			if(ThisFoodSprite==null){
-				console.log("null founddddddd");
+			if(this.foodSprite==null){
+				//console.log("null founddddddd");
 				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
 			}
 			else if(this.spoilTimer == foodSpoilTime){
 
-				console.log("spoillllleedddd!!!!!!!!!!!!!!");
-				removeDrawnSprite(ThisFoodSprite);
+				//console.log("spoillllleedddd!!!!!!!!!!!!!!");
+				removeDrawnSprite(this.foodSprite);
 				addDrawnSprites(greenApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
 
 			}
@@ -191,14 +188,20 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 			this.spoilTimer = 0;
 			this.xfood = Math.floor(Math.random()*xcellCount);
 			this.yfood = Math.floor(Math.random()*ycellCount);
-			if(ThisFoodSprite !=null){
-				removeDrawnSprite(ThisFoodSprite);
+			if(this.foodSprite !=null){
+				removeDrawnSprite(this.foodSprite);
 				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
 			}
 		}
 
 
 		foodArray.push(food);
+	}
+}
+
+function resetFood(){
+	for(var iter = 0; iter < amountFood; iter++) {
+		foodArray[iter].reset();
 	}
 }
 
@@ -273,16 +276,11 @@ function drawStats(){
 			//context.fillText(highscore_text2, 5, canvas.height-45);
 		addText(textsize,textfont,highscore_text2,5, canvas.height-45,textfillstyle);
 		
-		var reset = "Reset Alltime Highscore";
-			//context.fillStyle="#FFFFFF";
-			//context.fillText(reset, canvas.width-110, 20);
-		addText(textsize,textfont,reset, canvas.height-110,20,textfillstyle);
 	
 	}
 
 
 /////////////////////////////////////////////////////////UPDATE + Draw
-var localhighscore = 0;
 
 function update() {
 	
@@ -299,25 +297,9 @@ function update() {
 	if (highscore < score) {
 		highscore = score;
 	}
-	//////////////////Note: Local storage does not work correctly with Edge browser!!! Use Google chrome...///////////
-	localhighscore = localStorage.getItem("localhighscore");
-	if(localhighscore !== null){
-	    if (score > localhighscore) {
-	        localStorage.setItem("localhighscore", score);      
-	    }
-	}
-	else{
-	    localStorage.setItem("localhighscore", score);
-	}
 	
-	if(mouseisdown == 'yes') {
-		if(checkdistance(canvas.width-(110/2), 20/2, xcoord, ycoord, 50))
-			localStorage.setItem("localhighscore", 0);
-	}
+	checkHighscore(score);
 }
-
-
-
 
 
 function draw() {
@@ -329,7 +311,6 @@ function draw() {
 
 	drawStats();
 
-	
 }
 
 
