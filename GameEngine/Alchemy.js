@@ -115,10 +115,5 @@ function mix(array){
 	collided = false;
 }
 
+setGameLoopInterval(30);
 
-function game_loop() {
-	update();
-	draw();
-}
-
-setInterval(game_loop, 30);

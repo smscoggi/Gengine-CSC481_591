@@ -61,6 +61,7 @@ function removeDrawnSprite(oldSprite){
 	for(var i=0; i<drawnSprites.length; i++){
 		if(drawnSprites[i].ID == oldSprite.ID){
 			drawnSprites.splice(i,1);
+			
 		}
 	}
 
@@ -246,7 +247,7 @@ function handleKeypress(e){
 	}
 
 }
-
+///////////////////////////////////////////////////////////////objects
 function Wall(xWall, yWall, xcellWidth, ycellLength) {
 	this.xWall = xWall;
 	this.yWall = yWall;
@@ -270,6 +271,7 @@ function Food(x, y, spoilTime, maxTimeLife,id) {
 
 	this.draw;
 	this.reset;
+	this.collision;
 }
 
 ////////////////////////////Testing/Validation functions//// for debugging////
@@ -311,3 +313,18 @@ function checkHighscore(score) {
 function resetHighscore() {
     localStorage.setItem("localhighscore", 00);
 }
+
+
+
+//////Game Loop functions////////
+function game_loop() {
+	update();
+	draw();
+}
+var gameLoopInterval=80;
+
+function setGameLoopInterval(newInterval){
+	gameLoopInterval=newInterval;
+}
+
+setInterval(game_loop, gameLoopInterval);
