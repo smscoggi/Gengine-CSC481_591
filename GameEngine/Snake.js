@@ -107,6 +107,26 @@ function Snake(numLinks, posX, posY){
 			deadState = 'notDead';
 		}
 		//console.log(this.snakeArray[0].x, posX);
+/////test to see if snake ran into food/////
+
+		for(var iter=0; iter<foodArray.length; iter++){
+			foodCollide=foodArray[iter].collision(this.posX,this.posY,0);
+
+			if (foodCollide == 1) { 
+				snake.snakeLinks = snake.snakeLinks - 1;
+				if (snake.snakeLinks < 2) {
+					snake.deadState = 'dead';
+				}
+				score--;
+				foodArray[iter].reset();
+			}
+			else if (foodCollide==2) { 
+				snake.snakeLinks++;
+				score++;
+				foodArray[iter].reset();
+			}
+
+		}
 
 	};
 
@@ -140,7 +160,7 @@ var redApple = findSprite(sprites,"redapple");
 var greenApple = findSprite(sprites,"greenapple");
 
 
-function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
+function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprite){
 	for(var iter = 0; iter < amountFood; iter++) {
 		var foodid= "f"+iter;
 		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
@@ -150,14 +170,14 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 			ThisFoodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
 
 			if(ThisFoodSprite==null){
-				console.log("null founddddddd");
-				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
+				//console.log("null founddddddd");
+				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
 			}
 			else if(this.spoilTimer == foodSpoilTime){
 
-				console.log("spoillllleedddd!!!!!!!!!!!!!!");
+				//console.log("spoillllleedddd!!!!!!!!!!!!!!");
 				removeDrawnSprite(ThisFoodSprite);
-				addDrawnSprites(greenApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+				addDrawnSprites(badSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
 
 			}
 			//console.log(snake.deadState);
@@ -169,21 +189,26 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 				
 			}
 
-			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer >= foodSpoilTime) { 
-				snake.snakeLinks = snake.snakeLinks - 1;
-				if (snake.snakeLinks < 2) {
-					snake.deadState = 'dead';
-				}
-				score--;
-				this.reset();
-			}
+			
 
-			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer < foodSpoilTime) { 
-				snake.snakeLinks++;
-				score++;
-				this.reset();
-			}
+			
 
+		}
+
+		food.collision=function(checkX, checkY,proximity){
+
+				//collision when good, not spoiled
+			if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer >= foodSpoilTime) { 
+					return 1;
+			}
+				///collision when spoiled
+			else if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer < foodSpoilTime) {
+					return 2;
+			}
+			else{
+				return 0;
+			}
+			
 		}
 
 		
@@ -193,7 +218,7 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 			this.yfood = Math.floor(Math.random()*ycellCount);
 			if(ThisFoodSprite !=null){
 				removeDrawnSprite(ThisFoodSprite);
-				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
 			}
 		}
 
@@ -202,7 +227,7 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
 	}
 }
 
-makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
+makeFood(amountFood,foodSpoilTime,foodMaxLifeTime,redApple,greenApple);
 //Food Objects
 
 
@@ -314,6 +339,10 @@ function update() {
 		if(checkdistance(canvas.width-(110/2), 20/2, xcoord, ycoord, 50))
 			localStorage.setItem("localhighscore", 0);
 	}
+
+
+
+
 }
 
 
@@ -321,8 +350,8 @@ function update() {
 
 
 function draw() {
-	testDrawnSprites();
-	testSprites();
+	//testDrawnSprites();
+	//testSprites();
 
 	snake.draw();
 	drawSprites();
@@ -333,11 +362,3 @@ function draw() {
 }
 
 
-function game_loop(){
-	
-	update();
-	draw();
-		
-	//console.log(snake.snakeLinks);
-}
-setInterval(game_loop, 80);
