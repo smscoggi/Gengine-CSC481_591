@@ -261,6 +261,7 @@ function Wall(xWall, yWall, xcellWidth, ycellLength) {
 }
 
 function Food(x, y, spoilTime, maxTimeLife,id) {
+	/////Generalized this is a deteriorating/changing disappearing sprite
 	this.id=id;
 	this.xfood = x;
 	this.yfood = y;
@@ -274,6 +275,70 @@ function Food(x, y, spoilTime, maxTimeLife,id) {
 	this.collision;
 }
 
+
+
+////////Specific Object functions///////////////
+var foodArray = new Array();
+function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprite){
+	for(var iter = 0; iter < amountFood; iter++) {
+		var foodid= "f"+iter;
+		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
+		this.foodSprite = null;
+		
+		food.update = function() {
+			this.foodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
+
+			if(this.foodSprite==null){
+				//console.log("null founddddddd");
+				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
+			}
+			else if(this.spoilTimer == foodSpoilTime){
+
+				//console.log("spoillllleedddd!!!!!!!!!!!!!!");
+				removeDrawnSprite(this.foodSprite);
+				addDrawnSprites(badSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+
+			}
+			//console.log(snake.deadState);
+			if (this.spoilTimer < foodMaxLifeTime) {
+				this.spoilTimer++;
+			}
+			if (this.spoilTimer == foodMaxLifeTime) {
+				this.reset();
+				
+			}
+		}
+		food.collision=function(checkX, checkY,proximity){
+
+				//collision when good, not spoiled
+			if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer >= foodSpoilTime) { 
+					return 1;
+			}
+				///collision when spoiled
+			else if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer < foodSpoilTime) {
+					return 2;
+			}
+			else{
+				return 0;
+			}
+		}
+		food.reset=function(){
+			this.spoilTimer = 0;
+			this.xfood = Math.floor(Math.random()*xcellCount);
+			this.yfood = Math.floor(Math.random()*ycellCount);
+			if(this.foodSprite !=null){
+				removeDrawnSprite(this.foodSprite);
+				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+			}
+		}
+		foodArray.push(food);
+	}
+}
+function resetFood(){
+	for(var iter = 0; iter < amountFood; iter++) {
+		foodArray[iter].reset();
+	}
+}
 ////////////////////////////Testing/Validation functions//// for debugging////
 
 function testDrawnSprites(){

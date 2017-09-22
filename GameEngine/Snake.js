@@ -150,85 +150,16 @@ function Snake(numLinks, posX, posY){
 var amountFood = 3;
 var foodMaxLifeTime = 100;
 var foodSpoilTime = 65;
-var foodArray = new Array();
+
 addSprite("https://i.imgur.com/2IhGuoJ.png","redapple");
 addSprite("https://i.imgur.com/dIPgiDN.png","greenapple");
 var redApple = findSprite(sprites,"redapple");
 var greenApple = findSprite(sprites,"greenapple");
 
 
-function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprite){
-	for(var iter = 0; iter < amountFood; iter++) {
-		var foodid= "f"+iter;
-		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
-		this.foodSprite = null;
-		
-		food.update = function() {
-			this.foodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
-
-			if(this.foodSprite==null){
-				//console.log("null founddddddd");
-				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
-			}
-			else if(this.spoilTimer == foodSpoilTime){
-
-				//console.log("spoillllleedddd!!!!!!!!!!!!!!");
-				removeDrawnSprite(this.foodSprite);
-				addDrawnSprites(badSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
-
-			}
-			//console.log(snake.deadState);
-			if (this.spoilTimer < foodMaxLifeTime) {
-				this.spoilTimer++;
-			}
-			if (this.spoilTimer == foodMaxLifeTime) {
-				this.reset();
-				
-			}
-
-			
-
-			
-
-		}
-
-		food.collision=function(checkX, checkY,proximity){
-
-				//collision when good, not spoiled
-			if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer >= foodSpoilTime) { 
-					return 1;
-			}
-				///collision when spoiled
-			else if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer < foodSpoilTime) {
-					return 2;
-			}
-			else{
-				return 0;
-			}
-			
-		}
-
-		
-		food.reset=function(){
-			this.spoilTimer = 0;
-			this.xfood = Math.floor(Math.random()*xcellCount);
-			this.yfood = Math.floor(Math.random()*ycellCount);
-			if(this.foodSprite !=null){
-				removeDrawnSprite(this.foodSprite);
-				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
-			}
-		}
 
 
-		foodArray.push(food);
-	}
-}
 
-function resetFood(){
-	for(var iter = 0; iter < amountFood; iter++) {
-		foodArray[iter].reset();
-	}
-}
 
 makeFood(amountFood,foodSpoilTime,foodMaxLifeTime,redApple,greenApple);
 //Food Objects
@@ -311,12 +242,12 @@ function update() {
 	
 	////moved from game_loop
 	snake.update();
-	makeWalls();
+	
 	for(var iter = 0; iter < foodArray.length; iter++){
 		foodArray[iter].update();
 		//foodArray[iter].draw();
 	}
-	
+	makeWalls();
 	//////////////////////////
 
 	if (highscore < score) {
