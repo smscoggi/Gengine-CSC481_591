@@ -406,6 +406,6 @@ var handle = setInterval(game_loop, gameLoopInterval);
 function setGameLoopInterval(newInterval){
 	gameLoopInterval=newInterval;
 	clearInterval(handle);
-	handle = setInterval(game_loop, 60);
+	handle = setInterval(game_loop, gameLoopInterval);
 }
 

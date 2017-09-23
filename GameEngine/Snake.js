@@ -93,7 +93,6 @@ function Snake(numLinks, posX, posY){
 				score = 0;
 
 			resetFood();
-			setDifficulty(3);
 
 			deadState = 'notDead';
 		}
@@ -227,16 +226,25 @@ function setDifficulty(difficulty){
 	console.log(difficulty);
 	switch(difficulty){
 		case 1:
-			setGameLoopInterval(120);
+			setGameLoopInterval(90);
+			snake.deadState = "dead";
 			break;
 		case 2:
 			setGameLoopInterval(80);
+			snake.deadState = "dead";
 			break;
 		case 3:
-			setGameLoopInterval(50);
+			setGameLoopInterval(70);
+			snake.deadState = "dead";
 			break;
 	}
 }
+
+function changeDifficulty() {
+	var x = document.getElementById("difficulty").options.selectedIndex;
+	setDifficulty(x);
+}
+
 
 
 /////////////////////////////////////////////////////////UPDATE + Draw
@@ -275,5 +283,3 @@ function draw() {
 	drawStats();
 
 }
-
-

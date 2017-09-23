@@ -18,8 +18,8 @@
  		<option value="2">Medium</option>
  		<option value="3">Hard</option>
 		</select>
-		<input type="submit" name="Change Difficulty"/>
 	</form>
+	<button onclick="changeDifficulty()">Change Difficulty</button>
 </div>
 <br />
 <div align="center" > <button align="center" onclick="resetHighscore()">Reset AllTime HighScore</button> </div>
@@ -78,12 +78,6 @@ body { margin: 0;
   }
 </script>
 	
-	<script>
-		setDifficulty(document.getElementById('difficulty').innerHTML);
-	</script>
-	
-	document.getElementById('difficulty').innerHTML
-
 
 </body>
 
