@@ -1,0 +1,28 @@
+Snake Refactoring - 9/22/2017
+Commit Messages on github show the specific changes in our code.
+ https://github.com/smscoggi/Gengine-CSC481_591/commits/master/GameEngine
+
+- Moved gameloop() and setInterval() to the engine
+:github commit = gameloop, makefoodcollision
+
+- Moved var localHighscore to the engine. Created a function, checkHighscore(score).
+Takes score and checks if it is greater than localHighscore, if yes then store it.
+:github commit = A couple of changes
+
+- Fixed food reset on snake's death bug. Now food properly resets when snake dies.
+Orginally food did not reset on snake's death.
+:github commit = A couple of changes
+ 
+- Moved makefood() to engine. Made the function more general to apply to multiple games.
+All related varibles to makefood() moved to array.
+:github commit = moved makefood to engine
+
+- Moved grid creation and highscore variables to the engine.
+:github commit = gridfunction,highscore variables, random
+
+- Put direction of snake movement in engine.
+:github commit = took out snake movement
+
+- Added changing difficulty for snake game.
+:github commit = diffuculty implementation
+:github commit = Fixed Difficulty Dropdown
