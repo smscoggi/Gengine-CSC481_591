@@ -480,11 +480,7 @@ var handle = setInterval(game_loop, gameLoopInterval);
 
 function setGameLoopInterval(newInterval){
 	gameLoopInterval=newInterval;
-<<<<<<< HEAD
-	setInterval(game_loop, gameLoopInterval);
-=======
 	clearInterval(handle);
 	handle = setInterval(game_loop, gameLoopInterval);
->>>>>>> bc4e21ac3240cb24be6edfb5ec06094cf213afa9
 }
 

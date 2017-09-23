@@ -1,13 +1,7 @@
 /////Snake
-<<<<<<< HEAD
-
-=======
-var direction = 'none';
 var difficulty = 2;
->>>>>>> bc4e21ac3240cb24be6edfb5ec06094cf213afa9
+
 var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
-
-
 
 function Snake(numLinks, posX, posY){
 	var segPos = 0;
@@ -183,10 +177,10 @@ function drawStats(){
 
 function setDifficulty(difficulty){
 	//difficulty = document.getElementById('difficulty').innerHTML;
-	console.log(difficulty);
+	//console.log(difficulty);
 	switch(difficulty){
 		case 1:
-			setGameLoopInterval(90);
+			setGameLoopInterval(110);
 			snake.deadState = "dead";
 			break;
 		case 2:
@@ -194,7 +188,7 @@ function setDifficulty(difficulty){
 			snake.deadState = "dead";
 			break;
 		case 3:
-			setGameLoopInterval(70);
+			setGameLoopInterval(50);
 			snake.deadState = "dead";
 			break;
 	}
