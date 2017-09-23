@@ -1,5 +1,10 @@
 /////Snake
+<<<<<<< HEAD
 
+=======
+var direction = 'none';
+var difficulty = 2;
+>>>>>>> bc4e21ac3240cb24be6edfb5ec06094cf213afa9
 var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
 
 
@@ -176,6 +181,31 @@ function drawStats(){
 	
 	}
 
+function setDifficulty(difficulty){
+	//difficulty = document.getElementById('difficulty').innerHTML;
+	console.log(difficulty);
+	switch(difficulty){
+		case 1:
+			setGameLoopInterval(90);
+			snake.deadState = "dead";
+			break;
+		case 2:
+			setGameLoopInterval(80);
+			snake.deadState = "dead";
+			break;
+		case 3:
+			setGameLoopInterval(70);
+			snake.deadState = "dead";
+			break;
+	}
+}
+
+function changeDifficulty() {
+	var x = document.getElementById("difficulty").options.selectedIndex;
+	setDifficulty(x);
+}
+
+
 
 /////////////////////////////////////////////////////////UPDATE + Draw
 
@@ -213,5 +243,3 @@ function draw() {
 	drawStats();
 
 }
-
-

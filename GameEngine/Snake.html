@@ -9,6 +9,19 @@
 <canvas  id="whyupdate" width="500" height="500">
 </canvas>
 </div>
+<br />
+<div align="center">
+	<form>
+		<select name ="difficulty" id="difficulty">
+ 		<option selected disabled>Difficulty:</option>
+ 		<option value="1">Easy</option>
+ 		<option value="2">Medium</option>
+ 		<option value="3">Hard</option>
+		</select>
+	</form>
+	<button onclick="changeDifficulty()">Change Difficulty</button>
+</div>
+<br />
 <div align="center" > <button align="center" onclick="resetHighscore()">Reset AllTime HighScore</button> </div>
 <!DOCTYPE html>
 <html>
@@ -64,6 +77,7 @@ body { margin: 0;
     }], "*")
   }
 </script>
+	
 
 </body>
 
