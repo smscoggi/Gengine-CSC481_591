@@ -3,6 +3,7 @@ var cellHeight = 15;
 var xcellCount = Math.floor(canvas.width/cellWidth);
 var ycellCount = Math.floor(canvas.height/cellHeight);
 var direction = 'none';
+var difficulty = 2;
 
 var score = 0;
 var highscore = 0;
@@ -100,6 +101,7 @@ function Snake(numLinks, posX, posY){
 				score = 0;
 
 			resetFood();
+			setDifficulty(3);
 
 			deadState = 'notDead';
 		}
@@ -303,6 +305,22 @@ function drawStats(){
 		
 	
 	}
+
+function setDifficulty(difficulty){
+	//difficulty = document.getElementById('difficulty').innerHTML;
+	console.log(difficulty);
+	switch(difficulty){
+		case 1:
+			setGameLoopInterval(120);
+			break;
+		case 2:
+			setGameLoopInterval(80);
+			break;
+		case 3:
+			setGameLoopInterval(50);
+			break;
+	}
+}
 
 
 /////////////////////////////////////////////////////////UPDATE + Draw

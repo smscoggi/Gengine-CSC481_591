@@ -322,9 +322,12 @@ function game_loop() {
 	draw();
 }
 var gameLoopInterval=80;
+var handle = setInterval(game_loop, gameLoopInterval);
+
 
 function setGameLoopInterval(newInterval){
 	gameLoopInterval=newInterval;
+	clearInterval(handle);
+	handle = setInterval(game_loop, 60);
 }
 
-setInterval(game_loop, gameLoopInterval);
