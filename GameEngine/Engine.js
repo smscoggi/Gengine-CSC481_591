@@ -120,10 +120,7 @@ function drawSprites(){
 	}
 }
 
-function dragSprite(){
-	sprites[selectedImage].X = xcoord - (sprites[selectedImage].image.width/2);
-	sprites[selectedImage].Y = ycoord - (sprites[selectedImage].image.height/2);
-}
+
 
 //Collisions
 var collided = false;
@@ -259,6 +256,84 @@ function handleKeypress(e){
 	}
 
 }
+
+
+
+/////movement functions////////////
+var direction = 'none';
+
+function dragSprite(){
+	sprites[selectedImage].X = xcoord - (sprites[selectedImage].image.width/2);
+	sprites[selectedImage].Y = ycoord - (sprites[selectedImage].image.height/2);
+}
+
+function basicDirection(basicMovableObject, backwardsDirection){
+	///can move left,right, assumes auto move foward, can't move backwards
+
+	switch(direction){
+		case 'right':
+			if (backwardsDirection != 'right' || backwardsDirection == 'none') {
+				basicMovableObject.posX++;
+				backwardsDirection = 'left';
+			}
+			if (backwardsDirection == 'right') {
+				basicMovableObject.posX--;
+			}
+			break;
+		case 'left':
+			if (backwardsDirection != 'left' || backwardsDirection == 'none') {
+				basicMovableObject.posX--;
+				backwardsDirection = 'right';
+			}
+			if (backwardsDirection == 'left') {
+				basicMovableObject.posX++;
+			}
+			break;
+		case 'up':
+			if (backwardsDirection != 'up' || backwardsDirection == 'none') {
+				basicMovableObject.posY--;
+				backwardsDirection = 'down';
+			}
+			if (backwardsDirection == 'up') {
+				basicMovableObject.posY++;
+			}
+			break;
+		case 'down':
+			if (backwardsDirection != 'down' || backwardsDirection == 'none') {
+				basicMovableObject.posY++;
+				backwardsDirection = 'up';
+			}
+			if (backwardsDirection == 'down') {
+				basicMovableObject.posY--;
+			}
+			break;
+		}
+		return  backwardsDirection;
+
+}
+
+function jumpToOtherSideOfScreen(movingObject){
+	///takes moving object and jumps it to the other side of viewable screen
+	//returns object with updated x,y positions 
+	///need to possible change .posy/x to .x and .y to have all possible object have same pos name
+
+	if (movingObject.posX < 0) {
+		movingObject.posX = xcellCount - 1;
+	}
+	else if (movingObject.posX > xcellCount - 1) {
+		movingObject.posX = 0;
+	}
+	else if (movingObject.posY < 0) {
+		movingObject.posY = ycellCount - 1;
+	}
+	else if (movingObject.posY > ycellCount - 1) {
+		movingObject.posY =  0;
+	}
+	return movingObject;
+}
+
+
+
 ///////////////////////////////////////////////////////////////objects
 function Wall(xWall, yWall, xcellWidth, ycellLength) {
 	this.xWall = xWall;
@@ -404,6 +479,7 @@ var gameLoopInterval=80;
 
 function setGameLoopInterval(newInterval){
 	gameLoopInterval=newInterval;
+	setInterval(game_loop, gameLoopInterval);
 }
 
 setInterval(game_loop, gameLoopInterval);

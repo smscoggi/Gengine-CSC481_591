@@ -1,6 +1,8 @@
 /////Snake
-var direction = 'none';
+
 var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
+
+
 
 function Snake(numLinks, posX, posY){
 	var segPos = 0;
@@ -13,57 +15,11 @@ function Snake(numLinks, posX, posY){
 
 	this.update = function(){
 
-		switch(direction){
-		case 'right':
-			if (backwardsDirection != 'right' || backwardsDirection == 'none') {
-				this.posX++;
-				backwardsDirection = 'left';
-			}
-			if (backwardsDirection == 'right') {
-				this.posX--;
-			}
-			break;
-		case 'left':
-			if (backwardsDirection != 'left' || backwardsDirection == 'none') {
-				this.posX--;
-				backwardsDirection = 'right';
-			}
-			if (backwardsDirection == 'left') {
-				this.posX++;
-			}
-			break;
-		case 'up':
-			if (backwardsDirection != 'up' || backwardsDirection == 'none') {
-				this.posY--;
-				backwardsDirection = 'down';
-			}
-			if (backwardsDirection == 'up') {
-				this.posY++;
-			}
-			break;
-		case 'down':
-			if (backwardsDirection != 'down' || backwardsDirection == 'none') {
-				this.posY++;
-				backwardsDirection = 'up';
-			}
-			if (backwardsDirection == 'down') {
-				this.posY--;
-			}
-			break;
-		}
-
-		if (this.posX < 0) {
-			this.posX = xcellCount - 1;
-		}
-		if (this.posX > xcellCount - 1) {
-			this.posX = 0;
-		}
-		if (this.posY < 0) {
-			this.posY = ycellCount - 1;
-		}
-		if (this.posY > ycellCount - 1) {
-			this.posY =  0;
-		}
+		backwardsDirection=basicDirection(this,backwardsDirection);
+		var tempObject =jumpToOtherSideOfScreen(this);
+		this.posX= tempObject.posX;
+		this.posY = tempObject.posY;
+		
 
 		this.snakeArray.push({x:this.posX, y:this.posY, sP:segPos});
 		segPos = 0;
@@ -227,12 +183,12 @@ function update() {
 	
 	////moved from game_loop
 	snake.update();
-	
+	makeWalls();
 	for(var iter = 0; iter < foodArray.length; iter++){
 		foodArray[iter].update();
 		//foodArray[iter].draw();
 	}
-	makeWalls();
+	
 	//////////////////////////
 
 	if (highscore < score) {
