@@ -1,13 +1,6 @@
-var cellWidth = 15;
-var cellHeight = 15;
-var xcellCount = Math.floor(canvas.width/cellWidth);
-var ycellCount = Math.floor(canvas.height/cellHeight);
-var direction = 'none';
+/////Snake
+var difficulty = 2;
 
-var score = 0;
-var highscore = 0;
-
-//Snake
 var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
 
 function Snake(numLinks, posX, posY){
@@ -21,57 +14,11 @@ function Snake(numLinks, posX, posY){
 
 	this.update = function(){
 
-		switch(direction){
-		case 'right':
-			if (backwardsDirection != 'right' || backwardsDirection == 'none') {
-				this.posX++;
-				backwardsDirection = 'left';
-			}
-			if (backwardsDirection == 'right') {
-				this.posX--;
-			}
-			break;
-		case 'left':
-			if (backwardsDirection != 'left' || backwardsDirection == 'none') {
-				this.posX--;
-				backwardsDirection = 'right';
-			}
-			if (backwardsDirection == 'left') {
-				this.posX++;
-			}
-			break;
-		case 'up':
-			if (backwardsDirection != 'up' || backwardsDirection == 'none') {
-				this.posY--;
-				backwardsDirection = 'down';
-			}
-			if (backwardsDirection == 'up') {
-				this.posY++;
-			}
-			break;
-		case 'down':
-			if (backwardsDirection != 'down' || backwardsDirection == 'none') {
-				this.posY++;
-				backwardsDirection = 'up';
-			}
-			if (backwardsDirection == 'down') {
-				this.posY--;
-			}
-			break;
-		}
-
-		if (this.posX < 0) {
-			this.posX = xcellCount - 1;
-		}
-		if (this.posX > xcellCount - 1) {
-			this.posX = 0;
-		}
-		if (this.posY < 0) {
-			this.posY = ycellCount - 1;
-		}
-		if (this.posY > ycellCount - 1) {
-			this.posY =  0;
-		}
+		backwardsDirection=basicDirection(this,backwardsDirection);
+		var tempObject =jumpToOtherSideOfScreen(this);
+		this.posX= tempObject.posX;
+		this.posY = tempObject.posY;
+		
 
 		this.snakeArray.push({x:this.posX, y:this.posY, sP:segPos});
 		segPos = 0;
@@ -99,21 +46,36 @@ function Snake(numLinks, posX, posY){
 			direction = 'none'
 				score = 0;
 
-			for(var iter = 0; iter < amountFood; iter++) {
-				foodArray.shift();	
-			}
-			makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
+			resetFood();
 
 			deadState = 'notDead';
 		}
 		//console.log(this.snakeArray[0].x, posX);
+/////test to see if snake ran into food/////
+
+		for(var iter=0; iter<foodArray.length; iter++){
+			foodCollide=foodArray[iter].collision(this.posX,this.posY,0);
+
+			if (foodCollide == 1) { 
+				snake.snakeLinks = snake.snakeLinks - 1;
+				if (snake.snakeLinks < 2) {
+					snake.deadState = 'dead';
+				}
+				score--;
+				foodArray[iter].reset();
+			}
+			else if (foodCollide==2) { 
+				snake.snakeLinks++;
+				score++;
+				foodArray[iter].reset();
+			}
+
+		}
 
 	};
 
 	this.draw = function(){
-		canvas.width = canvas.width;
-		context.fillStyle="black";
-		context.fillRect(0,0,canvas.width,canvas.height);
+		
 
 		for(var iter=0; iter<this.snakeArray.length; iter++){
 			context.fillStyle='green';
@@ -133,76 +95,13 @@ function Snake(numLinks, posX, posY){
 var amountFood = 3;
 var foodMaxLifeTime = 100;
 var foodSpoilTime = 65;
-var foodArray = new Array();
+
 addSprite("https://i.imgur.com/2IhGuoJ.png","redapple");
 addSprite("https://i.imgur.com/dIPgiDN.png","greenapple");
 var redApple = findSprite(sprites,"redapple");
 var greenApple = findSprite(sprites,"greenapple");
 
-
-function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime){
-	for(var iter = 0; iter < amountFood; iter++) {
-		var foodid= "f"+iter;
-		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
-		var ThisFoodSprite;
-		
-		food.update = function() {
-			ThisFoodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
-
-			if(ThisFoodSprite==null){
-				console.log("null founddddddd");
-				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
-			}
-			else if(this.spoilTimer == foodSpoilTime){
-
-				console.log("spoillllleedddd!!!!!!!!!!!!!!");
-				removeDrawnSprite(ThisFoodSprite);
-				addDrawnSprites(greenApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
-
-			}
-			//console.log(snake.deadState);
-			if (this.spoilTimer < foodMaxLifeTime) {
-				this.spoilTimer++;
-			}
-			if (this.spoilTimer == foodMaxLifeTime) {
-				this.reset();
-				
-			}
-
-			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer >= foodSpoilTime) { 
-				snake.snakeLinks = snake.snakeLinks - 1;
-				if (snake.snakeLinks < 2) {
-					snake.deadState = 'dead';
-				}
-				score--;
-				this.reset();
-			}
-
-			if (checkdistance(this.xfood, this.yfood, snake.posX, snake.posY, 0) && this.spoilTimer < foodSpoilTime) { 
-				snake.snakeLinks++;
-				score++;
-				this.reset();
-			}
-
-		}
-
-		
-		food.reset=function(){
-			this.spoilTimer = 0;
-			this.xfood = Math.floor(Math.random()*xcellCount);
-			this.yfood = Math.floor(Math.random()*ycellCount);
-			if(ThisFoodSprite !=null){
-				removeDrawnSprite(ThisFoodSprite);
-				addDrawnSprites(redApple,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
-			}
-		}
-
-
-		foodArray.push(food);
-	}
-}
-
-makeFood(amountFood,foodSpoilTime,foodMaxLifeTime);
+makeFood(amountFood,foodSpoilTime,foodMaxLifeTime,redApple,greenApple);
 //Food Objects
 
 
@@ -225,7 +124,7 @@ for(var iter = 0; iter < wallArray.length; iter++){
 			context.fillRect(xWall*cellWidth, yWall*cellHeight, cellWidth*xcellWidth, cellHeight*ycellLength);
 		
 	}*//////////// for block walls
-} //Wall Objects
+} 
 
 
 function makeWalls(){
@@ -242,9 +141,9 @@ function makeWalls(){
 			}
 		}
 
-		}
 	}
-
+}
+//Wall Objects
 
 
 
@@ -273,16 +172,36 @@ function drawStats(){
 			//context.fillText(highscore_text2, 5, canvas.height-45);
 		addText(textsize,textfont,highscore_text2,5, canvas.height-45,textfillstyle);
 		
-		var reset = "Reset Alltime Highscore";
-			//context.fillStyle="#FFFFFF";
-			//context.fillText(reset, canvas.width-110, 20);
-		addText(textsize,textfont,reset, canvas.height-110,20,textfillstyle);
 	
 	}
 
+function setDifficulty(difficulty){
+	//difficulty = document.getElementById('difficulty').innerHTML;
+	//console.log(difficulty);
+	switch(difficulty){
+		case 1:
+			setGameLoopInterval(110);
+			snake.deadState = "dead";
+			break;
+		case 2:
+			setGameLoopInterval(80);
+			snake.deadState = "dead";
+			break;
+		case 3:
+			setGameLoopInterval(50);
+			snake.deadState = "dead";
+			break;
+	}
+}
+
+function changeDifficulty() {
+	var x = document.getElementById("difficulty").options.selectedIndex;
+	setDifficulty(x);
+}
+
+
 
 /////////////////////////////////////////////////////////UPDATE + Draw
-var localhighscore = 0;
 
 function update() {
 	
@@ -299,45 +218,22 @@ function update() {
 	if (highscore < score) {
 		highscore = score;
 	}
-	//////////////////Note: Local storage does not work correctly with Edge browser!!! Use Google chrome...///////////
-	localhighscore = localStorage.getItem("localhighscore");
-	if(localhighscore !== null){
-	    if (score > localhighscore) {
-	        localStorage.setItem("localhighscore", score);      
-	    }
-	}
-	else{
-	    localStorage.setItem("localhighscore", score);
-	}
 	
-	if(mouseisdown == 'yes') {
-		if(checkdistance(canvas.width-(110/2), 20/2, xcoord, ycoord, 50))
-			localStorage.setItem("localhighscore", 0);
-	}
+	checkHighscore(score);
 }
 
 
-
-
-
 function draw() {
-	testDrawnSprites();
-	testSprites();
+	canvas.width = canvas.width;
+	context.fillStyle="black";
+	context.fillRect(0,0,canvas.width,canvas.height);
+
+	//testDrawnSprites();
+	//testSprites();
 
 	snake.draw();
 	drawSprites();
 
 	drawStats();
 
-	
 }
-
-
-function game_loop(){
-	
-	update();
-	draw();
-		
-	//console.log(snake.snakeLinks);
-}
-setInterval(game_loop, 80);

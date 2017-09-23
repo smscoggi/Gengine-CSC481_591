@@ -8,6 +8,18 @@ context = canvas.getContext('2d');
 
 var sprites = new Array();
 var drawnSprites = new Array();
+/////Gamestate- "camera view grid" variables
+var cellWidth = 15;
+var cellHeight = 15;
+var xcellCount = Math.floor(canvas.width/cellWidth);
+var ycellCount = Math.floor(canvas.height/cellHeight);
+
+function setCanvasGrid(newcellWidth,newcellHeight,newxcellCount,newycellCount){
+		cellWidth=newcellWidth;
+		cellHeight=newcellHeight;
+		xcellCount=newxcellCount;
+		ycellCount=newycellCount;	
+}
 
 function Sprite(x, y, width, height, src, ID) {
 	this.X = x;
@@ -61,6 +73,7 @@ function removeDrawnSprite(oldSprite){
 	for(var i=0; i<drawnSprites.length; i++){
 		if(drawnSprites[i].ID == oldSprite.ID){
 			drawnSprites.splice(i,1);
+			
 		}
 	}
 
@@ -107,10 +120,7 @@ function drawSprites(){
 	}
 }
 
-function dragSprite(){
-	sprites[selectedImage].X = xcoord - (sprites[selectedImage].image.width/2);
-	sprites[selectedImage].Y = ycoord - (sprites[selectedImage].image.height/2);
-}
+
 
 //Collisions
 var collided = false;
@@ -247,6 +257,84 @@ function handleKeypress(e){
 
 }
 
+
+
+/////movement functions////////////
+var direction = 'none';
+
+function dragSprite(){
+	sprites[selectedImage].X = xcoord - (sprites[selectedImage].image.width/2);
+	sprites[selectedImage].Y = ycoord - (sprites[selectedImage].image.height/2);
+}
+
+function basicDirection(basicMovableObject, backwardsDirection){
+	///can move left,right, assumes auto move foward, can't move backwards
+
+	switch(direction){
+		case 'right':
+			if (backwardsDirection != 'right' || backwardsDirection == 'none') {
+				basicMovableObject.posX++;
+				backwardsDirection = 'left';
+			}
+			if (backwardsDirection == 'right') {
+				basicMovableObject.posX--;
+			}
+			break;
+		case 'left':
+			if (backwardsDirection != 'left' || backwardsDirection == 'none') {
+				basicMovableObject.posX--;
+				backwardsDirection = 'right';
+			}
+			if (backwardsDirection == 'left') {
+				basicMovableObject.posX++;
+			}
+			break;
+		case 'up':
+			if (backwardsDirection != 'up' || backwardsDirection == 'none') {
+				basicMovableObject.posY--;
+				backwardsDirection = 'down';
+			}
+			if (backwardsDirection == 'up') {
+				basicMovableObject.posY++;
+			}
+			break;
+		case 'down':
+			if (backwardsDirection != 'down' || backwardsDirection == 'none') {
+				basicMovableObject.posY++;
+				backwardsDirection = 'up';
+			}
+			if (backwardsDirection == 'down') {
+				basicMovableObject.posY--;
+			}
+			break;
+		}
+		return  backwardsDirection;
+
+}
+
+function jumpToOtherSideOfScreen(movingObject){
+	///takes moving object and jumps it to the other side of viewable screen
+	//returns object with updated x,y positions 
+	///need to possible change .posy/x to .x and .y to have all possible object have same pos name
+
+	if (movingObject.posX < 0) {
+		movingObject.posX = xcellCount - 1;
+	}
+	else if (movingObject.posX > xcellCount - 1) {
+		movingObject.posX = 0;
+	}
+	else if (movingObject.posY < 0) {
+		movingObject.posY = ycellCount - 1;
+	}
+	else if (movingObject.posY > ycellCount - 1) {
+		movingObject.posY =  0;
+	}
+	return movingObject;
+}
+
+
+
+///////////////////////////////////////////////////////////////objects
 function Wall(xWall, yWall, xcellWidth, ycellLength) {
 	this.xWall = xWall;
 	this.yWall = yWall;
@@ -260,6 +348,7 @@ function Wall(xWall, yWall, xcellWidth, ycellLength) {
 }
 
 function Food(x, y, spoilTime, maxTimeLife,id) {
+	/////Generalized this is a deteriorating/changing disappearing sprite
 	this.id=id;
 	this.xfood = x;
 	this.yfood = y;
@@ -270,8 +359,73 @@ function Food(x, y, spoilTime, maxTimeLife,id) {
 
 	this.draw;
 	this.reset;
+	this.collision;
 }
 
+
+
+////////Specific Object functions///////////////
+var foodArray = new Array();
+function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprite){
+	for(var iter = 0; iter < amountFood; iter++) {
+		var foodid= "f"+iter;
+		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
+		this.foodSprite = null;
+		
+		food.update = function() {
+			this.foodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
+
+			if(this.foodSprite==null){
+				//console.log("null founddddddd");
+				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
+			}
+			else if(this.spoilTimer == foodSpoilTime){
+
+				//console.log("spoillllleedddd!!!!!!!!!!!!!!");
+				removeDrawnSprite(this.foodSprite);
+				addDrawnSprites(badSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+
+			}
+			//console.log(snake.deadState);
+			if (this.spoilTimer < foodMaxLifeTime) {
+				this.spoilTimer++;
+			}
+			if (this.spoilTimer == foodMaxLifeTime) {
+				this.reset();
+				
+			}
+		}
+		food.collision=function(checkX, checkY,proximity){
+
+				//collision when good, not spoiled
+			if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer >= foodSpoilTime) { 
+					return 1;
+			}
+				///collision when spoiled
+			else if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer < foodSpoilTime) {
+					return 2;
+			}
+			else{
+				return 0;
+			}
+		}
+		food.reset=function(){
+			this.spoilTimer = 0;
+			this.xfood = Math.floor(Math.random()*xcellCount);
+			this.yfood = Math.floor(Math.random()*ycellCount);
+			if(this.foodSprite !=null){
+				removeDrawnSprite(this.foodSprite);
+				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+			}
+		}
+		foodArray.push(food);
+	}
+}
+function resetFood(){
+	for(var iter = 0; iter < amountFood; iter++) {
+		foodArray[iter].reset();
+	}
+}
 ////////////////////////////Testing/Validation functions//// for debugging////
 
 function testDrawnSprites(){
@@ -280,7 +434,7 @@ function testDrawnSprites(){
 	for(var i=0; i<drawnSprites.length; i++){
 		testString = testString+ " " +drawnSprites[i].ID;
 	}
-	console.log(testString);
+	//console.log(testString);
 }
 function testSprites(){
 	var testString= "";
@@ -288,5 +442,45 @@ function testSprites(){
 		for(var i=0; i<sprites.length; i++){
 			testString = testString+ " " +sprites[i].ID;
 		}
-		console.log(testString);
+		//console.log(testString);
 }
+
+
+////LocalHighScore
+//////////////////Note: Local storage does not work correctly with Edge browser!!! Use Google chrome...///////////
+var localhighscore = 0;
+var score = 0;
+var highscore = 0;
+
+function checkHighscore(score) {
+	localhighscore = localStorage.getItem("localhighscore");
+	if(localhighscore !== null){
+	    if (score > localhighscore) {
+	        localStorage.setItem("localhighscore", score);      
+	    }
+	}
+	else{
+	    localStorage.setItem("localhighscore", score);
+	}
+}
+
+function resetHighscore() {
+    localStorage.setItem("localhighscore", 00);
+}
+
+
+
+//////Game Loop functions////////
+function game_loop() {
+	update();
+	draw();
+}
+var gameLoopInterval=80;
+var handle = setInterval(game_loop, gameLoopInterval);
+
+function setGameLoopInterval(newInterval){
+	gameLoopInterval=newInterval;
+	clearInterval(handle);
+	handle = setInterval(game_loop, gameLoopInterval);
+}
+
