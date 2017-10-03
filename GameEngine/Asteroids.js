@@ -18,29 +18,32 @@ var drawnRocket= findSprite(drawnSprites,"rocket");
 function rotatingDirection(MovableObject, degreeStep,fowardStep){
     switch(direction){
         case 'right':
-            MovableObject.rotateDegree+= degreeStep;
-                if(MovableObject.rotateDegree>360){
-                    MovableObject.rotateDegree-= 360;
-                }
-                direction="none";
+        	MovableObject.rotateDegree = MovableObject.rotateDegree + degreeStep;
+        	console.log(MovableObject.rotateDegree);
+        	if(MovableObject.rotateDegree>=360){
+        		MovableObject.rotateDegree-= 360;
+        	}
+        	direction="none";
+        	break;
         case 'left':
-            MovableObject.rotateDegree= MovableObject.rotateDegree- degreeStep;
-            if(MovableObject.rotateDegree<0){
-                console.log(MovableObject.rotateDegree);
-                MovableObject.rotateDegree+= 360;
+        	MovableObject.rotateDegree = MovableObject.rotateDegree - degreeStep;
+        	console.log(MovableObject.rotateDegree);
+        	if(MovableObject.rotateDegree<0){
+        		MovableObject.rotateDegree+= 360;
 
-            }
-            direction="none";
+        	}
+        	direction="none";
+        	break;
         case 'up':
+        	console.log(MovableObject.rotateDegree);
+        	var x1= fowardStep*Math.floor(Math.cos(MovableObject.rotateDegree*Math.PI/180));
+        	var y1= fowardStep*Math.floor(Math.sin(MovableObject.rotateDegree*Math.PI/180));
 
-            var x1= fowardStep*Math.floor(Math.cos(MovableObject.rotateDegree*Math.PI/180));
-            var y1= fowardStep*Math.floor(Math.sin(MovableObject.rotateDegree*Math.PI/180));
-
-            MovableObject.centerX= MovableObject.centerX+x1;
-            MovableObject.centerY= MovableObject.centerY+y1;
-            ////need dynamic functionality to add/take direction usage for other games...///
-           
-            break;
+        	MovableObject.centerX= MovableObject.centerX+x1;
+        	MovableObject.centerY= MovableObject.centerY+y1;
+        	////need dynamic functionality to add/take direction usage for other games...///
+        	direction="none";
+        	break;
     }
 }
 

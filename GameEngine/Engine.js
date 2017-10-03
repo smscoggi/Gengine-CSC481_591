@@ -128,14 +128,23 @@ function drawSprites(){
 			//assumes rotation around center/fixed point in sprite
 			//context.translate(-drawnSprites[iter].centerX,-drawnSprites[iter].centerY);
 			
-			context.rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
-			console.log(drawnSprites[iter].rotateDegree+"rotate degree");
-			console.log(drawnSprites[iter].centerX+"centerx");
-			console.log(drawnSprites[iter].centerY+"centery");
-			console.log(drawnSprites[iter].X+"x");
-			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].centerX-drawnSprites[iter].cXrelation, drawnSprites[iter].centerY-drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
-			context.rotate(-drawnSprites[iter].rotateDegree * Math.PI/180);
+			//context.rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
+			//console.log(drawnSprites[iter].rotateDegree+"rotate degree");
+			//console.log(drawnSprites[iter].centerX+"centerx");
+			//console.log(drawnSprites[iter].centerY+"centery");
+			//console.log(drawnSprites[iter].X+"x");
+			//context.drawImage(drawnSprites[iter].image, drawnSprites[iter].centerX-drawnSprites[iter].cXrelation, drawnSprites[iter].centerY-drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
+			//context.rotate(-drawnSprites[iter].rotateDegree * Math.PI/180);
 			//context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);		
+
+			//context.save();
+			context.translate(drawnSprites[iter].centerX, drawnSprites[iter].centerY);
+			context.rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
+			context.drawImage(drawnSprites[iter].image, -drawnSprites[iter].cXrelation, -drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
+
+			context.rotate(-drawnSprites[iter].rotateDegree * Math.PI/180);
+			context.translate(-drawnSprites[iter].centerX, -drawnSprites[iter].centerY);
+			//context.restore();
 		}
 		else{
 			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].X, drawnSprites[iter].Y, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
