@@ -32,8 +32,10 @@ function Sprite(x, y, width, height, src, ID) {
 
 
 	this.rotateDegree=0;
-	this.centerX=this.X+this.image.width/2;
-	this.centerY=this.Y+this.image.height/2;
+	this.cXrelation=this.image.width/2;
+	this.cYrelation=this.image.height/2;
+	this.centerX=this.cXrelation + this.X;
+	this.centerY=this.cYrelation + this.Y;
 }
 
 function checkSprite(sprite, x, y) {
@@ -124,11 +126,11 @@ function drawSprites(){
 		if(drawnSprites[iter].rotateDegree!=0 || drawnSprites[iter].rotateDegree!=360){
 			//handles only if the drawnsprite has its rotationDegree set 
 			//assumes rotation around center/fixed point in sprite
-			translate(-drawnSprites.centerX,-drawnSprites[iter].centerY);
-			rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
-			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].X, drawnSprites[iter].Y, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
-			rotate(-drawnSprites[iter].rotateDegree * Math.PI/180);
-			translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);		
+			context.translate(-drawnSprites.centerX,-drawnSprites[iter].centerY);
+			context.rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
+			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].centerX-drawnSprites[iter].cXrelation, drawnSprites[iter].Y-drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
+			context.rotate(-drawnSprites[iter].rotateDegree * Math.PI/180);
+			context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);		
 		}
 		else{
 			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].X, drawnSprites[iter].Y, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
