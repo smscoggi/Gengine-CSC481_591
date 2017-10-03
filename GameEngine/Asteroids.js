@@ -23,6 +23,7 @@ function rotatingDirection(MovableObject, degreeStep,fowardStep){
                     MovableObject.rotateDegree-= 360;
                 }
                 direction="none";
+                break;
         case 'left':
             MovableObject.rotateDegree= MovableObject.rotateDegree- degreeStep;
             if(MovableObject.rotateDegree<0){
@@ -31,6 +32,7 @@ function rotatingDirection(MovableObject, degreeStep,fowardStep){
 
             }
             direction="none";
+            break;
         case 'up':
 
             var x1= fowardStep*Math.floor(Math.cos(MovableObject.rotateDegree*Math.PI/180));
@@ -55,11 +57,14 @@ function update(){
 
 
 function draw(){
+
+
     canvas.width = canvas.width;
     context.fillStyle="black";
     context.fillRect(0,0,canvas.width,canvas.height);
+
+    
    
     drawSprites();
 
 }
-
