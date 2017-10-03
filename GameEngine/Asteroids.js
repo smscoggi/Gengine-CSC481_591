@@ -18,6 +18,7 @@ var drawnRocket= findSprite(drawnSprites,"rocket");
 function rotatingDirection(MovableObject, degreeStep,fowardStep){
     switch(direction){
         case 'right':
+<<<<<<< HEAD
         	MovableObject.rotateDegree = MovableObject.rotateDegree + degreeStep;
         	console.log(MovableObject.rotateDegree);
         	if(MovableObject.rotateDegree>=360){
@@ -25,15 +26,29 @@ function rotatingDirection(MovableObject, degreeStep,fowardStep){
         	}
         	direction="none";
         	break;
+=======
+            MovableObject.rotateDegree+= degreeStep;
+                if(MovableObject.rotateDegree>360){
+                    MovableObject.rotateDegree-= 360;
+                }
+                direction="none";
+                break;
+>>>>>>> branch 'Asteroids' of https://github.com/smscoggi/Gengine-CSC481_591.git
         case 'left':
         	MovableObject.rotateDegree = MovableObject.rotateDegree - degreeStep;
         	console.log(MovableObject.rotateDegree);
         	if(MovableObject.rotateDegree<0){
         		MovableObject.rotateDegree+= 360;
 
+<<<<<<< HEAD
         	}
         	direction="none";
         	break;
+=======
+            }
+            direction="none";
+            break;
+>>>>>>> branch 'Asteroids' of https://github.com/smscoggi/Gengine-CSC481_591.git
         case 'up':
         	console.log(MovableObject.rotateDegree);
         	var x1= fowardStep*Math.floor(Math.cos(MovableObject.rotateDegree*Math.PI/180));
@@ -58,11 +73,14 @@ function update(){
 
 
 function draw(){
+
+
     canvas.width = canvas.width;
     context.fillStyle="black";
     context.fillRect(0,0,canvas.width,canvas.height);
+
+    
    
     drawSprites();
 
 }
-
