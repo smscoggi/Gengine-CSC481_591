@@ -36,8 +36,8 @@ function rotatingDirection(MovableObject, degreeStep,fowardStep){
             var x1= fowardStep*Math.floor(Math.cos(MovableObject.rotateDegree*Math.PI/180));
             var y1= fowardStep*Math.floor(Math.sin(MovableObject.rotateDegree*Math.PI/180));
 
-            MovableObject.centerX= MovableObject.centerX+y1;
-            MovableObject.centerY= MovableObject.centerY-x1;
+            MovableObject.centerX= MovableObject.centerX+x1;
+            MovableObject.centerY= MovableObject.centerY+y1;
             ////need dynamic functionality to add/take direction usage for other games...///
            
             break;

@@ -123,14 +123,19 @@ function selectedOutline(){
 
 function drawSprites(){
 	for (var iter = 0; iter < drawnSprites.length; iter++) {
-		if(drawnSprites[iter].rotateDegree!=0 || drawnSprites[iter].rotateDegree!=360){
+		if(drawnSprites[iter].rotateDegree!=0 && drawnSprites[iter].rotateDegree!=360){
 			//handles only if the drawnsprite has its rotationDegree set 
 			//assumes rotation around center/fixed point in sprite
-			context.translate(-drawnSprites.centerX,-drawnSprites[iter].centerY);
+			//context.translate(-drawnSprites[iter].centerX,-drawnSprites[iter].centerY);
+			
 			context.rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
-			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].centerX-drawnSprites[iter].cXrelation, drawnSprites[iter].Y-drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
+			console.log(drawnSprites[iter].rotateDegree+"rotate degree");
+			console.log(drawnSprites[iter].centerX+"centerx");
+			console.log(drawnSprites[iter].centerY+"centery");
+			console.log(drawnSprites[iter].X+"x");
+			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].centerX-drawnSprites[iter].cXrelation, drawnSprites[iter].centerY-drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
 			context.rotate(-drawnSprites[iter].rotateDegree * Math.PI/180);
-			context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);		
+			//context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);		
 		}
 		else{
 			context.drawImage(drawnSprites[iter].image, drawnSprites[iter].X, drawnSprites[iter].Y, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
