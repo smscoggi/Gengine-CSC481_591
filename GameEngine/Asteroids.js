@@ -13,9 +13,10 @@ var rocketStartY= canvas.height/2-rocksprite.image.height/2;
 addDrawnSprites(rocksprite, rocketStartX, rocketStartY,rocksprite.image.width, rocksprite.image.height, rocksprite.ID);
 var drawnRocket= findSprite(drawnSprites,"rocket");
 
-
+var rotating=false;
 
 function rotatingDirection(MovableObject, degreeStep,fowardStep){
+    rotating= true;
     switch(direction){
         case 'right':
         	MovableObject.rotateDegree = MovableObject.rotateDegree + degreeStep;
@@ -47,7 +48,7 @@ function rotatingDirection(MovableObject, degreeStep,fowardStep){
         	console.log("X:", MovableObject.X);
         	console.log("Y:", MovableObject.Y);
         	////need dynamic functionality to add/take direction usage for other games...///
-        	direction="none";
+        	///direction="none";
         	break;
     }
 }
