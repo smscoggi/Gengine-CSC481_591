@@ -34,12 +34,18 @@ function rotatingDirection(MovableObject, degreeStep,fowardStep){
         	direction="none";
         	break;
         case 'up':
-        	console.log(MovableObject.rotateDegree);
-        	var x1= fowardStep*Math.floor(Math.cos(MovableObject.rotateDegree*Math.PI/180));
-        	var y1= fowardStep*Math.floor(Math.sin(MovableObject.rotateDegree*Math.PI/180));
+        	var y1= fowardStep*(Math.cos(MovableObject.rotateDegree*Math.PI/180));
+        	var x1= fowardStep*(Math.sin(MovableObject.rotateDegree*Math.PI/180));
+        	console.log("x1:", x1);
+        	console.log("y1:", y1);
 
-        	MovableObject.centerX= MovableObject.centerX+x1;
-        	MovableObject.centerY= MovableObject.centerY+y1;
+        	MovableObject.X += x1;
+        	MovableObject.Y -= y1;
+        	MovableObject.centerX = MovableObject.cXrelation + MovableObject.X;
+        	MovableObject.centerY = MovableObject.cYrelation + MovableObject.Y;
+        	
+        	console.log("X:", MovableObject.X);
+        	console.log("Y:", MovableObject.Y);
         	////need dynamic functionality to add/take direction usage for other games...///
         	direction="none";
         	break;

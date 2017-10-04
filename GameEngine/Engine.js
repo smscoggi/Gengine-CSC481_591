@@ -141,10 +141,10 @@ function drawSprites(){
 		
 			
 			context.rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
-			console.log(drawnSprites[iter].rotateDegree+"rotate degree");
-			console.log(drawnSprites[iter].centerX+"centerx");
-			console.log(drawnSprites[iter].centerY+"centery");
-			console.log(drawnSprites[iter].X+"x");
+			//console.log(drawnSprites[iter].rotateDegree+"rotate degree");
+			//console.log(drawnSprites[iter].centerX+"centerx");
+			//console.log(drawnSprites[iter].centerY+"centery");
+			//console.log(drawnSprites[iter].X+"x");
 			context.drawImage(drawnSprites[iter].image, -drawnSprites[iter].cXrelation, -drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
 			context.rotate(-drawnSprites[iter].rotateDegree * Math.PI/180);
 			context.translate(-drawnSprites[iter].centerX,-drawnSprites[iter].centerY);		
