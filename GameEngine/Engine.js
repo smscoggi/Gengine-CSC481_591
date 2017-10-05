@@ -373,25 +373,24 @@ function jumpToOtherSideOfScreen(movingObject){
 	if (movingObject.posX < 0) {
 		movingObject.posX = xcellCount - 1;
 		jumped=true;
-		console.log(jumped+"left");
+		
 	}
 	else if (movingObject.posX > xcellCount - 1) {
 		movingObject.posX = 0;
 		jumped=true;
-		console.log(jumped+"right");
-		console.log(movingObject.posX+"movingobjectposx");
+		
 	}
 	else if (movingObject.posY < 0) {
 		movingObject.posY = ycellCount - 1;
 		jumped=true;
-		console.log(jumped+"up");
+		
 	}
 	else if (movingObject.posY > ycellCount - 1) {
 		movingObject.posY =  0;
 		jumped=true;
-		console.log(jumped+"down");
+		
 	}
-	console.log(jumped);
+	
 	return movingObject;
 }
 
