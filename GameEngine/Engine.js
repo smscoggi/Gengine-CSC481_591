@@ -125,7 +125,7 @@ function drawSprites(){
 
 
 	for (var iter = 0; iter < drawnSprites.length; iter++) {
-		if(rotating){
+		if(drawnSprites[iter].rotating){
 		
 			context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);
 			
@@ -227,6 +227,7 @@ canvas.addEventListener("mousedown",mousedown);
 canvas.addEventListener("mouseup",mouseup);
 canvas.addEventListener("mousemove",mousemove);
 document.addEventListener('keydown', handleKeypress);
+document.addEventListener('keyup',handlekeyup);
 //////prevents window scrolling for arrows...
 window.addEventListener("keydown", function(e) {
     // space and arrow keys
@@ -259,22 +260,51 @@ function mousemove(e) {
 	mouseismoving = 'yes';
 }
 
+//////keys///////
+var leftkey=false;
+var rightkey=false;
+var upkey=false;
+var downkey= false;
+/////need to setup changing functions for changing keys meant for controls...
 function handleKeypress(e){
 
 	switch(e.keyCode){
 	case 37:
 		direction = 'left';
+		leftkey=true;
 		break;
 	case 38:
 		direction = 'up';
+		upkey=true;
 		break;
 	case 39:
 		direction = 'right';
+		rightkey=true;
 		break;
 	case 40:
 		direction = 'down';
+		downkey=true;
 		break;
 	}
+
+}
+function handlekeyup(e){
+	switch(e.keyCode){
+		
+		case 37:
+			leftkey=false;
+			break;
+		case 38:
+			upkey=false;
+			break;
+		case 39:
+			rightkey=false;
+			break;
+		case 40:
+			downkey=false;
+			break;
+	}
+
 
 }
 
@@ -337,19 +367,31 @@ function jumpToOtherSideOfScreen(movingObject){
 	///takes moving object and jumps it to the other side of viewable screen
 	//returns object with updated x,y positions 
 	///need to possible change .posy/x to .x and .y to have all possible object have same pos name
+	this.jumped=false;
+	
 
 	if (movingObject.posX < 0) {
 		movingObject.posX = xcellCount - 1;
+		jumped=true;
+		console.log(jumped+"left");
 	}
 	else if (movingObject.posX > xcellCount - 1) {
 		movingObject.posX = 0;
+		jumped=true;
+		console.log(jumped+"right");
+		console.log(movingObject.posX+"movingobjectposx");
 	}
 	else if (movingObject.posY < 0) {
 		movingObject.posY = ycellCount - 1;
+		jumped=true;
+		console.log(jumped+"up");
 	}
 	else if (movingObject.posY > ycellCount - 1) {
 		movingObject.posY =  0;
+		jumped=true;
+		console.log(jumped+"down");
 	}
+	console.log(jumped);
 	return movingObject;
 }
 
