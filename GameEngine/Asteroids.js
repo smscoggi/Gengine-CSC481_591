@@ -114,63 +114,62 @@ var bulletSprite= findSprite(sprites,"bullet");
 bulletSprite.image.width= .5*cellWidth;
 bulletSprite.image.height=.5*cellHeight;
 var bulletArray=new Array();
-bulletSpacing=10;
-var numBullets = 0
-var maxBullets = 3
+var bulletSpacing=1.5;
+var bulletTime = 0;
+var numBullets = 0;
+var maxBullets = 3;
+var bulletID = 0;
+var buffer = 10;
 
 function MakeBullet(){
-	//var startposX= canvas.width/2-bulletSprite.image.width/2;
-    //var startposY= rocketStartY;
+	numBullets++;
+	if(bulletID >= maxBullets*buffer){
+		bulletID = 0;
+	}
+	bulletID++;
     var startposX=  drawnRocket.centerX-bulletSprite.image.width/2;
     var startposY=  drawnRocket.centerY-bulletSprite.image.height/2;
-   
-    addDrawnSprites(bulletSprite, startposX, startposY,bulletSprite.image.width, bulletSprite.image.height,"bullet"+numBullets);
-    this.bullet=findSprite(drawnSprites,"bullet"+numBullets);
-/*    this.bullet.rotating=true;
-    this.bullet.rotatedirection=Math.floor(Math.random()*2);*/
-    this.bullet.trajectory=drawnRocket.rotateDegree;
-    this.bullet.speed=15;
-    numBullets++;
-    bulletArray.push(this.bullet);
-    console.log("MADE");
+    
+    addDrawnSprites(bulletSprite, startposX, startposY,bulletSprite.image.width, bulletSprite.image.height,"bullet"+bulletID);
+    var bullet=findSprite(drawnSprites,"bullet"+bulletID);
+    bullet.trajectory=drawnRocket.rotateDegree;
+    bullet.speed=25;
+    
+    bulletArray.push(bullet);
 
-    this.bullet.update=function(){
+    bullet.update=function(){
         if(testSideCrossing(this)==true){
+        	removeDrawnSprite(this);
+        	for(var i=0; i<bulletArray.length; i++){
+                if(bulletArray[i].ID==bullet.ID){
+                   bulletArray.splice(i,1);
+                }
+            }
+            //destroyBullet(this);
+            numBullets--;
         	
-            destroyBullet(this);
-            this.Y = startposY;
         }
 
-        /*if(this.rotatedirection==0){
-            leftRotation(this,10);
-        }
-        else if(this.rotatedirection==1){
-            rightRotation(this,10);
-        }*/
+
         angledFowardMotion(this,this.speed,this.trajectory);
-        console.log("UPDATING");
-        //console.log(bullet.Y);
     }
 
+  //****This stuff does not work. Should either move code above here and call method or just remove method***//
     this.destroyBullet=function(bullet){
-    	for(var i=0; i<drawnSprites.length; i++){
-            if(drawnSprites[i].ID==bullet.ID){
-               drawnSprites.splice(i,1);
-            }
-        }
-        for(var i=0; i<bulletArray.length; i++){
+    	
+        /*for(var i=0; i<bulletArray.length; i++){
         	console.log("1", bulletArray[i]);
         	console.log("2", bullet);
-        }
-        for(var i=0; i<bulletArray.length; i++){
+        }*/
+        /*for(var i=0; i<bulletArray.length; i++){
             if(bulletArray[i].ID==bullet.ID){
                bulletArray.splice(i,1);
             }
-        }
-        if(numBullets > 0) {
-        numBullets--;
-        }
-        console.log("remove");
+        }*/
+        //if(numBullets > 0) {
+        //numBullets--;
+        //}
+        //console.log("remove");
 
     }
 
@@ -178,8 +177,6 @@ function MakeBullet(){
 }
 
 //MakeBullet();
-
-
 
 
 
@@ -269,33 +266,28 @@ function update(){
     drawnRocket.update();
     for(var i=0; i<AsteroidArray.length; i++){
         AsteroidArray[i].update();
-        //console.log(AsteroidArray[i].X+", "+AsteroidArray[i].Y);
     }
-    //console.log(AsteroidArray.length);
 
-    if(spacebar){
+    if(spacebar && bulletTime >= bulletSpacing){
     	if (numBullets < maxBullets){
-    	MakeBullet();
+    		MakeBullet();
+    		bulletTime = 0;
     	}
     }
-    //if(downkey){
+    bulletTime++;
+    
     for(var i=0; i<bulletArray.length; i++){
-        	bulletArray[i].update();
-        	//console.log(bulletArray[i]);
+    	bulletArray[i].update();
     }
-    //}
-    //console.log(bulletArray.length);
-    //console.log(bulletArray[0].X+", "+bulletArray[0].Y);
-    //console.log(drawnSprites.length);
+    //console.log(numBullets,"number:", bulletID, "ID");
     //testDrawnSprites();
-    //TEST();
+    //testBulletArray();
 
     
 
 }
 
-function TEST() {   
-	console.log(bulletArray.length);
+function testBulletArray() {   
 	var testString = "";
 	for(var i=0; i<bulletArray.length; i++){
 		testString = testString+ " " +bulletArray[i].ID;
