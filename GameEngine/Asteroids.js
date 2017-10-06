@@ -23,7 +23,7 @@ function makeRocket(){
     
     addDrawnSprites(rocksprite, rocketStartX, rocketStartY,rocksprite.image.width, rocksprite.image.height, rocksprite.ID);
     drawnRocket= findSprite(drawnSprites,"rocket");
-
+    drawnRocket.maxVelocity = 2;
     drawnRocket.rotating=false;
 
     drawnRocket.update=function(){
@@ -34,7 +34,7 @@ function makeRocket(){
         drawnRocket.centerY=(drawnRocket.posY+drawnRocket.velocityY)*cellHeight;
         adjustXYByCenterPoint(drawnRocket);
 
-        rotatingDirection(drawnRocket,20,20);
+        rotatingDirection(drawnRocket,20,.2);
         
 
     }
@@ -134,6 +134,9 @@ function MakeBullet(){
     var bullet=findSprite(drawnSprites,"bullet"+bulletID);
     bullet.trajectory=drawnRocket.rotateDegree;
     bullet.speed=25;
+    bullet.maxVelocity = 25;
+    bullet.velocityX = bullet.speed*Math.sin(bullet.trajectory*Math.PI/180);
+    bullet.velocityY = -1*bullet.speed*Math.cos(bullet.trajectory*Math.PI/180);
     
     bulletArray.push(bullet);
 
@@ -149,9 +152,8 @@ function MakeBullet(){
             numBullets--;
         	
         }
-
-
-        angledFowardMotion(this,this.speed,this.trajectory);
+        
+        
     }
 
   //****This stuff does not work. Should either move code above here and call method or just remove method***//
@@ -248,8 +250,8 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
    // console.log("x1:", x1);
    // console.log("y1:", y1);
     
-    MovableObject.velocityX += .5*Math.sin(angle*Math.PI/180);
-    MovableObject.velocityY -= .5*Math.cos(angle*Math.PI/180);
+    MovableObject.velocityX += fowardStep*Math.sin(angle*Math.PI/180);
+    MovableObject.velocityY -= fowardStep*Math.cos(angle*Math.PI/180);
     
     //MovableObject.X += x1;
     //MovableObject.Y -= y1;

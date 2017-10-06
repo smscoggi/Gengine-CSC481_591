@@ -38,7 +38,7 @@ function Sprite(x, y, width, height, src, ID) {
 	this.centerY=this.cYrelation + this.Y;
 	this.velocityX = 0;
 	this.velocityY = 0;
-	this.maxVelocity = 1.5;
+	this.maxVelocity = 0;
 }
 
 function checkSprite(sprite, x, y) {
