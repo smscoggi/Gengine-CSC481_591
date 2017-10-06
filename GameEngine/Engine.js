@@ -367,7 +367,7 @@ function jumpToOtherSideOfScreen(movingObject){
 	///takes moving object and jumps it to the other side of viewable screen
 	//returns object with updated x,y positions 
 	///need to possible change .posy/x to .x and .y to have all possible object have same pos name
-	this.jumped=false;
+	jumped=false;
 	
 
 	if (movingObject.posX < 0) {

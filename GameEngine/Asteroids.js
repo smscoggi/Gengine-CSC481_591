@@ -109,9 +109,72 @@ function makeAsteroids(){
 }
 
 
+////bullets
+addSprite("https://i.imgur.com/nfOhB08.png","bullet");
+var bulletSprite= findSprite(sprites,"asteroid1");
+bulletSprite.image.width= .5*cellWidth;
+bulletSprite.image.height=.5*cellHeight;
+var bulletArray=new Array();
+bulletSpacing=10;
+
+function MakeBullet(){
+    var startposX= drawnRocket.posX;
+    var startposY= drawnRocket.posY;
+    
+    addDrawnSprites(bulletSprite, startposX*cellWidth, startposY*cellHeight,bulletSprite.image.width, bulletSprite.image.height,"bullet");
+    var bullet=findSprite(drawnSprites,"bullet");
+    bulletArray.push(bullet);
+    bullet.rotating=true;
+    bullet.rotatedirection=Math.floor(Math.random()*2);
+    bullet.trajectory=drawnRocket.rotateDegree;
+    bullet.speed=15
+
+    bullet.update=function(){
+        if(testSideCrossing(this)){
+            this.destroy();
+
+        }
+
+        if(this.rotatedirection==0){
+            leftRotation(this,10);
+        }
+        else if(this.rotatedirection==1){
+            rightRotation(this,10);
+        }
+
+        angledFowardMotion(this,this.speed,this.trajectory);
+    }
+
+    this.destroy=function(){
+        var index;
+        for(var i=0; i<drawnSprites; i++){
+            if(drawnSprites[i]==this){
+               index=i;
+            }
+        }
+        drawnSprites[index].splice(index,1);
+////needs to remove from bulletarray too..
+
+    }
+
+
+}
+
+MakeBullet();
+
+
+
 
 
 /////////Possible adds to engine//////////////////////////////////////
+function testSideCrossing(MovableObject){
+    if (movingObject.posX < 0 || movingObject.posX > xcellCount - 1 ||movingObject.posY < 0 || movingObject.posY > ycellCount - 1) {
+        return true;
+         
+     }
+     else{return false;}
+}
+
 function adjustPosXYByCenterPoint(MovableObject){
     MovableObject.posX=MovableObject.centerX/cellWidth;
     MovableObject.posY= MovableObject.centerY/cellHeight;
@@ -196,6 +259,10 @@ function update(){
         console.log(AsteroidArray[i].X+", "+AsteroidArray[i].Y);
     }
     console.log(AsteroidArray.length);
+
+    for(var i=0; i<bulletArray; i++){
+        bulletArray[i].update();
+    }
     
 
 }
