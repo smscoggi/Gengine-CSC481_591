@@ -10,7 +10,7 @@ addDrawnSprites(back,0,0,canvas.width,canvas.height,"back");
 ///rocket objects
 addSprite("https://i.imgur.com/M15Q3Sp.png","rocket");
 var rocksprite= findSprite(sprites,"rocket");
-rocksprite.image.width= 3*cellWidth;
+rocksprite.image.width=3*cellWidth;
 rocksprite.image.height=3*cellHeight;
 var drawnRocket;
 
@@ -30,8 +30,8 @@ function makeRocket(){
         adjustPosXYByCenterPoint(drawnRocket);
         //update center from new possible possition to jump...
         jumpToOtherSideOfScreen(drawnRocket);
-        drawnRocket.centerX=drawnRocket.posX*cellWidth;
-        drawnRocket.centerY=drawnRocket.posY*cellHeight;
+        drawnRocket.centerX=(drawnRocket.posX+drawnRocket.velocityX)*cellWidth;
+        drawnRocket.centerY=(drawnRocket.posY+drawnRocket.velocityY)*cellHeight;
         adjustXYByCenterPoint(drawnRocket);
 
         rotatingDirection(drawnRocket,20,20);
@@ -247,11 +247,14 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
     var x1= fowardStep*(Math.sin(angle*Math.PI/180));
    // console.log("x1:", x1);
    // console.log("y1:", y1);
-
-    MovableObject.X += x1;
-    MovableObject.Y -= y1;
-    MovableObject.centerX = MovableObject.cXrelation + MovableObject.X;
-    MovableObject.centerY = MovableObject.cYrelation + MovableObject.Y;
+    
+    MovableObject.velocityX += .5*Math.sin(angle*Math.PI/180);
+    MovableObject.velocityY -= .5*Math.cos(angle*Math.PI/180);
+    
+    //MovableObject.X += x1;
+    //MovableObject.Y -= y1;
+    //MovableObject.centerX = MovableObject.cXrelation + MovableObject.X;
+    //MovableObject.centerY = MovableObject.cYrelation + MovableObject.Y;
     
   //  console.log("X:", MovableObject.X);
   //  console.log("Y:", MovableObject.Y);
