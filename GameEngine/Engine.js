@@ -265,10 +265,15 @@ var leftkey=false;
 var rightkey=false;
 var upkey=false;
 var downkey= false;
+var spacebar=false;
 /////need to setup changing functions for changing keys meant for controls...
 function handleKeypress(e){
 
 	switch(e.keyCode){
+	//spacebar
+	case 32:
+		spacebar=true;
+		break;
 	case 37:
 		direction = 'left';
 		leftkey=true;
@@ -291,6 +296,9 @@ function handleKeypress(e){
 function handlekeyup(e){
 	switch(e.keyCode){
 		
+		case 32:
+			spacebar=false;
+			break;
 		case 37:
 			leftkey=false;
 			break;
@@ -496,7 +504,8 @@ function testDrawnSprites(){
 	for(var i=0; i<drawnSprites.length; i++){
 		testString = testString+ " " +drawnSprites[i].ID;
 	}
-	//console.log(testString);
+	
+	console.log(testString);
 }
 function testSprites(){
 	var testString= "";

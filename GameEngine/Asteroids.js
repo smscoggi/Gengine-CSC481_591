@@ -14,26 +14,25 @@ rocksprite.image.width= 3*cellWidth;
 rocksprite.image.height=3*cellHeight;
 var drawnRocket;
 
+var rocketStartX= canvas.width/2-rocksprite.image.width/2;
+var rocketStartY= canvas.height/2-rocksprite.image.height/2;
+
 makeRocket();
 
 function makeRocket(){
-    var rocketStartX= canvas.width/2-rocksprite.image.width/2;
-    var rocketStartY= canvas.height/2-rocksprite.image.height/2;
+    
     addDrawnSprites(rocksprite, rocketStartX, rocketStartY,rocksprite.image.width, rocksprite.image.height, rocksprite.ID);
     drawnRocket= findSprite(drawnSprites,"rocket");
 
     drawnRocket.rotating=false;
 
-    
     drawnRocket.update=function(){
         adjustPosXYByCenterPoint(drawnRocket);
-        
         //update center from new possible possition to jump...
         jumpToOtherSideOfScreen(drawnRocket);
         drawnRocket.centerX=drawnRocket.posX*cellWidth;
         drawnRocket.centerY=drawnRocket.posY*cellHeight;
         adjustXYByCenterPoint(drawnRocket);
-
 
         rotatingDirection(drawnRocket,20,20);
         
@@ -111,64 +110,82 @@ function makeAsteroids(){
 
 ////bullets
 addSprite("https://i.imgur.com/nfOhB08.png","bullet");
-var bulletSprite= findSprite(sprites,"asteroid1");
+var bulletSprite= findSprite(sprites,"bullet");
 bulletSprite.image.width= .5*cellWidth;
 bulletSprite.image.height=.5*cellHeight;
 var bulletArray=new Array();
 bulletSpacing=10;
+var numBullets = 0
+var maxBullets = 3
 
 function MakeBullet(){
-    var startposX= drawnRocket.posX;
-    var startposY= drawnRocket.posY;
-    
-    addDrawnSprites(bulletSprite, startposX*cellWidth, startposY*cellHeight,bulletSprite.image.width, bulletSprite.image.height,"bullet");
-    var bullet=findSprite(drawnSprites,"bullet");
-    bulletArray.push(bullet);
-    bullet.rotating=true;
-    bullet.rotatedirection=Math.floor(Math.random()*2);
-    bullet.trajectory=drawnRocket.rotateDegree;
-    bullet.speed=15
+	//var startposX= canvas.width/2-bulletSprite.image.width/2;
+    //var startposY= rocketStartY;
+    var startposX=  drawnRocket.centerX-bulletSprite.image.width/2;
+    var startposY=  drawnRocket.centerY-bulletSprite.image.height/2;
+   
+    addDrawnSprites(bulletSprite, startposX, startposY,bulletSprite.image.width, bulletSprite.image.height,"bullet"+numBullets);
+    this.bullet=findSprite(drawnSprites,"bullet"+numBullets);
+/*    this.bullet.rotating=true;
+    this.bullet.rotatedirection=Math.floor(Math.random()*2);*/
+    this.bullet.trajectory=drawnRocket.rotateDegree;
+    this.bullet.speed=15;
+    numBullets++;
+    bulletArray.push(this.bullet);
+    console.log("MADE");
 
-    bullet.update=function(){
-        if(testSideCrossing(this)){
-            this.destroy();
-
+    this.bullet.update=function(){
+        if(testSideCrossing(this)==true){
+        	
+            destroyBullet(this);
+            this.Y = startposY;
         }
 
-        if(this.rotatedirection==0){
+        /*if(this.rotatedirection==0){
             leftRotation(this,10);
         }
         else if(this.rotatedirection==1){
             rightRotation(this,10);
-        }
-
+        }*/
         angledFowardMotion(this,this.speed,this.trajectory);
+        console.log("UPDATING");
+        //console.log(bullet.Y);
     }
 
-    this.destroy=function(){
-        var index;
-        for(var i=0; i<drawnSprites; i++){
-            if(drawnSprites[i]==this){
-               index=i;
+    this.destroyBullet=function(bullet){
+    	for(var i=0; i<drawnSprites.length; i++){
+            if(drawnSprites[i].ID==bullet.ID){
+               drawnSprites.splice(i,1);
             }
         }
-        drawnSprites[index].splice(index,1);
-////needs to remove from bulletarray too..
+        for(var i=0; i<bulletArray.length; i++){
+        	console.log("1", bulletArray[i]);
+        	console.log("2", bullet);
+        }
+        for(var i=0; i<bulletArray.length; i++){
+            if(bulletArray[i].ID==bullet.ID){
+               bulletArray.splice(i,1);
+            }
+        }
+        if(numBullets > 0) {
+        numBullets--;
+        }
+        console.log("remove");
 
     }
 
 
 }
 
-MakeBullet();
+//MakeBullet();
 
 
 
 
 
 /////////Possible adds to engine//////////////////////////////////////
-function testSideCrossing(MovableObject){
-    if (movingObject.posX < 0 || movingObject.posX > xcellCount - 1 ||movingObject.posY < 0 || movingObject.posY > ycellCount - 1) {
+function testSideCrossing(movingObject){
+    if (movingObject.X < 0 || movingObject.X > canvas.width || movingObject.Y < 0 || movingObject.Y > canvas.height) {
         return true;
          
      }
@@ -248,24 +265,44 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
 ///////////////////////////////////////possible adds to engene----end////////////////////////
 
 
-
-
-
-
 function update(){
     drawnRocket.update();
     for(var i=0; i<AsteroidArray.length; i++){
         AsteroidArray[i].update();
-        console.log(AsteroidArray[i].X+", "+AsteroidArray[i].Y);
+        //console.log(AsteroidArray[i].X+", "+AsteroidArray[i].Y);
     }
-    console.log(AsteroidArray.length);
+    //console.log(AsteroidArray.length);
 
-    for(var i=0; i<bulletArray; i++){
-        bulletArray[i].update();
+    if(spacebar){
+    	if (numBullets < maxBullets){
+    	MakeBullet();
+    	}
     }
+    //if(downkey){
+    for(var i=0; i<bulletArray.length; i++){
+        	bulletArray[i].update();
+        	//console.log(bulletArray[i]);
+    }
+    //}
+    //console.log(bulletArray.length);
+    //console.log(bulletArray[0].X+", "+bulletArray[0].Y);
+    //console.log(drawnSprites.length);
+    //testDrawnSprites();
+    //TEST();
+
     
 
 }
+
+function TEST() {   
+	console.log(bulletArray.length);
+	var testString = "";
+	for(var i=0; i<bulletArray.length; i++){
+		testString = testString+ " " +bulletArray[i].ID;
+	}
+	console.log(testString);
+}
+
 
 
 function draw(){
