@@ -75,8 +75,8 @@ function makeAsteroids(){
         ///random slope calculation...may need more refining..
         //ast.trajectory=Math.pow(-1,Math.floor(Math.random()*2))*Math.random()*ycellCount/(Math.random()*xcellCount);
         ast.trajectory=Math.random()*360;
+        ast.maxVelocity = 300;
         ast.speed=Math.random()*15;
-
 
         ast.update=function(){
             adjustPosXYByCenterPoint(this);
@@ -93,7 +93,13 @@ function makeAsteroids(){
                 rightRotation(this,10);
             }
 
-            angledFowardMotion(this,this.speed,this.trajectory);
+            
+
+            this.X += this.speed*Math.sin(this.trajectory*Math.PI/180);
+            this.Y -= this.speed*Math.cos(this.trajectory*Math.PI/180);
+            this.centerX = this.cXrelation + this.X;
+            this.centerY = this.cYrelation + this.Y;
+            //angledFowardMotin(this,this.speed,this.trajectory);
             ///update based on trajectory...
            
 
@@ -261,7 +267,6 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
   //  console.log("X:", MovableObject.X);
   //  console.log("Y:", MovableObject.Y);
 }
-
 
 
 ///////////////////////////////////////possible adds to engene----end////////////////////////

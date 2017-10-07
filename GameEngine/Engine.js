@@ -134,6 +134,7 @@ function drawSprites(){
 		drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
 		drawnSprites[iter].X += drawnSprites[iter].velocityX;
 		drawnSprites[iter].Y += drawnSprites[iter].velocityY;
+		console.log(findSprite(drawnSprites, "ast0").velocityX);
 		if(drawnSprites[iter].rotating){
 		
 			context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);
