@@ -24,8 +24,9 @@ function makeRocket(){
     
     addDrawnSprites(rocksprite, rocketStartX, rocketStartY,rocksprite.image.width, rocksprite.image.height, rocksprite.ID);
     drawnRocket= findSprite(drawnSprites,"rocket");
-    drawnRocket.maxVelocity = .2;
+    drawnRocket.maxVelocity = 2;
     drawnRocket.rotating=false;
+    drawnRocket.collider=makeSpriteCollider(drawnRocket);
     
     drawnRocket.update=function(){
         adjustPosXYByCenterPoint(drawnRocket);
@@ -37,6 +38,23 @@ function makeRocket(){
         
         rotatingDirection(drawnRocket,20,.2);
 
+		drawnRocket.collider.update();
+
+        drawnRocket.collision();
+    }
+    
+    drawnRocket.collision=function(){
+       // console.log(drawnRocket.collider.collidedObjectsArray.length)
+        for(var i=0; i<drawnRocket.collider.collidedObjectsArray.length; i++){
+
+            if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
+               // drawnRocket.explode(); /// will put explosion on top of rocket...
+              //  Game.reset();           /////will reset the game
+                console.log("asteroid collision");
+
+            }
+
+        }
     }
 
 }
@@ -128,7 +146,9 @@ function makeAsteroids(){
         ///random slope calculation...may need more refining..
         //ast.trajectory=Math.pow(-1,Math.floor(Math.random()*2))*Math.random()*ycellCount/(Math.random()*xcellCount);
         ast.trajectory=Math.random()*360;
+        ast.maxVelocity = 300;
         ast.speed=Math.random()*15;
+        ast.type="asteroid";
 
 
         ast.update=function(){
@@ -146,7 +166,13 @@ function makeAsteroids(){
                 rightRotation(this,10);
             }
 
-            angledFowardMotion(this,this.speed,this.trajectory);
+            
+
+            this.X += this.speed*Math.sin(this.trajectory*Math.PI/180);
+            this.Y -= this.speed*Math.cos(this.trajectory*Math.PI/180);
+            this.centerX = this.cXrelation + this.X;
+            this.centerY = this.cYrelation + this.Y;
+            //angledFowardMotin(this,this.speed,this.trajectory);
             ///update based on trajectory...
            
 
@@ -164,8 +190,8 @@ function makeAsteroids(){
 ////bullets
 addSprite("https://i.imgur.com/nfOhB08.png","bullet");
 var bulletSprite= findSprite(sprites,"bullet");
-bulletSprite.image.width= .5*cellWidth;
-bulletSprite.image.height=.5*cellHeight;
+bulletSprite.image.width= 1*cellWidth;
+bulletSprite.image.height=1*cellHeight;
 var bulletArray=new Array();
 var bulletSpacing=1.5;
 var bulletTime = 0;
@@ -333,7 +359,7 @@ function update(){
     //testDrawnSprites();
     //testBulletArray();
 
-    
+    collisionDetection()
 
 }
 
