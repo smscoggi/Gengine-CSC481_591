@@ -25,6 +25,8 @@ function makeRocket(){
     drawnRocket= findSprite(drawnSprites,"rocket");
 
     drawnRocket.rotating=false;
+    drawnRocket.collider=makeSpriteCollider(drawnRocket);
+
 
     drawnRocket.update=function(){
         adjustPosXYByCenterPoint(drawnRocket);
@@ -35,9 +37,26 @@ function makeRocket(){
         adjustXYByCenterPoint(drawnRocket);
 
         rotatingDirection(drawnRocket,20,20);
-        
 
+        drawnRocket.collider.update();
+
+        drawnRocket.collision();
     }
+
+    drawnRocket.collision=function(){
+       // console.log(drawnRocket.collider.collidedObjectsArray.length)
+        for(var i=0; i<drawnRocket.collider.collidedObjectsArray.length; i++){
+
+            if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
+               // drawnRocket.explode(); /// will put explosion on top of rocket...
+              //  Game.reset();           /////will reset the game
+                console.log("asteroid collision");
+
+            }
+
+        }
+    }
+
 
 }
 /////end rocket objects
@@ -76,7 +95,7 @@ function makeAsteroids(){
         //ast.trajectory=Math.pow(-1,Math.floor(Math.random()*2))*Math.random()*ycellCount/(Math.random()*xcellCount);
         ast.trajectory=Math.random()*360;
         ast.speed=Math.random()*15;
-
+        ast.type="asteroid";
 
         ast.update=function(){
             adjustPosXYByCenterPoint(this);
@@ -111,8 +130,8 @@ function makeAsteroids(){
 ////bullets
 addSprite("https://i.imgur.com/nfOhB08.png","bullet");
 var bulletSprite= findSprite(sprites,"bullet");
-bulletSprite.image.width= .5*cellWidth;
-bulletSprite.image.height=.5*cellHeight;
+bulletSprite.image.width= 1*cellWidth;
+bulletSprite.image.height=1*cellHeight;
 var bulletArray=new Array();
 var bulletSpacing=1.5;
 var bulletTime = 0;
@@ -283,7 +302,7 @@ function update(){
     //testDrawnSprites();
     //testBulletArray();
 
-    
+    collisionDetection()
 
 }
 

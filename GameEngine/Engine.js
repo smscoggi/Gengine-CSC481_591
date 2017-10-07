@@ -221,6 +221,67 @@ function checkdistance(x1, y1, x2, y2, distance) {
 
 	return 0;
 }
+///////////////////////////////////////New general purpose collider containers...old collision will be transfered to this..//////////
+var colliders= new Array();
+
+function Collider(X,Y,width,height){
+	this.top= Y;
+	this.left=X;
+	this.right=X+width;
+	this.bottom=Y+height;
+
+	this.collidedObjectsArray=new Array();
+	this.update;
+	this.object;
+
+}
+
+function makeSpriteCollider(Object){
+	var collider= new Collider(Object.X,Object.Y,Object.width,Object.height);
+	collider.object=Object;
+	colliders.push(collider);
+
+	collider.update= function(){
+		this.top= this.object.Y;
+		this.left=this.object.X;
+		this.right=this.object.X+this.object.image.width;
+		this.bottom=this.object.Y+this.object.image.height;
+
+	}
+	return collider;
+}
+
+function collisionDetection(){
+	//console.log(colliders.length);
+	for(var i=0; i<colliders.length; i++){
+		var mainC = colliders[i];
+		mainC.collidedObjectsArray.length=0;
+
+		for(var j=0; j<colliders.length; j++){
+			var c2 = colliders[j];
+			if(i==j){
+				//do nothing
+			}
+			else{
+				console.log("yesss");
+				///check for collsions
+				if((mainC.top<=c2 && c2<=mainC.bottom) || (mainC.top<=c2.bottom && c2.bottom<=mainC.bottom)){
+				
+					if((mainC.left<=c2.left && c2.left<=mainC.right) || (mainC.left<=c2.right && c2.right<=mainC.right)){
+					////this means two edges of checked collider (j) have crossed into the main collider (i)
+						console.log("pushing c2");
+						mainC.collidedObjectsArray.push(c2.object);
+						
+
+					}
+				}
+			}
+		}
+	}
+}
+
+
+///////////////////////////////////////////////End--collsions
 
 //KeyBoard and Mouse events
 canvas.addEventListener("mousedown",mousedown);
