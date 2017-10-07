@@ -5,11 +5,12 @@
 //background sprite
 addSprite("https://i.imgur.com/YeuKUD7.jpg","back");
 var back=findSprite(sprites,"back");
-addDrawnSprites(back,0,0,canvas.width,canvas.height,"back");
 
 ///rocket objects
 addSprite("https://i.imgur.com/M15Q3Sp.png","rocket");
+addDrawnSprites(back,0,0,canvas.width,canvas.height,"back");
 var rocksprite= findSprite(sprites,"rocket");
+
 rocksprite.image.width=3*cellWidth;
 rocksprite.image.height=3*cellHeight;
 var drawnRocket;
@@ -23,9 +24,9 @@ function makeRocket(){
     
     addDrawnSprites(rocksprite, rocketStartX, rocketStartY,rocksprite.image.width, rocksprite.image.height, rocksprite.ID);
     drawnRocket= findSprite(drawnSprites,"rocket");
-    drawnRocket.maxVelocity = 2;
+    drawnRocket.maxVelocity = .2;
     drawnRocket.rotating=false;
-
+    
     drawnRocket.update=function(){
         adjustPosXYByCenterPoint(drawnRocket);
         //update center from new possible possition to jump...
@@ -33,14 +34,66 @@ function makeRocket(){
         drawnRocket.centerX=(drawnRocket.posX+drawnRocket.velocityX)*cellWidth;
         drawnRocket.centerY=(drawnRocket.posY+drawnRocket.velocityY)*cellHeight;
         adjustXYByCenterPoint(drawnRocket);
-
-        rotatingDirection(drawnRocket,20,.2);
         
+        rotatingDirection(drawnRocket,20,.2);
 
     }
 
 }
 /////end rocket objects
+
+
+addSprite("https://i.imgur.com/iQ9zcMp.png", "booster");
+var booster = findSprite(sprites,"booster");
+booster.image.width = 1.5*cellWidth;
+booster.image.height = 1.5*cellHeight;
+var drawnbooster;
+
+var boosterOn = false;
+var numBooster = 0;
+var maxBoosters = 1;
+
+function makeBooster(){
+	boosterOn = true;
+	numBooster++;
+    addDrawnSprites(booster, drawnRocket.centerX, drawnRocket.centerY,booster.image.width, booster.image.height, booster.ID);
+    drawnbooster= findSprite(drawnSprites,"booster");
+    drawnbooster.maxVelocity = drawnRocket.maxVelocity;
+    drawnbooster.rotating=false;
+    drawnbooster.rotateDegree = drawnRocket.rotateDegree + 180;
+    
+    drawnbooster.update=function(){
+        
+        adjustPosXYByCenterPoint(drawnbooster);
+        //update center from new possible possition to jump...
+        jumpToOtherSideOfScreen(drawnbooster);
+        var y1= 25*(Math.cos(drawnbooster.rotateDegree*Math.PI/180));
+        var x1= 25*(Math.sin(drawnbooster.rotateDegree*Math.PI/180));
+        drawnbooster.centerX= drawnRocket.centerX+x1;
+        drawnbooster.centerY= drawnRocket.centerY-y1;
+        
+        if(leftkey){
+        	drawnbooster.rotateDegree = drawnRocket.rotateDegree + 190;
+        }
+        if(rightkey){
+        	drawnbooster.rotateDegree = drawnRocket.rotateDegree + 160;
+        }
+        
+        adjustXYByCenterPoint(drawnbooster);
+        
+        rotatingDirection(drawnbooster,20,0);
+
+    }
+
+}
+
+function removeBooster(){
+	removeDrawnSprite(booster);
+	boosterOn = false;
+	if(numBooster > 0) {
+		numBooster--;
+     }
+}
 
 
 //asteroid objects
@@ -148,33 +201,10 @@ function MakeBullet(){
                    bulletArray.splice(i,1);
                 }
             }
-            //destroyBullet(this);
-            numBullets--;
-        	
+            numBullets--;        	
         }
         
-        
     }
-
-  //****This stuff does not work. Should either move code above here and call method or just remove method***//
-    this.destroyBullet=function(bullet){
-    	
-        /*for(var i=0; i<bulletArray.length; i++){
-        	console.log("1", bulletArray[i]);
-        	console.log("2", bullet);
-        }*/
-        /*for(var i=0; i<bulletArray.length; i++){
-            if(bulletArray[i].ID==bullet.ID){
-               bulletArray.splice(i,1);
-            }
-        }*/
-        //if(numBullets > 0) {
-        //numBullets--;
-        //}
-        //console.log("remove");
-
-    }
-
 
 }
 
@@ -269,6 +299,21 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
 
 function update(){
     drawnRocket.update();
+    
+    if(upkey){
+    	boosterOn = true;
+    }
+    if(upkey == false) {
+    	boosterOn = false;
+    	removeBooster();
+    }
+    if(boosterOn == true) {
+    	if( numBooster < maxBoosters )
+    		makeBooster();
+    	drawnbooster.update();
+    }
+    
+    
     for(var i=0; i<AsteroidArray.length; i++){
         AsteroidArray[i].update();
     }
