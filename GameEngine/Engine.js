@@ -36,6 +36,9 @@ function Sprite(x, y, width, height, src, ID) {
 	this.cYrelation=this.image.height/2;
 	this.centerX=this.cXrelation + this.X;
 	this.centerY=this.cYrelation + this.Y;
+	this.velocityX = 0;
+	this.velocityY = 0;
+	this.maxVelocity = 0;
 }
 
 function checkSprite(sprite, x, y) {
@@ -123,8 +126,15 @@ function selectedOutline(){
 
 function drawSprites(){
 
-
+	
 	for (var iter = 0; iter < drawnSprites.length; iter++) {
+		var signX = Math.sign(drawnSprites[iter].velocityX);
+		var signY = Math.sign(drawnSprites[iter].velocityY);
+		drawnSprites[iter].velocityX = signX*Math.min(Math.abs(drawnSprites[iter].velocityX), drawnSprites[iter].maxVelocity);
+		drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
+		drawnSprites[iter].X += drawnSprites[iter].velocityX;
+		drawnSprites[iter].Y += drawnSprites[iter].velocityY;
+		console.log(findSprite(drawnSprites, "ast0").velocityX);
 		if(drawnSprites[iter].rotating){
 		
 			context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);
