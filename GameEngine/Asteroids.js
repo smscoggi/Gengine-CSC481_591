@@ -15,13 +15,12 @@ rocksprite.image.width=3*cellWidth;
 rocksprite.image.height=3*cellHeight;
 var drawnRocket;
 
-var rocketStartX= canvas.width/2-rocksprite.image.width/2;
-var rocketStartY= canvas.height/2-rocksprite.image.height/2;
-
 makeRocket();
 
 function makeRocket(){
-    
+	removeDrawnSprite(findSprite(drawnSprites, "rocket"));
+	var rocketStartX= canvas.width/2-rocksprite.image.width/2;
+	var rocketStartY= canvas.height/2-rocksprite.image.height/2;
     addDrawnSprites(rocksprite, rocketStartX, rocketStartY,rocksprite.image.width, rocksprite.image.height, rocksprite.ID);
     drawnRocket= findSprite(drawnSprites,"rocket");
     drawnRocket.maxVelocity = 2;
@@ -49,7 +48,8 @@ function makeRocket(){
 
             if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
                // drawnRocket.explode(); /// will put explosion on top of rocket...
-              //  Game.reset();           /////will reset the game
+            	removeCollider(this.collider);
+                game_reset();           /////will reset the game
                 console.log("asteroid collision");
 
             }
@@ -128,10 +128,17 @@ makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
 
 
 function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
-    
+    if(findSprite(drawnSprites, "ast0") != null){
+    	for(var i = 0; i<numAsteroids; i++){
+    		var tempSprite = findSprite(drawnSprites, "ast" + i);
+    		removeCollider(tempSprite.collider);
+    		removeDrawnSprite(tempSprite);
+    	}
+    }
     for(var i=0; i<numAsteroids; i++){
       
         if(iter==1){ 
+        	//while(startposX <)
             startposX= Math.random()*xcellCount;
             startposY= Math.random()*ycellCount;
         }
@@ -190,7 +197,7 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
      
                  if(this.collider.collidedObjectsArray[i].type=="bullet"){
                     // ast.explode(); /// will put explosion on top of rocket...
-                   //  Game.reset();           /////will reset the game
+                    game_reset();           /////will reset the game
                     // console.log("asteroid collision");
 
                     console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
@@ -388,6 +395,11 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
   //  console.log("Y:", MovableObject.Y);
 }
 
+function game_reset(){
+	makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
+	makeRocket();
+	
+}
 
 
 ///////////////////////////////////////possible adds to engene----end////////////////////////

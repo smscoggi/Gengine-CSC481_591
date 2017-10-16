@@ -80,6 +80,9 @@ function addDrawnSprites(oldSprite,newX,newY,newWidth,newHeight,newid) {
 }
 
 function removeDrawnSprite(oldSprite){
+	if(oldSprite == null){
+		return;
+	}
 	for(var i=0; i<drawnSprites.length; i++){
 		if(drawnSprites[i].ID == oldSprite.ID){
 			drawnSprites.splice(i,1);
