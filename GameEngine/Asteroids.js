@@ -196,7 +196,7 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
                     console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
                     if(this.iteration==1){
                         removeDrawnSprite(this);
-                        removeCollider(this);
+                        removeCollider(this.collider);
                         for(var j=0; j<AsteroidArray.length; j++){
                             if(this== AsteroidArray[i]){
                                 AsteroidArray.splice(i,1);
@@ -280,7 +280,14 @@ function MakeBullet(){
         for(var i=0; i<this.collider.collidedObjectsArray.length; i++){
             
             if(this.collider.collidedObjectsArray[i].type=="asteroid"){
-                
+            	removeDrawnSprite(this);
+                removeCollider(this.collider);
+            	for(var i=0; i<bulletArray.length; i++){
+                    if(bulletArray[i].ID==bullet.ID){
+                       bulletArray.splice(i,1);
+                    }
+                }
+                numBullets--; 
 
             }
         }
