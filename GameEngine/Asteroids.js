@@ -120,26 +120,27 @@ var asteroidSprite1= findSprite(sprites,"asteroid1");
 asteroidSprite1.image.width= 2*cellWidth;
 asteroidSprite1.image.height=2*cellHeight;
 var AsteroidArray=new Array();
-var numAsteroids=6;
+var numAster=6;
 
 
-makeAsteroids();
+makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
 
 
 
-function makeAsteroids(){
+function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
     
     for(var i=0; i<numAsteroids; i++){
       
-
-        var startposX= Math.random()*xcellCount;
-        var startposY= Math.random()*ycellCount;
+        if(iter==1){ 
+            startposX= Math.random()*xcellCount;
+            startposY= Math.random()*ycellCount;
+        }
         addDrawnSprites(asteroidSprite1, startposX*cellWidth, startposY*cellHeight,asteroidSprite1.image.width, asteroidSprite1.image.height,"ast"+i);
        var ast=findSprite(drawnSprites,"ast"+i);
         AsteroidArray.push(ast);
         var randDimension=(1.5+Math.random()*2);
-        ast.image.width= randDimension*cellWidth;
-        ast.image.height= randDimension*cellHeight;
+        ast.image.width= randDimension*scalew;
+        ast.image.height= randDimension*scaleh;
         ast.rotateDegree=Math.random()*360;
         ast.rotating=true;
         ast.rotatedirection=Math.floor(Math.random()*2);
@@ -150,7 +151,9 @@ function makeAsteroids(){
         ast.speed=Math.random()*15;
         ast.type="asteroid";
         ast.collider=makeSpriteCollider(ast,"circle");
-        //console.log(ast.collider.centerY);
+       // ast.objectArray=asteroidArray;
+        ast.iteration=iter;
+
 
         ast.update=function(){
             adjustPosXYByCenterPoint(this);
@@ -191,7 +194,21 @@ function makeAsteroids(){
                     // console.log("asteroid collision");
 
                     console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
-                    
+                    if(this.iteration==1){
+                        removeDrawnSprite(this);
+                        removeCollider(this);
+                        for(var j=0; j<AsteroidArray.length; j++){
+                            if(this== AsteroidArray[i]){
+                                AsteroidArray.splice(i,1);
+                            }
+                        }
+                        //makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
+
+                        
+                    }
+                    else{
+
+                    }
                  }
      
              }
@@ -238,6 +255,8 @@ function MakeBullet(){
 
     bullet.type="bullet";
     bullet.collider=makeSpriteCollider(bullet,"circle");
+
+    bullet.objectArray=bulletArray;
 
     bullet.update=function(){
         if(testSideCrossing(this)){
