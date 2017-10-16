@@ -2,13 +2,20 @@
 ///need to set up game state functionality... put everything in a start function that gets called at the beginning of the game...
 ///...resets all variables used at game restart? will go in engine (start function to stay in game... model after unity?)
 
+var asteroidscellWidth = 15;
+var asteroidscellHeight = 15;
+var asteroidsxcellCount = Math.floor(canvas.width/cellWidth);
+var asteroidsycellCount = Math.floor(canvas.height/cellHeight-3);
+
+setCanvasGrid(asteroidscellWidth,asteroidscellHeight, asteroidsxcellCount, asteroidsycellCount)
+
 //background sprite
 addSprite("https://i.imgur.com/YeuKUD7.jpg","back");
 var back=findSprite(sprites,"back");
 
 ///rocket objects
 addSprite("https://i.imgur.com/M15Q3Sp.png","rocket");
-addDrawnSprites(back,0,0,canvas.width,canvas.height,"back");
+addDrawnSprites(back,0,0,canvas.width,asteroidsycellCount*asteroidscellHeight,"back");
 var rocksprite= findSprite(sprites,"rocket");
 
 rocksprite.image.width=3*cellWidth;
@@ -49,7 +56,7 @@ function makeRocket(){
 
             if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
                // drawnRocket.explode(); /// will put explosion on top of rocket...
-              //  Game.reset();           /////will reset the game
+                resetGame();         /////will reset the game
                 console.log("asteroid collision");
 
             }
@@ -59,6 +66,16 @@ function makeRocket(){
 
 }
 /////end rocket objects
+function resetGame(){
+	//console.log(drawnSprites.length);
+	for(var i=0; i<drawnSprites.length; i++){
+		if(drawnSprites[i].ID == "asteroid" || drawnSprites[i].ID == "rocket" || drawnSprites[i].ID == "bullet")
+		removeDrawnSprite(drawnSprites[i]);
+	}
+	//removeDrawnSprite()
+	makeRocket();
+	//makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
+}
 
 
 addSprite("https://i.imgur.com/iQ9zcMp.png", "booster");
@@ -148,7 +165,8 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
         //ast.trajectory=Math.pow(-1,Math.floor(Math.random()*2))*Math.random()*ycellCount/(Math.random()*xcellCount);
         ast.trajectory=Math.random()*360;
         ast.maxVelocity = 300;
-        ast.speed=Math.random()*15;
+        //ast.speed=Math.random()*15;
+        ast.speed=0;
         ast.type="asteroid";
         ast.collider=makeSpriteCollider(ast,"circle");
        // ast.objectArray=asteroidArray;
@@ -193,13 +211,14 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
                    //  Game.reset();           /////will reset the game
                     // console.log("asteroid collision");
 
-                    console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
+                    //console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
                     if(this.iteration==1){
+                    	//console.log(this.ID);
                         removeDrawnSprite(this);
                         removeCollider(this.collider);
                         for(var j=0; j<AsteroidArray.length; j++){
-                            if(this== AsteroidArray[i]){
-                                AsteroidArray.splice(i,1);
+                            if(this == AsteroidArray[j]){
+                                AsteroidArray.splice(j,1);
                             }
                         }
                         //makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
@@ -278,10 +297,10 @@ function MakeBullet(){
 
     bullet.collision=function(){
         for(var i=0; i<this.collider.collidedObjectsArray.length; i++){
-            
             if(this.collider.collidedObjectsArray[i].type=="asteroid"){
             	removeDrawnSprite(this);
                 removeCollider(this.collider);
+                score++;
             	for(var i=0; i<bulletArray.length; i++){
                     if(bulletArray[i].ID==bullet.ID){
                        bulletArray.splice(i,1);
@@ -389,7 +408,22 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
 }
 
 
+function drawStats(){
+	
+	var textfont ="verdana";
+	var textfillstyle = "#FFFFFF";
+	var textsize = 10;
 
+	var score_text = "Score: " + score ;
+		//context.fillStyle="#FFFFFF";
+		//context.fillText(score_text, 5, canvas.height-5);
+	addText(textsize,textfont,score_text,5, canvas.height-5,textfillstyle);
+
+	var highscore_text = "Session Highscore: " + highscore ;
+		//context.fillStyle="#FFFFFF";
+		//context.fillText(highscore_text, 5, canvas.height-20);
+	addText(textsize,textfont,highscore_text,5, canvas.height-20,textfillstyle);
+}
 ///////////////////////////////////////possible adds to engene----end////////////////////////
 
 
@@ -426,10 +460,16 @@ function update(){
     	bulletArray[i].update();
     }
     //console.log(numBullets,"number:", bulletID, "ID");
-    //testDrawnSprites();
+    testDrawnSprites();
     //testBulletArray();
 
     collisionDetection()
+    
+    if (highscore < score) {
+		highscore = score;
+	}
+	
+	checkHighscore(score);
 
 }
 
@@ -445,13 +485,14 @@ function testBulletArray() {
 
 function draw(){
 
-
-    canvas.width = canvas.width;
-    context.fillStyle="black";
-    context.fillRect(0,0,canvas.width,canvas.height);
-
-    
+	canvas.width = canvas.width;
+    //context.fillStyle="black";
+    //context.fillRect(0,0,canvas.width,canvas.height);
    
     drawSprites();
+
+    context.fillStyle="blue";
+    context.fillRect(0,asteroidscellHeight*asteroidsycellCount,canvas.width,canvas.height-asteroidscellHeight*asteroidsycellCount);
+    drawStats();
 
 }
