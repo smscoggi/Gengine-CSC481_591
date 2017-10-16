@@ -128,13 +128,9 @@ makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
 
 
 function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
-    if(findSprite(drawnSprites, "ast0") != null){
-    	for(var i = 0; i<numAsteroids; i++){
-    		var tempSprite = findSprite(drawnSprites, "ast" + i);
-    		removeCollider(tempSprite.collider);
-    		removeDrawnSprite(tempSprite);
-    	}
-    }
+    
+
+
     for(var i=0; i<numAsteroids; i++){
       
         if(iter==1){ 
@@ -197,28 +193,31 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
      
                  if(this.collider.collidedObjectsArray[i].type=="bullet"){
                     // ast.explode(); /// will put explosion on top of rocket...
-                    game_reset();           /////will reset the game
+                    //game_reset();           /////will reset the game
                     // console.log("asteroid collision");
 
                     console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
                     if(this.iteration==1){
-                        removeDrawnSprite(this);
-                        removeCollider(this.collider);
-                        for(var j=0; j<AsteroidArray.length; j++){
-                            if(this== AsteroidArray[i]){
-                                AsteroidArray.splice(i,1);
-                            }
-                        }
+                        this.reset();
                        // szdfasdf//makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
 
                         
                     }
-                    else{
-
-                    }
+                   
                  }
      
              }
+         }
+
+         ast.reset=function(){
+            removeDrawnSprite(this);
+            removeCollider(this.collider);
+            for(var j=0; j<AsteroidArray.length; j++){
+                if(this== AsteroidArray[i]){
+                    AsteroidArray.splice(i,1);
+                }
+            }
+
          }
 
         ////to create ast.reset or create a new astoroid when needed
@@ -396,6 +395,11 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
 }
 
 function game_reset(){
+    if(AsteroidArray.length>0){
+    	for(var i = 0; i<AsteroidArray.length; i++){
+    		AsteroidArray.reset();
+    	}
+    }
 	makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
 	makeRocket();
 	
