@@ -397,7 +397,7 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
 function game_reset(){
     if(AsteroidArray.length>0){
     	for(var i = 0; i<AsteroidArray.length; i++){
-    		AsteroidArray.reset();
+    		AsteroidArray[i].reset();
     	}
     }
 	makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
