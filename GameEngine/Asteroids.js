@@ -175,21 +175,23 @@ function makeAsteroids(){
             this.centerY = this.cYrelation + this.Y;
             //angledFowardMotin(this,this.speed,this.trajectory);
             ///update based on trajectory...
-            ast.collider.update();
-            ast.collision();
-
+            this.collider.update();
+            this.collision();
+            //console.log(ast.)
 
         }
 
         ast.collision=function(){
             // console.log(drawnRocket.collider.collidedObjectsArray.length)
-             for(var i=0; i<ast.collider.collidedObjectsArray.length; i++){
+             for(var i=0; i<this.collider.collidedObjectsArray.length; i++){
      
-                 if(ast.collider.collidedObjectsArray[i].type=="rocket"){
+                 if(this.collider.collidedObjectsArray[i].type=="bullet"){
                     // ast.explode(); /// will put explosion on top of rocket...
                    //  Game.reset();           /////will reset the game
                     // console.log("asteroid collision");
-     
+
+                    console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
+                    
                  }
      
              }
@@ -234,9 +236,13 @@ function MakeBullet(){
     
     bulletArray.push(bullet);
 
+    bullet.type="bullet";
+    bullet.collider=makeSpriteCollider(bullet,"circle");
+
     bullet.update=function(){
-        if(testSideCrossing(this)==true){
-        	removeDrawnSprite(this);
+        if(testSideCrossing(this)){
+            removeDrawnSprite(this);
+            removeCollider(this.collider);
         	for(var i=0; i<bulletArray.length; i++){
                 if(bulletArray[i].ID==bullet.ID){
                    bulletArray.splice(i,1);
@@ -245,6 +251,21 @@ function MakeBullet(){
             numBullets--;        	
         }
         
+        this.centerX = this.cXrelation + this.X;
+        this.centerY = this.cYrelation + this.Y;
+        this.collider.update();
+        this.collision();
+    }
+
+    bullet.collision=function(){
+        for(var i=0; i<this.collider.collidedObjectsArray.length; i++){
+            
+            if(this.collider.collidedObjectsArray[i].type=="asteroid"){
+                
+
+            }
+        }
+
     }
 
 }
@@ -254,6 +275,14 @@ function MakeBullet(){
 
 
 /////////Possible adds to engine//////////////////////////////////////
+function removeCollider(rcollider){
+    for(var i=0; i<colliders.length; i++){
+        if(rcollider == colliders[i]){
+            colliders.splice(i,1);
+        }
+    }
+
+}
 function testSideCrossing(movingObject){
     if (movingObject.X < 0 || movingObject.X > canvas.width || movingObject.Y < 0 || movingObject.Y > canvas.height) {
         return true;

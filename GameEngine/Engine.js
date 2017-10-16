@@ -327,10 +327,10 @@ function collisionDetection(){
 
 					var dist=actualDistance(mainC.centerX,mainC.centerY,c2.centerX,c2.centerY);
 					var distcheck=mainC.radius+c2.radius;
-					//console.log("dist:"+ dist+"   distcheck:"+distcheck);
+					//console.log(mainC.object.ID+" "+c2.object.ID+" dist:"+ dist+"   distcheck:"+distcheck);
 					if(dist<=distcheck){
-						console.log("dist:"+ dist+"   distcheck:"+distcheck);
-						console.log("yesss"+c2.object.ID);
+						//console.log("dist:"+ dist+"   distcheck:"+distcheck);
+						//console.log("yesss"+c2.object.ID);
 						mainC.collidedObjectsArray.push(c2.object);
 						
 					}
