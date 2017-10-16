@@ -26,8 +26,8 @@ function makeRocket(){
     drawnRocket= findSprite(drawnSprites,"rocket");
     drawnRocket.maxVelocity = 2;
     drawnRocket.rotating=false;
-    drawnRocket.collider=makeSpriteCollider(drawnRocket);
-    
+    drawnRocket.collider=makeSpriteCollider(drawnRocket,"circle");
+    drawnRocket.type="rocket";
     drawnRocket.update=function(){
         adjustPosXYByCenterPoint(drawnRocket);
         //update center from new possible possition to jump...
@@ -149,7 +149,8 @@ function makeAsteroids(){
         ast.maxVelocity = 300;
         ast.speed=Math.random()*15;
         ast.type="asteroid";
-
+        ast.collider=makeSpriteCollider(ast,"circle");
+        //console.log(ast.collider.centerY);
 
         ast.update=function(){
             adjustPosXYByCenterPoint(this);
@@ -174,11 +175,25 @@ function makeAsteroids(){
             this.centerY = this.cYrelation + this.Y;
             //angledFowardMotin(this,this.speed,this.trajectory);
             ///update based on trajectory...
-           
-
+            ast.collider.update();
+            ast.collision();
 
 
         }
+
+        ast.collision=function(){
+            // console.log(drawnRocket.collider.collidedObjectsArray.length)
+             for(var i=0; i<ast.collider.collidedObjectsArray.length; i++){
+     
+                 if(ast.collider.collidedObjectsArray[i].type=="rocket"){
+                    // ast.explode(); /// will put explosion on top of rocket...
+                   //  Game.reset();           /////will reset the game
+                    // console.log("asteroid collision");
+     
+                 }
+     
+             }
+         }
 
         ////to create ast.reset or create a new astoroid when needed
         

@@ -134,7 +134,7 @@ function drawSprites(){
 		drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
 		drawnSprites[iter].X += drawnSprites[iter].velocityX;
 		drawnSprites[iter].Y += drawnSprites[iter].velocityY;
-		console.log(findSprite(drawnSprites, "ast0").velocityX);
+		//console.log(findSprite(drawnSprites, "ast0").velocityX);
 		if(drawnSprites[iter].rotating){
 		
 			context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);
@@ -231,6 +231,10 @@ function checkdistance(x1, y1, x2, y2, distance) {
 
 	return 0;
 }
+function actualDistance(x1, y1, x2, y2){
+	var distance = Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+	return distance;
+}
 ///////////////////////////////////////New general purpose collider containers...old collision will be transfered to this..//////////
 var colliders= new Array();
 
@@ -245,45 +249,92 @@ function Collider(X,Y,width,height){
 	this.object;
 
 }
+function Collider(centerX,centerY,radius){
 
-function makeSpriteCollider(Object){
-	var collider= new Collider(Object.X,Object.Y,Object.width,Object.height);
+	this.centerX= centerX;
+	this.centerY= centerY;
+	this.radius=radius;
+	this.collidedObjectsArray=new Array();
+	this.update;
+	this.object;
+}
+
+function makeSpriteCollider(Object, type){
+
+	if(type=="box"){
+	var collider= new Collider(Object.X,Object.Y,Object.image.width,Object.image.height);
+	
+
+		collider.update= function(){
+			this.top= this.object.Y;
+			this.left=this.object.X;
+			this.right=this.object.X+this.object.image.width;
+			this.bottom=this.object.Y+this.object.image.height;
+
+			}
+		}
+	else if(type=="circle"){
+
+		//need to define this as an ellipse later...
+		var collider = new Collider(Object.centerX,Object.centerY,Object.image.height/2);
+		collider.update= function(){
+			this.centerX=this.object.centerX;
+			this.centerY=this.object.centerY;
+	
+
+		}
+	}
+	collider.type=type;
 	collider.object=Object;
 	colliders.push(collider);
-
-	collider.update= function(){
-		this.top= this.object.Y;
-		this.left=this.object.X;
-		this.right=this.object.X+this.object.image.width;
-		this.bottom=this.object.Y+this.object.image.height;
-
-	}
 	return collider;
 }
+
 
 function collisionDetection(){
 	//console.log(colliders.length);
 	for(var i=0; i<colliders.length; i++){
 		var mainC = colliders[i];
+		//console.log(mainC.collidedObjectsArray.length + mainC.object.type+ i);
 		mainC.collidedObjectsArray.length=0;
-
+		///console.log(mainC.collidedObjectsArray.length);
 		for(var j=0; j<colliders.length; j++){
 			var c2 = colliders[j];
 			if(i==j){
 				//do nothing
 			}
 			else{
-				console.log("yesss");
-				///check for collsions
-				if((mainC.top<=c2 && c2<=mainC.bottom) || (mainC.top<=c2.bottom && c2.bottom<=mainC.bottom)){
 				
-					if((mainC.left<=c2.left && c2.left<=mainC.right) || (mainC.left<=c2.right && c2.right<=mainC.right)){
+				///check for collsions
+				//console.log("maintop"+mainC.top);
+				//console.log("mainbottom"+mainC.bottom);
+				//console.log("ctop"+c2.top);
+				//console.log("cbottom"+c2.bottom);
+				if(mainC.type=="box"){	
+					if((mainC.top<=c2.top && c2.top<=mainC.bottom) || (mainC.top<=c2.bottom && c2.bottom<=mainC.bottom)){
+						//console.log("yesss");
+						if((mainC.left<=c2.left && c2.left<=mainC.right) || (mainC.left<=c2.right && c2.right<=mainC.right)){
 					////this means two edges of checked collider (j) have crossed into the main collider (i)
-						console.log("pushing c2");
-						mainC.collidedObjectsArray.push(c2.object);
+						//console.log("pushing c2");
+							mainC.collidedObjectsArray.push(c2.object);
 						
 
+						}
 					}
+				}
+				else if(mainC.type="circle"){
+				
+
+					var dist=actualDistance(mainC.centerX,mainC.centerY,c2.centerX,c2.centerY);
+					var distcheck=mainC.radius+c2.radius;
+					//console.log("dist:"+ dist+"   distcheck:"+distcheck);
+					if(dist<=distcheck){
+						console.log("dist:"+ dist+"   distcheck:"+distcheck);
+						console.log("yesss"+c2.object.ID);
+						mainC.collidedObjectsArray.push(c2.object);
+						
+					}
+
 				}
 			}
 		}
