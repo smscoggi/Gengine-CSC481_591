@@ -209,7 +209,7 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
                                 AsteroidArray.splice(i,1);
                             }
                         }
-                        //makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
+                       // szdfasdf//makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
 
                         
                     }
