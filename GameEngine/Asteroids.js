@@ -13,6 +13,9 @@ setCanvasGrid(asteroidscellWidth,asteroidscellHeight, asteroidsxcellCount, aster
 addSprite("https://i.imgur.com/YeuKUD7.jpg","back");
 var back=findSprite(sprites,"back");
 
+addSprite("https://i.imgur.com/nfOhB08.png","splode");
+var splode= findSprite(sprites,"splode");
+
 ///rocket objects
 addSprite("https://i.imgur.com/M15Q3Sp.png","rocket");
 addDrawnSprites(back,0,0,canvas.width,asteroidsycellCount*asteroidscellHeight,"back");
@@ -56,7 +59,10 @@ function makeRocket(){
 
             if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
                // drawnRocket.explode(); /// will put explosion on top of rocket...
-            	removeCollider(this.collider);
+               //addDrawnSprites(splode,drawnRocket.X,drawnRocket.Y,drawnRocket.image.width,drawnRocket.image.height, "splode");
+              
+                makeExplosion(drawnRocket);
+               removeCollider(this.collider);
                 game_reset();           /////will reset the game
                 console.log("asteroid collision");
 
@@ -67,6 +73,34 @@ function makeRocket(){
 
 }
 /////end rocket objects
+
+///explosion mechanics
+explodeArray=new Array();
+
+function makeExplosion(explodingObject){ 
+    addDrawnSprites(splode,explodingObject.X,explodingObject.Y,explodingObject.image.width,explodingObject.image.height, "splode");
+    var esplode= findSprite(drawnSprites,"splode");
+    esplode.counter=2;
+    explodeArray.push(esplode);
+
+    esplode.update=function(){
+       // console.log("splodeeeeeeee");
+        if(this.counter<=0){
+            removeDrawnSprite(this);
+            for(var i=0; i<explodeArray.length; i++){
+                if(this== explodeArray[i]){
+                    explodeArray.splice(i,1);
+                }
+            }
+        }
+        this.counter--;
+
+    }
+
+
+}
+
+
 
 addSprite("https://i.imgur.com/iQ9zcMp.png", "booster");
 var booster = findSprite(sprites,"booster");
@@ -200,9 +234,10 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
                     //game_reset();           /////will reset the game
                     // console.log("asteroid collision");
 
-                    console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
+                    //console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
                     if(this.iteration==1){
                         this.reset();
+                        makeExplosion(this);
                        // szdfasdf//makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
 
                         
@@ -475,9 +510,15 @@ function update(){
 		highscore = score;
 	}
 	
-	checkHighscore(score);
+    checkHighscore(score);
+    
+    for(var i=0; i<explodeArray.length; i++){
+        explodeArray[i].update();
+    }
 
 }
+
+
 
 function testBulletArray() {   
 	var testString = "";
