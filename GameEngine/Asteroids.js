@@ -17,6 +17,7 @@ addSprite("https://i.imgur.com/nfOhB08.png","splode");
 var splode= findSprite(sprites,"splode");
 
 ///rocket objects
+///image credit http://millionthvector.blogspot.com/p/free-sprites_12.html by MillionVector
 addSprite("https://i.imgur.com/M15Q3Sp.png","rocket");
 addDrawnSprites(back,0,0,canvas.width,asteroidsycellCount*asteroidscellHeight,"back");
 var rocksprite= findSprite(sprites,"rocket");
