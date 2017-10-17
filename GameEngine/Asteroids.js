@@ -28,7 +28,7 @@ var rocketStartY= canvas.height/2-rocksprite.image.height/2;
 makeRocket();
 
 function makeRocket(){
-    
+    removeDrawnSprite(findSprite(drawnSprites, "rocket"));
     addDrawnSprites(rocksprite, rocketStartX, rocketStartY,rocksprite.image.width, rocksprite.image.height, rocksprite.ID);
     drawnRocket= findSprite(drawnSprites,"rocket");
     drawnRocket.maxVelocity = 2;
@@ -56,7 +56,8 @@ function makeRocket(){
 
             if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
                // drawnRocket.explode(); /// will put explosion on top of rocket...
-                resetGame();         /////will reset the game
+            	removeCollider(this.collider);
+                game_reset();           /////will reset the game
                 console.log("asteroid collision");
 
             }
@@ -66,17 +67,6 @@ function makeRocket(){
 
 }
 /////end rocket objects
-function resetGame(){
-	//console.log(drawnSprites.length);
-	for(var i=0; i<drawnSprites.length; i++){
-		if(drawnSprites[i].ID == "asteroid" || drawnSprites[i].ID == "rocket" || drawnSprites[i].ID == "bullet")
-		removeDrawnSprite(drawnSprites[i]);
-	}
-	//removeDrawnSprite()
-	makeRocket();
-	//makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
-}
-
 
 addSprite("https://i.imgur.com/iQ9zcMp.png", "booster");
 var booster = findSprite(sprites,"booster");
@@ -165,8 +155,7 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
         //ast.trajectory=Math.pow(-1,Math.floor(Math.random()*2))*Math.random()*ycellCount/(Math.random()*xcellCount);
         ast.trajectory=Math.random()*360;
         ast.maxVelocity = 300;
-        //ast.speed=Math.random()*15;
-        ast.speed=0;
+        ast.speed=Math.random()*15;
         ast.type="asteroid";
         ast.collider=makeSpriteCollider(ast,"circle");
        // ast.objectArray=asteroidArray;
@@ -208,29 +197,31 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
      
                  if(this.collider.collidedObjectsArray[i].type=="bullet"){
                     // ast.explode(); /// will put explosion on top of rocket...
-                   //  Game.reset();           /////will reset the game
+                    //game_reset();           /////will reset the game
                     // console.log("asteroid collision");
 
-                    //console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
+                    console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
                     if(this.iteration==1){
-                    	//console.log(this.ID);
-                        removeDrawnSprite(this);
-                        removeCollider(this.collider);
-                        for(var j=0; j<AsteroidArray.length; j++){
-                            if(this == AsteroidArray[j]){
-                                AsteroidArray.splice(j,1);
-                            }
-                        }
-                        //makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
+                        this.reset();
+                       // szdfasdf//makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
 
                         
                     }
-                    else{
-
-                    }
+                   
                  }
      
              }
+         }
+         
+         ast.reset=function(){
+            removeDrawnSprite(this);
+            removeCollider(this.collider);
+            for(var j=0; j<AsteroidArray.length; j++){
+                if(this == AsteroidArray[j]){
+                    AsteroidArray.splice(j,1);
+                }
+            }
+
          }
 
         ////to create ast.reset or create a new astoroid when needed
@@ -407,6 +398,21 @@ function angledFowardMotion(MovableObject,fowardStep,angle){
   //  console.log("Y:", MovableObject.Y);
 }
 
+function game_reset(){
+    if(AsteroidArray.length>0){
+    	for(var i = 0; i<AsteroidArray.length; i++){
+    		//AsteroidArray[i].reset();
+    		//AsteroidArray.splice(i,1);
+    		removeCollider(AsteroidArray[i].collider);
+    		removeDrawnSprite(AsteroidArray[i]);
+    	}
+    }
+	makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
+	removeBooster();
+	makeRocket();
+	score = 0;
+	
+}
 
 function drawStats(){
 	
@@ -460,7 +466,7 @@ function update(){
     	bulletArray[i].update();
     }
     //console.log(numBullets,"number:", bulletID, "ID");
-    testDrawnSprites();
+    //testDrawnSprites();
     //testBulletArray();
 
     collisionDetection()
