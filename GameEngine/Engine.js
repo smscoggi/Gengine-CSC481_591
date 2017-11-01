@@ -391,6 +391,7 @@ var rightkey=false;
 var upkey=false;
 var downkey= false;
 var spacebar=false;
+var menu = 0;
 /////need to setup changing functions for changing keys meant for controls...
 function handleKeypress(e){
 
@@ -414,6 +415,12 @@ function handleKeypress(e){
 	case 40:
 		direction = 'down';
 		downkey=true;
+		break;
+	case 27:
+		menu += 1;
+		if(menu > 1){
+			menu = 0;
+		}
 		break;
 	}
 

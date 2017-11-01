@@ -315,10 +315,7 @@ function MakeBullet(){
     addDrawnSprites(bulletSprite, startposX, startposY,bulletSprite.image.width, bulletSprite.image.height,"bullet"+bulletID);
     var bullet=findSprite(drawnSprites,"bullet"+bulletID);
     bullet.trajectory=drawnRocket.rotateDegree;
-    bullet.speed=25;
-    bullet.maxVelocity = 25;
-    bullet.velocityX = bullet.speed*Math.sin(bullet.trajectory*Math.PI/180);
-    bullet.velocityY = -1*bullet.speed*Math.cos(bullet.trajectory*Math.PI/180);
+    
     
     bulletArray.push(bullet);
 
@@ -328,6 +325,16 @@ function MakeBullet(){
     bullet.objectArray=bulletArray;
 
     bullet.update=function(){
+    	bullet.speed=25;
+        bullet.maxVelocity = 25;
+        bullet.velocityX = bullet.speed*Math.sin(bullet.trajectory*Math.PI/180);
+        bullet.velocityY = -1*bullet.speed*Math.cos(bullet.trajectory*Math.PI/180);
+        if(onMenu) {
+        	bullet.speed=0;
+            bullet.maxVelocity = 0;
+            bullet.velocityX = 0;
+            bullet.velocityY = 0;
+        }
         if(testSideCrossing(this)){
             removeDrawnSprite(this);
             removeCollider(this.collider);
@@ -493,55 +500,66 @@ function drawStats(){
 }
 ///////////////////////////////////////possible adds to engene----end////////////////////////
 
+var onMenu = true;
 
 function update(){
-    drawnRocket.update();
-    
-    if(upkey){
-    	boosterOn = true;
-    }
-    if(upkey == false) {
-    	boosterOn = false;
-    	removeBooster();
-    }
-    if(boosterOn == true) {
-    	if( numBooster < maxBoosters )
-    		makeBooster();
-    	drawnbooster.update();
-    }
-    
-    
-    for(var i=0; i<AsteroidArray.length; i++){
-        AsteroidArray[i].update();
-    }
-
-    if(spacebar && bulletTime >= bulletSpacing){
-    	if (numBullets < maxBullets){
-    		MakeBullet();
-    		bulletTime = 0;
-    	}
-    }
-    bulletTime++;
-    
-    for(var i=0; i<bulletArray.length; i++){
-    	bulletArray[i].update();
-    }
-    //console.log(numBullets,"number:", bulletID, "ID");
-    //testDrawnSprites();
-    //testBulletArray();
-
-    collisionDetection()
-    
-    if (highscore < score) {
-		highscore = score;
+	if(menu == 0) {
+		onMenu = true;
+	} else {
+		onMenu = false;
 	}
-	
-    checkHighscore(score);
-    
-    for(var i=0; i<explodeArray.length; i++){
-        explodeArray[i].update();
-    }
+	if(onMenu){
 
+	} else {
+
+		drawnRocket.update();
+
+		if(upkey){
+			boosterOn = true;
+		}
+		if(upkey == false) {
+			boosterOn = false;
+			removeBooster();
+		}
+		if(boosterOn == true) {
+			if( numBooster < maxBoosters )
+				makeBooster();
+			drawnbooster.update();
+		}
+
+
+		for(var i=0; i<AsteroidArray.length; i++){
+			AsteroidArray[i].update();
+		}
+
+		if(spacebar && bulletTime >= bulletSpacing){
+			if (numBullets < maxBullets){
+				MakeBullet();
+				bulletTime = 0;
+			}
+		}
+		bulletTime++;
+
+		
+		//console.log(numBullets,"number:", bulletID, "ID");
+		//testDrawnSprites();
+		//testBulletArray();
+
+		collisionDetection()
+
+		if (highscore < score) {
+			highscore = score;
+		}
+
+		checkHighscore(score);
+
+		for(var i=0; i<explodeArray.length; i++){
+			explodeArray[i].update();
+		}
+	}
+	for(var i=0; i<bulletArray.length; i++){
+		bulletArray[i].update();
+	}
 }
 
 
@@ -556,16 +574,35 @@ function testBulletArray() {
 
 
 
+var title = 'Asteroids';
+var text = 'Esc to begin';
+var measurement = 0;
 function draw(){
 
 	canvas.width = canvas.width;
-    //context.fillStyle="black";
-    //context.fillRect(0,0,canvas.width,canvas.height);
-   
-    drawSprites();
+    
+	drawSprites();
 
     context.fillStyle="blue";
+    context.font = '16px monospace';
     context.fillRect(0,asteroidscellHeight*asteroidsycellCount,canvas.width,canvas.height-asteroidscellHeight*asteroidsycellCount);
     drawStats();
+    
+    
+	if(onMenu){
+		//context.fillStyle='black';
+	    //context.fillRect(0,0,canvas.width,canvas.height);
+		context.fillStyle = 'white';
+		context.font = '48px monospace';
+		measurement = context.measureText(title);
+		context.fillText(title, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2);
 
+		context.fillStyle = 'red';
+		context.font = '24px monospace';
+		measurement = context.measureText(text);
+		context.fillText(text, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30);
+	} 
+		
+
+	
 }

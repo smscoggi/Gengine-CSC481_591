@@ -26,3 +26,7 @@ All related varibles to makefood() moved to array.
 - Added changing difficulty for snake game.
 :github commit = diffuculty implementation
 :github commit = Fixed Difficulty Dropdown
+
+Asteroids Refactoring - 11/1/2017
+Added a menu. Press Esc to start/pause.
+Changed Makebullet() to reflect pause menu.
