@@ -486,7 +486,7 @@ function drawStats(){
 	
 	var textfont ="verdana";
 	var textfillstyle = "#FFFFFF";
-	var textsize = 10;
+	var textsize = '16px';
 
 	var score_text = "Score: " + score ;
 		//context.fillStyle="#FFFFFF";
@@ -582,9 +582,7 @@ function draw(){
 	canvas.width = canvas.width;
     
 	drawSprites();
-
     context.fillStyle="blue";
-    context.font = '16px monospace';
     context.fillRect(0,asteroidscellHeight*asteroidsycellCount,canvas.width,canvas.height-asteroidscellHeight*asteroidsycellCount);
     drawStats();
     
@@ -592,15 +590,13 @@ function draw(){
 	if(onMenu){
 		//context.fillStyle='black';
 	    //context.fillRect(0,0,canvas.width,canvas.height);
-		context.fillStyle = 'white';
 		context.font = '48px monospace';
 		measurement = context.measureText(title);
-		context.fillText(title, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2);
+		addText('48px', 'monospace', title, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2, 'white');
 
-		context.fillStyle = 'red';
 		context.font = '24px monospace';
 		measurement = context.measureText(text);
-		context.fillText(text, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30);
+		addText('24px', 'monospace', text, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30, 'red');
 	} 
 		
 
