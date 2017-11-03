@@ -26,3 +26,29 @@ All related varibles to makefood() moved to array.
 - Added changing difficulty for snake game.
 :github commit = diffuculty implementation
 :github commit = Fixed Difficulty Dropdown
+
+Asteroids Refactoring - 11/1/2017
+-Added a menu. Press Esc to start/pause.
+
+-Changed Makebullet() to reflect pause menu.
+
+-Moved various functions from Asteroids.js to Engine.js
+	-Functions
+	:adjustPosXYByCenterPoint
+	:adjustXYByCenterPoint
+	:rotatingDirection
+	:rightRotation
+	:leftRotation
+	:angledFowardMotion
+	:jumpToOtherSideOfScreen
+	:testSideCrossing
+	
+-Comment cleanup and blank space cleanup
+
+-BUG fix - Added Asteroids to gallery in GamesIndex.html
+
+-Took out update velocity from drawSprites and made it to its own function.
+
+-BUg fix - Flying bullets are now destroyed when game resets.
+
+-Added border to score box

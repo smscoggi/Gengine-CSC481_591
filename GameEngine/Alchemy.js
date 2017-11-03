@@ -11,7 +11,7 @@ addSprite("http://i.imgur.com/CuQvdVG.png", 4);
 addDrawnSprite(sprites[0])
 addDrawnSprite(sprites[1])
 
-var direction = 'none';
+//var direction = 'none';
 var selectedImage = -1;
 var draggingImage = false;
 
