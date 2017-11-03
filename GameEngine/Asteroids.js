@@ -7,7 +7,7 @@ var asteroidscellHeight = 15;
 var asteroidsxcellCount = Math.floor(canvas.width/cellWidth);
 var asteroidsycellCount = Math.floor(canvas.height/cellHeight-3);
 
-setCanvasGrid(asteroidscellWidth,asteroidscellHeight, asteroidsxcellCount, asteroidsycellCount)
+setCanvasGrid(asteroidscellWidth,asteroidscellHeight, asteroidsxcellCount, asteroidsycellCount);
 
 //background sprite
 addSprite("https://i.imgur.com/YeuKUD7.jpg","back");
