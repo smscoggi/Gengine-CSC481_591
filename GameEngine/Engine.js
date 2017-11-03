@@ -146,6 +146,8 @@ function updateVelocity(){
 			drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
 			drawnSprites[iter].X += drawnSprites[iter].velocityX;
 			drawnSprites[iter].Y += drawnSprites[iter].velocityY;
+			//drawnSprites[iter].centerX=drawnSprites[iter].cXrelation;
+			//drawnSprites[iter].centerY=drawnSprites[iter].cYrelation;
 		}
 	}
 }
