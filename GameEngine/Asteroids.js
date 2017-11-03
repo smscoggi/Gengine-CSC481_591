@@ -347,6 +347,15 @@ function MakeBullet(){
 
 }
 
+///not called any where else
+function testBulletArray() {   
+	var testString = "";
+	for(var i=0; i<bulletArray.length; i++){
+		testString = testString+ " " +bulletArray[i].ID;
+	}
+	console.log(testString);
+}
+
 
 function game_reset(){
 	numAster= 6;
@@ -377,17 +386,24 @@ function drawStats(){
 	addText(textsize,textfont,highscore_text,5, canvas.height-20,textfillstyle);
 }
 
+
+
+///menu stuff
 var onMenu = true;
+var title = 'Asteroids';
+var text = 'Esc to begin';
+var measurement = 0;
 
 function update(){
-	if(menu == 0) {
+    ///new menu
+    if(menu == 0) {
 		onMenu = true;
 	} else {
 		onMenu = false;
 	}
-	if(onMenu){
+	if(!onMenu){
 
-	} else {
+
 
 		drawnRocket.update();
 
@@ -439,19 +455,8 @@ function update(){
 
 
 
-function testBulletArray() {   
-	var testString = "";
-	for(var i=0; i<bulletArray.length; i++){
-		testString = testString+ " " +bulletArray[i].ID;
-	}
-	console.log(testString);
-}
 
 
-
-var title = 'Asteroids';
-var text = 'Esc to begin';
-var measurement = 0;
 function draw(){
 
 	canvas.width = canvas.width;
@@ -479,3 +484,6 @@ function draw(){
 
 	
 }
+
+
+
