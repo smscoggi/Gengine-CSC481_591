@@ -39,6 +39,7 @@ function makeRocket(){
     drawnRocket.rotating=false;
     drawnRocket.collider=makeSpriteCollider(drawnRocket,"circle");
     drawnRocket.type="rocket";
+
     drawnRocket.update=function(){
         adjustPosXYByCenterPoint(drawnRocket);
         //update center from new possible position to jump...
@@ -97,8 +98,6 @@ function makeExplosion(explodingObject){
 
 
 }
-
-
 
 addSprite("https://i.imgur.com/iQ9zcMp.png", "booster");
 var booster = findSprite(sprites,"booster");
@@ -435,8 +434,8 @@ function update(){
 
 		
 	
-
-		collisionDetection()
+        updateVelocity();
+		collisionDetection();
 
 		if (highscore < score) {
 			highscore = score;
@@ -479,10 +478,7 @@ function draw(){
 		context.font = '24px monospace';
 		measurement = context.measureText(text);
 		context.fillText(text, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30);
-	} 
-		
-
-	
+	} 	
 }
 
 

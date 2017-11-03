@@ -136,16 +136,25 @@ function selectedOutline(){
 	}
 }
 
+function updateVelocity(){
+	
+		for (var iter = 0; iter < drawnSprites.length; iter++) {
+			if(drawnSprites[iter].velocityX!=0 && drawnSprites[iter].velocityY!=0){
+			var signX = Math.sign(drawnSprites[iter].velocityX);
+			var signY = Math.sign(drawnSprites[iter].velocityY);
+			drawnSprites[iter].velocityX = signX*Math.min(Math.abs(drawnSprites[iter].velocityX), drawnSprites[iter].maxVelocity);
+			drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
+			drawnSprites[iter].X += drawnSprites[iter].velocityX;
+			drawnSprites[iter].Y += drawnSprites[iter].velocityY;
+		}
+	}
+}
+
 function drawSprites(){
 
 	
 	for (var iter = 0; iter < drawnSprites.length; iter++) {
-		var signX = Math.sign(drawnSprites[iter].velocityX);
-		var signY = Math.sign(drawnSprites[iter].velocityY);
-		drawnSprites[iter].velocityX = signX*Math.min(Math.abs(drawnSprites[iter].velocityX), drawnSprites[iter].maxVelocity);
-		drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
-		drawnSprites[iter].X += drawnSprites[iter].velocityX;
-		drawnSprites[iter].Y += drawnSprites[iter].velocityY;
+	
 		//console.log(findSprite(drawnSprites, "ast0").velocityX);
 		if(drawnSprites[iter].rotating){
 		
