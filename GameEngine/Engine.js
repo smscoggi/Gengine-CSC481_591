@@ -106,6 +106,15 @@ function findSprite(spritearray,id){
 	return null;
 
 }
+function adjustPosXYByCenterPoint(MovableObject){
+    MovableObject.posX=MovableObject.centerX/cellWidth;
+    MovableObject.posY= MovableObject.centerY/cellHeight;
+}
+
+function adjustXYByCenterPoint(MovableObject){
+    MovableObject.X=MovableObject.centerX-MovableObject.cXrelation;
+    MovableObject.Y=MovableObject.centerY-MovableObject.cYrelation;
+}
 
 
 ///////////////////////////////////////
@@ -345,6 +354,16 @@ function collisionDetection(){
 }
 
 
+function removeCollider(rcollider){
+    for(var i=0; i<colliders.length; i++){
+        if(rcollider == colliders[i]){
+            colliders.splice(i,1);
+        }
+    }
+
+}
+
+
 ///////////////////////////////////////////////End--collsions
 
 //KeyBoard and Mouse events
@@ -503,6 +522,61 @@ function basicDirection(basicMovableObject, backwardsDirection){
 
 }
 
+function rotatingDirection(MovableObject, degreeStep,fowardStep){
+    MovableObject.rotating= true;
+    if(rightkey){
+        
+            rightRotation(MovableObject,degreeStep);
+        	//direction="none";
+            
+    }
+     else if(leftkey){ 
+            leftRotation(MovableObject,degreeStep);
+        	//direction="none";
+     }
+        	////need dynamic functionality to add/take direction usage for other games...///
+        	///direction="none";
+        	//break;
+    
+    if(upkey){
+        angledFowardMotion(MovableObject,fowardStep,MovableObject.rotateDegree);
+
+    }
+}
+
+function rightRotation(MovableObject,degreeStep){
+    MovableObject.rotateDegree = MovableObject.rotateDegree + degreeStep;
+   // console.log(MovableObject.rotateDegree);
+    if(MovableObject.rotateDegree>=360){
+        MovableObject.rotateDegree-= 360;
+    }
+
+}
+function leftRotation(MovableObject,degreeStep){
+    MovableObject.rotateDegree = MovableObject.rotateDegree - degreeStep;
+   // console.log(MovableObject.rotateDegree);
+    if(MovableObject.rotateDegree<0){
+        MovableObject.rotateDegree+= 360;
+    }
+}
+function angledFowardMotion(MovableObject,fowardStep,angle){
+    var y1= fowardStep*(Math.cos(angle*Math.PI/180));
+    var x1= fowardStep*(Math.sin(angle*Math.PI/180));
+   // console.log("x1:", x1);
+   // console.log("y1:", y1);
+    
+    MovableObject.velocityX += fowardStep*Math.sin(angle*Math.PI/180);
+    MovableObject.velocityY -= fowardStep*Math.cos(angle*Math.PI/180);
+    
+    //MovableObject.X += x1;
+    //MovableObject.Y -= y1;
+    //MovableObject.centerX = MovableObject.cXrelation + MovableObject.X;
+    //MovableObject.centerY = MovableObject.cYrelation + MovableObject.Y;
+    
+  //  console.log("X:", MovableObject.X);
+  //  console.log("Y:", MovableObject.Y);
+}
+
 function jumpToOtherSideOfScreen(movingObject){
 	///takes moving object and jumps it to the other side of viewable screen
 	//returns object with updated x,y positions 
@@ -534,7 +608,13 @@ function jumpToOtherSideOfScreen(movingObject){
 	return movingObject;
 }
 
-
+function testSideCrossing(movingObject){
+    if (movingObject.X < 0 || movingObject.X > canvas.width || movingObject.Y < 0 || movingObject.Y > canvas.height) {
+        return true;
+         
+     }
+     else{return false;}
+}
 
 ///////////////////////////////////////////////////////////////objects
 function Wall(xWall, yWall, xcellWidth, ycellLength) {

@@ -7,7 +7,7 @@ var asteroidscellHeight = 15;
 var asteroidsxcellCount = Math.floor(canvas.width/cellWidth);
 var asteroidsycellCount = Math.floor(canvas.height/cellHeight-3);
 
-setCanvasGrid(asteroidscellWidth,asteroidscellHeight, asteroidsxcellCount, asteroidsycellCount);
+setCanvasGrid(asteroidscellWidth,asteroidscellHeight, asteroidsxcellCount, asteroidsycellCount)
 
 //background sprite
 addSprite("https://i.imgur.com/YeuKUD7.jpg","back");
@@ -41,7 +41,7 @@ function makeRocket(){
     drawnRocket.type="rocket";
     drawnRocket.update=function(){
         adjustPosXYByCenterPoint(drawnRocket);
-        //update center from new possible possition to jump...
+        //update center from new possible position to jump...
         jumpToOtherSideOfScreen(drawnRocket);
         drawnRocket.centerX=(drawnRocket.posX+drawnRocket.velocityX)*cellWidth;
         drawnRocket.centerY=(drawnRocket.posY+drawnRocket.velocityY)*cellHeight;
@@ -55,13 +55,10 @@ function makeRocket(){
     }
     
     drawnRocket.collision=function(){
-       // console.log(drawnRocket.collider.collidedObjectsArray.length)
+      
         for(var i=0; i<drawnRocket.collider.collidedObjectsArray.length; i++){
 
             if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
-               // drawnRocket.explode(); /// will put explosion on top of rocket...
-               //addDrawnSprites(splode,drawnRocket.X,drawnRocket.Y,drawnRocket.image.width,drawnRocket.image.height, "splode");
-              
                 makeExplosion(drawnRocket);
                removeCollider(this.collider);
                 game_reset();           /////will reset the game
@@ -85,7 +82,7 @@ function makeExplosion(explodingObject){
     explodeArray.push(esplode);
 
     esplode.update=function(){
-       // console.log("splodeeeeeeee");
+       
         if(this.counter<=0){
             removeDrawnSprite(this);
             for(var i=0; i<explodeArray.length; i++){
@@ -192,20 +189,17 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
         ast.rotateDegree=Math.random()*360;
         ast.rotating=true;
         ast.rotatedirection=Math.floor(Math.random()*2);
-        ///random slope calculation...may need more refining..
-        //ast.trajectory=Math.pow(-1,Math.floor(Math.random()*2))*Math.random()*ycellCount/(Math.random()*xcellCount);
         ast.trajectory=Math.random()*360;
         ast.maxVelocity = 300;
         ast.speed=Math.random()*15;
         ast.type="asteroid";
         ast.collider=makeSpriteCollider(ast,"circle");
-       // ast.objectArray=asteroidArray;
         ast.iteration=iter;
 
 
         ast.update=function(){
             adjustPosXYByCenterPoint(this);
-            //update center from new possible possition to jump...
+            //update center from new possible position to jump...
             jumpToOtherSideOfScreen(this);
             this.centerX=this.posX*cellWidth;
             this.centerY=this.posY*cellHeight;
@@ -224,19 +218,15 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
             this.Y -= this.speed*Math.cos(this.trajectory*Math.PI/180);
             this.centerX = this.cXrelation + this.X;
             this.centerY = this.cYrelation + this.Y;
-            //angledFowardMotin(this,this.speed,this.trajectory);
             ///update based on trajectory...
             this.collider.update();
             this.collision();
-            //console.log(ast.)
             
             if(astCount <= 0) {
             	numAster=Math.floor(numAster*1.25);
             	astCount = numAster;
             	if(AsteroidArray.length>0){
                 	for(var i = 0; i<AsteroidArray.length; i++){
-                		//AsteroidArray[i].reset();
-                		//AsteroidArray.splice(i,1);
                 		removeCollider(AsteroidArray[i].collider);
                 		removeDrawnSprite(AsteroidArray[i]);
                 	}
@@ -247,28 +237,17 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
         }
 
         ast.collision=function(){
-            // console.log(drawnRocket.collider.collidedObjectsArray.length)
              for(var i=0; i<this.collider.collidedObjectsArray.length; i++){
      
                  if(this.collider.collidedObjectsArray[i].type=="bullet"){
-                    // ast.explode(); /// will put explosion on top of rocket...
-                    //game_reset();           /////will reset the game
-                    // console.log("asteroid collision");
-
-                    //console.log("bullet collision"+this.collider.collidedObjectsArray[i].ID);
                     if(this.iteration==1){
                     	if(astCount > 0 ) {
                     		astCount--;
                     	}
                         this.reset();
-                        makeExplosion(this);
-                       // szdfasdf//makeAsteroids(2,2,this.image.width/2, this.image.height/2,this.posX, this.posY);
-
-                        
+                        makeExplosion(this);             
                     }
-                   
                  }
-     
              }
          }
          
@@ -281,12 +260,8 @@ function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
                 }
             }
 
-         }
-
-        ////to create ast.reset or create a new astoroid when needed
-        
+         }   
     }
-
 }
 
 
@@ -372,105 +347,12 @@ function MakeBullet(){
 
 }
 
-//MakeBullet();
-
-
-
-/////////Possible adds to engine//////////////////////////////////////
-function removeCollider(rcollider){
-    for(var i=0; i<colliders.length; i++){
-        if(rcollider == colliders[i]){
-            colliders.splice(i,1);
-        }
-    }
-
-}
-function testSideCrossing(movingObject){
-    if (movingObject.X < 0 || movingObject.X > canvas.width || movingObject.Y < 0 || movingObject.Y > canvas.height) {
-        return true;
-         
-     }
-     else{return false;}
-}
-
-function adjustPosXYByCenterPoint(MovableObject){
-    MovableObject.posX=MovableObject.centerX/cellWidth;
-    MovableObject.posY= MovableObject.centerY/cellHeight;
-}
-
-function adjustXYByCenterPoint(MovableObject){
-    MovableObject.X=MovableObject.centerX-MovableObject.cXrelation;
-    MovableObject.Y=MovableObject.centerY-MovableObject.cYrelation;
-}
-
-
-
-//var rotating=false;
-
-
-function rotatingDirection(MovableObject, degreeStep,fowardStep){
-    MovableObject.rotating= true;
-    if(rightkey){
-        
-            rightRotation(MovableObject,degreeStep);
-        	//direction="none";
-            
-    }
-     else if(leftkey){ 
-            leftRotation(MovableObject,degreeStep);
-        	//direction="none";
-     }
-        	////need dynamic functionality to add/take direction usage for other games...///
-        	///direction="none";
-        	//break;
-    
-    if(upkey){
-        angledFowardMotion(MovableObject,fowardStep,MovableObject.rotateDegree);
-
-    }
-}
-
-
-function rightRotation(MovableObject,degreeStep){
-    MovableObject.rotateDegree = MovableObject.rotateDegree + degreeStep;
-   // console.log(MovableObject.rotateDegree);
-    if(MovableObject.rotateDegree>=360){
-        MovableObject.rotateDegree-= 360;
-    }
-
-}
-function leftRotation(MovableObject,degreeStep){
-    MovableObject.rotateDegree = MovableObject.rotateDegree - degreeStep;
-   // console.log(MovableObject.rotateDegree);
-    if(MovableObject.rotateDegree<0){
-        MovableObject.rotateDegree+= 360;
-    }
-}
-function angledFowardMotion(MovableObject,fowardStep,angle){
-    var y1= fowardStep*(Math.cos(angle*Math.PI/180));
-    var x1= fowardStep*(Math.sin(angle*Math.PI/180));
-   // console.log("x1:", x1);
-   // console.log("y1:", y1);
-    
-    MovableObject.velocityX += fowardStep*Math.sin(angle*Math.PI/180);
-    MovableObject.velocityY -= fowardStep*Math.cos(angle*Math.PI/180);
-    
-    //MovableObject.X += x1;
-    //MovableObject.Y -= y1;
-    //MovableObject.centerX = MovableObject.cXrelation + MovableObject.X;
-    //MovableObject.centerY = MovableObject.cYrelation + MovableObject.Y;
-    
-  //  console.log("X:", MovableObject.X);
-  //  console.log("Y:", MovableObject.Y);
-}
 
 function game_reset(){
 	numAster= 6;
 	astCount = numAster;
     if(AsteroidArray.length>0){
     	for(var i = 0; i<AsteroidArray.length; i++){
-    		//AsteroidArray[i].reset();
-    		//AsteroidArray.splice(i,1);
     		removeCollider(AsteroidArray[i].collider);
     		removeDrawnSprite(AsteroidArray[i]);
     	}
@@ -486,19 +368,14 @@ function drawStats(){
 	
 	var textfont ="verdana";
 	var textfillstyle = "#FFFFFF";
-	var textsize = '16px';
+	var textsize = 10;
 
 	var score_text = "Score: " + score ;
-		//context.fillStyle="#FFFFFF";
-		//context.fillText(score_text, 5, canvas.height-5);
 	addText(textsize,textfont,score_text,5, canvas.height-5,textfillstyle);
 
 	var highscore_text = "Session Highscore: " + highscore ;
-		//context.fillStyle="#FFFFFF";
-		//context.fillText(highscore_text, 5, canvas.height-20);
 	addText(textsize,textfont,highscore_text,5, canvas.height-20,textfillstyle);
 }
-///////////////////////////////////////possible adds to engene----end////////////////////////
 
 var onMenu = true;
 
@@ -541,9 +418,7 @@ function update(){
 		bulletTime++;
 
 		
-		//console.log(numBullets,"number:", bulletID, "ID");
-		//testDrawnSprites();
-		//testBulletArray();
+	
 
 		collisionDetection()
 
@@ -582,21 +457,23 @@ function draw(){
 	canvas.width = canvas.width;
     
 	drawSprites();
+
     context.fillStyle="blue";
+    context.font = '16px monospace';
     context.fillRect(0,asteroidscellHeight*asteroidsycellCount,canvas.width,canvas.height-asteroidscellHeight*asteroidsycellCount);
     drawStats();
     
     
 	if(onMenu){
-		//context.fillStyle='black';
-	    //context.fillRect(0,0,canvas.width,canvas.height);
+		context.fillStyle = 'white';
 		context.font = '48px monospace';
 		measurement = context.measureText(title);
-		addText('48px', 'monospace', title, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2, 'white');
+		context.fillText(title, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2);
 
+		context.fillStyle = 'red';
 		context.font = '24px monospace';
 		measurement = context.measureText(text);
-		addText('24px', 'monospace', text, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30, 'red');
+		context.fillText(text, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30);
 	} 
 		
 
