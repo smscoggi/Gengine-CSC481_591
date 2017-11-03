@@ -15,10 +15,10 @@ var xcellCount = Math.floor(canvas.width/cellWidth);
 var ycellCount = Math.floor(canvas.height/cellHeight);
 
 function setCanvasGrid(newcellWidth,newcellHeight,newxcellCount,newycellCount){
-		cellWidth=newcellWidth;
-		cellHeight=newcellHeight;
-		xcellCount=newxcellCount;
-		ycellCount=newycellCount;	
+	cellWidth=newcellWidth;
+	cellHeight=newcellHeight;
+	xcellCount=newxcellCount;
+	ycellCount=newycellCount;	
 }
 
 function Sprite(x, y, width, height, src, ID) {
@@ -86,7 +86,7 @@ function removeDrawnSprite(oldSprite){
 	for(var i=0; i<drawnSprites.length; i++){
 		if(drawnSprites[i].ID == oldSprite.ID){
 			drawnSprites.splice(i,1);
-			
+
 		}
 	}
 
@@ -94,26 +94,26 @@ function removeDrawnSprite(oldSprite){
 }
 
 function findSprite(spritearray,id){
-	
+
 	for(var i=0; i<spritearray.length; i++){
 		if(spritearray[i].ID == id){
-			
+
 
 			return spritearray[i];
-			
+
 		}
 	}
 	return null;
 
 }
 function adjustPosXYByCenterPoint(MovableObject){
-    MovableObject.posX=MovableObject.centerX/cellWidth;
-    MovableObject.posY= MovableObject.centerY/cellHeight;
+	MovableObject.posX=MovableObject.centerX/cellWidth;
+	MovableObject.posY= MovableObject.centerY/cellHeight;
 }
 
 function adjustXYByCenterPoint(MovableObject){
-    MovableObject.X=MovableObject.centerX-MovableObject.cXrelation;
-    MovableObject.Y=MovableObject.centerY-MovableObject.cYrelation;
+	MovableObject.X=MovableObject.centerX-MovableObject.cXrelation;
+	MovableObject.Y=MovableObject.centerY-MovableObject.cYrelation;
 }
 
 
@@ -137,31 +137,29 @@ function selectedOutline(){
 }
 
 function updateVelocity(){
-	
-		for (var iter = 0; iter < drawnSprites.length; iter++) {
-			if(drawnSprites[iter].velocityX!=0 && drawnSprites[iter].velocityY!=0){
-			var signX = Math.sign(drawnSprites[iter].velocityX);
-			var signY = Math.sign(drawnSprites[iter].velocityY);
-			drawnSprites[iter].velocityX = signX*Math.min(Math.abs(drawnSprites[iter].velocityX), drawnSprites[iter].maxVelocity);
-			drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
-			drawnSprites[iter].X += drawnSprites[iter].velocityX;
-			drawnSprites[iter].Y += drawnSprites[iter].velocityY;
-			//drawnSprites[iter].centerX=drawnSprites[iter].cXrelation;
-			//drawnSprites[iter].centerY=drawnSprites[iter].cYrelation;
-		}
+
+	for (var iter = 0; iter < drawnSprites.length; iter++) {
+		var signX = Math.sign(drawnSprites[iter].velocityX);
+		var signY = Math.sign(drawnSprites[iter].velocityY);
+		drawnSprites[iter].velocityX = signX*Math.min(Math.abs(drawnSprites[iter].velocityX), drawnSprites[iter].maxVelocity);
+		drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
+		drawnSprites[iter].X += drawnSprites[iter].velocityX;
+		drawnSprites[iter].Y += drawnSprites[iter].velocityY;
+		//drawnSprites[iter].centerX=drawnSprites[iter].cXrelation;
+		//drawnSprites[iter].centerY=drawnSprites[iter].cYrelation;
 	}
 }
 
 function drawSprites(){
 
-	
+
 	for (var iter = 0; iter < drawnSprites.length; iter++) {
-	
+
 		//console.log(findSprite(drawnSprites, "ast0").velocityX);
 		if(drawnSprites[iter].rotating){
-		
+
 			context.translate(drawnSprites[iter].centerX,drawnSprites[iter].centerY);
-			
+
 			context.rotate(drawnSprites[iter].rotateDegree * Math.PI/180);
 			//console.log(drawnSprites[iter].rotateDegree+"rotate degree");
 			context.drawImage(drawnSprites[iter].image, -drawnSprites[iter].cXrelation, -drawnSprites[iter].cYrelation, drawnSprites[iter].image.width, drawnSprites[iter].image.height);
@@ -285,8 +283,8 @@ function Collider(centerX,centerY,radius){
 function makeSpriteCollider(Object, type){
 
 	if(type=="box"){
-	var collider= new Collider(Object.X,Object.Y,Object.image.width,Object.image.height);
-	
+		var collider= new Collider(Object.X,Object.Y,Object.image.width,Object.image.height);
+
 
 		collider.update= function(){
 			this.top= this.object.Y;
@@ -294,8 +292,8 @@ function makeSpriteCollider(Object, type){
 			this.right=this.object.X+this.object.image.width;
 			this.bottom=this.object.Y+this.object.image.height;
 
-			}
 		}
+	}
 	else if(type=="circle"){
 
 		//need to define this as an ellipse later...
@@ -303,7 +301,7 @@ function makeSpriteCollider(Object, type){
 		collider.update= function(){
 			this.centerX=this.object.centerX;
 			this.centerY=this.object.centerY;
-	
+
 
 		}
 	}
@@ -327,7 +325,7 @@ function collisionDetection(){
 				//do nothing
 			}
 			else{
-				
+
 				///check for collsions
 				//console.log("maintop"+mainC.top);
 				//console.log("mainbottom"+mainC.bottom);
@@ -337,16 +335,16 @@ function collisionDetection(){
 					if((mainC.top<=c2.top && c2.top<=mainC.bottom) || (mainC.top<=c2.bottom && c2.bottom<=mainC.bottom)){
 						//console.log("yesss");
 						if((mainC.left<=c2.left && c2.left<=mainC.right) || (mainC.left<=c2.right && c2.right<=mainC.right)){
-					////this means two edges of checked collider (j) have crossed into the main collider (i)
-						//console.log("pushing c2");
+							////this means two edges of checked collider (j) have crossed into the main collider (i)
+							//console.log("pushing c2");
 							mainC.collidedObjectsArray.push(c2.object);
-						
+
 
 						}
 					}
 				}
 				else if(mainC.type="circle"){
-				
+
 
 					var dist=actualDistance(mainC.centerX,mainC.centerY,c2.centerX,c2.centerY);
 					var distcheck=mainC.radius+c2.radius;
@@ -355,7 +353,7 @@ function collisionDetection(){
 						//console.log("dist:"+ dist+"   distcheck:"+distcheck);
 						//console.log("yesss"+c2.object.ID);
 						mainC.collidedObjectsArray.push(c2.object);
-						
+
 					}
 
 				}
@@ -366,11 +364,11 @@ function collisionDetection(){
 
 
 function removeCollider(rcollider){
-    for(var i=0; i<colliders.length; i++){
-        if(rcollider == colliders[i]){
-            colliders.splice(i,1);
-        }
-    }
+	for(var i=0; i<colliders.length; i++){
+		if(rcollider == colliders[i]){
+			colliders.splice(i,1);
+		}
+	}
 
 }
 
@@ -385,10 +383,10 @@ document.addEventListener('keydown', handleKeypress);
 document.addEventListener('keyup',handlekeyup);
 //////prevents window scrolling for arrows...
 window.addEventListener("keydown", function(e) {
-    // space and arrow keys
-    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-        e.preventDefault();
-    }
+	// space and arrow keys
+	if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+		e.preventDefault();
+	}
 }, false);
 
 
@@ -457,22 +455,22 @@ function handleKeypress(e){
 }
 function handlekeyup(e){
 	switch(e.keyCode){
-		
-		case 32:
-			spacebar=false;
-			break;
-		case 37:
-			leftkey=false;
-			break;
-		case 38:
-			upkey=false;
-			break;
-		case 39:
-			rightkey=false;
-			break;
-		case 40:
-			downkey=false;
-			break;
+
+	case 32:
+		spacebar=false;
+		break;
+	case 37:
+		leftkey=false;
+		break;
+	case 38:
+		upkey=false;
+		break;
+	case 39:
+		rightkey=false;
+		break;
+	case 40:
+		downkey=false;
+		break;
 	}
 
 
@@ -492,100 +490,100 @@ function basicDirection(basicMovableObject, backwardsDirection){
 	///can move left,right, assumes auto move foward, can't move backwards
 
 	switch(direction){
-		case 'right':
-			if (backwardsDirection != 'right' || backwardsDirection == 'none') {
-				basicMovableObject.posX++;
-				backwardsDirection = 'left';
-			}
-			if (backwardsDirection == 'right') {
-				basicMovableObject.posX--;
-			}
-			break;
-		case 'left':
-			if (backwardsDirection != 'left' || backwardsDirection == 'none') {
-				basicMovableObject.posX--;
-				backwardsDirection = 'right';
-			}
-			if (backwardsDirection == 'left') {
-				basicMovableObject.posX++;
-			}
-			break;
-		case 'up':
-			if (backwardsDirection != 'up' || backwardsDirection == 'none') {
-				basicMovableObject.posY--;
-				backwardsDirection = 'down';
-			}
-			if (backwardsDirection == 'up') {
-				basicMovableObject.posY++;
-			}
-			break;
-		case 'down':
-			if (backwardsDirection != 'down' || backwardsDirection == 'none') {
-				basicMovableObject.posY++;
-				backwardsDirection = 'up';
-			}
-			if (backwardsDirection == 'down') {
-				basicMovableObject.posY--;
-			}
-			break;
+	case 'right':
+		if (backwardsDirection != 'right' || backwardsDirection == 'none') {
+			basicMovableObject.posX++;
+			backwardsDirection = 'left';
 		}
-		return  backwardsDirection;
+		if (backwardsDirection == 'right') {
+			basicMovableObject.posX--;
+		}
+		break;
+	case 'left':
+		if (backwardsDirection != 'left' || backwardsDirection == 'none') {
+			basicMovableObject.posX--;
+			backwardsDirection = 'right';
+		}
+		if (backwardsDirection == 'left') {
+			basicMovableObject.posX++;
+		}
+		break;
+	case 'up':
+		if (backwardsDirection != 'up' || backwardsDirection == 'none') {
+			basicMovableObject.posY--;
+			backwardsDirection = 'down';
+		}
+		if (backwardsDirection == 'up') {
+			basicMovableObject.posY++;
+		}
+		break;
+	case 'down':
+		if (backwardsDirection != 'down' || backwardsDirection == 'none') {
+			basicMovableObject.posY++;
+			backwardsDirection = 'up';
+		}
+		if (backwardsDirection == 'down') {
+			basicMovableObject.posY--;
+		}
+		break;
+	}
+	return  backwardsDirection;
 
 }
 
 function rotatingDirection(MovableObject, degreeStep,fowardStep){
-    MovableObject.rotating= true;
-    if(rightkey){
-        
-            rightRotation(MovableObject,degreeStep);
-        	//direction="none";
-            
-    }
-     else if(leftkey){ 
-            leftRotation(MovableObject,degreeStep);
-        	//direction="none";
-     }
-        	////need dynamic functionality to add/take direction usage for other games...///
-        	///direction="none";
-        	//break;
-    
-    if(upkey){
-        angledFowardMotion(MovableObject,fowardStep,MovableObject.rotateDegree);
+	MovableObject.rotating= true;
+	if(rightkey){
 
-    }
+		rightRotation(MovableObject,degreeStep);
+		//direction="none";
+
+	}
+	else if(leftkey){ 
+		leftRotation(MovableObject,degreeStep);
+		//direction="none";
+	}
+	////need dynamic functionality to add/take direction usage for other games...///
+	///direction="none";
+	//break;
+
+	if(upkey){
+		angledFowardMotion(MovableObject,fowardStep,MovableObject.rotateDegree);
+
+	}
 }
 
 function rightRotation(MovableObject,degreeStep){
-    MovableObject.rotateDegree = MovableObject.rotateDegree + degreeStep;
-   // console.log(MovableObject.rotateDegree);
-    if(MovableObject.rotateDegree>=360){
-        MovableObject.rotateDegree-= 360;
-    }
+	MovableObject.rotateDegree = MovableObject.rotateDegree + degreeStep;
+	// console.log(MovableObject.rotateDegree);
+	if(MovableObject.rotateDegree>=360){
+		MovableObject.rotateDegree-= 360;
+	}
 
 }
 function leftRotation(MovableObject,degreeStep){
-    MovableObject.rotateDegree = MovableObject.rotateDegree - degreeStep;
-   // console.log(MovableObject.rotateDegree);
-    if(MovableObject.rotateDegree<0){
-        MovableObject.rotateDegree+= 360;
-    }
+	MovableObject.rotateDegree = MovableObject.rotateDegree - degreeStep;
+	// console.log(MovableObject.rotateDegree);
+	if(MovableObject.rotateDegree<0){
+		MovableObject.rotateDegree+= 360;
+	}
 }
 function angledFowardMotion(MovableObject,fowardStep,angle){
-    var y1= fowardStep*(Math.cos(angle*Math.PI/180));
-    var x1= fowardStep*(Math.sin(angle*Math.PI/180));
-   // console.log("x1:", x1);
-   // console.log("y1:", y1);
-    
-    MovableObject.velocityX += fowardStep*Math.sin(angle*Math.PI/180);
-    MovableObject.velocityY -= fowardStep*Math.cos(angle*Math.PI/180);
-    
-    //MovableObject.X += x1;
-    //MovableObject.Y -= y1;
-    //MovableObject.centerX = MovableObject.cXrelation + MovableObject.X;
-    //MovableObject.centerY = MovableObject.cYrelation + MovableObject.Y;
-    
-  //  console.log("X:", MovableObject.X);
-  //  console.log("Y:", MovableObject.Y);
+	var y1= fowardStep*(Math.cos(angle*Math.PI/180));
+	var x1= fowardStep*(Math.sin(angle*Math.PI/180));
+	// console.log("x1:", x1);
+	// console.log("y1:", y1);
+
+	MovableObject.velocityX += fowardStep*Math.sin(angle*Math.PI/180);
+	MovableObject.velocityY -= fowardStep*Math.cos(angle*Math.PI/180);
+
+	//MovableObject.X += x1;
+	//MovableObject.Y -= y1;
+	//MovableObject.centerX = MovableObject.cXrelation + MovableObject.X;
+	//MovableObject.centerY = MovableObject.cYrelation + MovableObject.Y;
+
+	//  console.log("X:", MovableObject.X);
+	//  console.log("Y:", MovableObject.Y);
 }
 
 function jumpToOtherSideOfScreen(movingObject){
@@ -593,38 +591,38 @@ function jumpToOtherSideOfScreen(movingObject){
 	//returns object with updated x,y positions 
 	///need to possible change .posy/x to .x and .y to have all possible object have same pos name
 	jumped=false;
-	
+
 
 	if (movingObject.posX < 0) {
 		movingObject.posX = xcellCount - 1;
 		jumped=true;
-		
+
 	}
 	else if (movingObject.posX > xcellCount - 1) {
 		movingObject.posX = 0;
 		jumped=true;
-		
+
 	}
 	else if (movingObject.posY < 0) {
 		movingObject.posY = ycellCount - 1;
 		jumped=true;
-		
+
 	}
 	else if (movingObject.posY > ycellCount - 1) {
 		movingObject.posY =  0;
 		jumped=true;
-		
+
 	}
-	
+
 	return movingObject;
 }
 
 function testSideCrossing(movingObject){
-    if (movingObject.X < 0 || movingObject.X > canvas.width || movingObject.Y < 0 || movingObject.Y > canvas.height) {
-        return true;
-         
-     }
-     else{return false;}
+	if (movingObject.X < 0 || movingObject.X > canvas.width || movingObject.Y < 0 || movingObject.Y > canvas.height) {
+		return true;
+
+	}
+	else{return false;}
 }
 
 ///////////////////////////////////////////////////////////////objects
@@ -664,7 +662,7 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprit
 		var foodid= "f"+iter;
 		var food = new Food(Math.floor(Math.random()*xcellCount), Math.floor(Math.random()*ycellCount), foodSpoilTime, foodMaxLifeTime,foodid);
 		this.foodSprite = null;
-		
+
 		food.update = function() {
 			this.foodSprite= findSprite(drawnSprites,this.id);////finds the sprite that represents this food in drawnsprites
 
@@ -685,18 +683,18 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprit
 			}
 			if (this.spoilTimer == foodMaxLifeTime) {
 				this.reset();
-				
+
 			}
 		}
 		food.collision=function(checkX, checkY,proximity){
 
-				//collision when good, not spoiled
+			//collision when good, not spoiled
 			if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer >= foodSpoilTime) { 
-					return 1;
+				return 1;
 			}
-				///collision when spoiled
+			///collision when spoiled
 			else if (checkdistance(this.xfood, this.yfood, checkX, checkY, proximity) && this.spoilTimer < foodSpoilTime) {
-					return 2;
+				return 2;
 			}
 			else{
 				return 0;
@@ -727,16 +725,16 @@ function testDrawnSprites(){
 	for(var i=0; i<drawnSprites.length; i++){
 		testString = testString+ " " +drawnSprites[i].ID;
 	}
-	
+
 	console.log(testString);
 }
 function testSprites(){
 	var testString= "";
-	
-		for(var i=0; i<sprites.length; i++){
-			testString = testString+ " " +sprites[i].ID;
-		}
-		//console.log(testString);
+
+	for(var i=0; i<sprites.length; i++){
+		testString = testString+ " " +sprites[i].ID;
+	}
+	//console.log(testString);
 }
 
 
@@ -749,17 +747,17 @@ var highscore = 0;
 function checkHighscore(score) {
 	localhighscore = localStorage.getItem("localhighscore");
 	if(localhighscore !== null){
-	    if (score > localhighscore) {
-	        localStorage.setItem("localhighscore", score);      
-	    }
+		if (score > localhighscore) {
+			localStorage.setItem("localhighscore", score);      
+		}
 	}
 	else{
-	    localStorage.setItem("localhighscore", score);
+		localStorage.setItem("localhighscore", score);
 	}
 }
 
 function resetHighscore() {
-    localStorage.setItem("localhighscore", 00);
+	localStorage.setItem("localhighscore", 00);
 }
 
 
