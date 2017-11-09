@@ -408,8 +408,9 @@ function mouseup(e) {
 }
 
 function mousemove(e) {
-	xcoord = e.clientX;
-	ycoord = e.clientY;
+	var rect = canvas.getBoundingClientRect();
+	xcoord = Math.round((e.clientX-rect.left)/(rect.right-rect.left)*canvas.width);
+	ycoord = Math.round((e.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
 	mouseismoving = 'yes';
 }
 
@@ -418,33 +419,59 @@ var leftkey=false;
 var rightkey=false;
 var upkey=false;
 var downkey= false;
+
+var leftkey2=false;
+var rightkey2=false;
+var upkey2=false;
+var downkey2= false;
+
 var spacebar=false;
 var menu = 0;
 /////need to setup changing functions for changing keys meant for controls...
 function handleKeypress(e){
 
 	switch(e.keyCode){
-	//spacebar
-	case 32:
+	case 32: //spacebar
 		spacebar=true;
 		break;
-	case 37:
+	
+	//arrow keys
+	case 37: //leftkey
 		direction = 'left';
 		leftkey=true;
 		break;
-	case 38:
+	case 38: //upkey
 		direction = 'up';
 		upkey=true;
 		break;
-	case 39:
+	case 39: //rightkey
 		direction = 'right';
 		rightkey=true;
 		break;
-	case 40:
+	case 40: //downkey
 		direction = 'down';
 		downkey=true;
 		break;
-	case 27:
+		
+	//'wasd' keys
+	case 65: //a
+		direction2 = 'left';
+		leftkey=true;
+		break;
+	case 87: //w
+		direction2 = 'up';
+		upkey=true;
+		break;
+	case 68: //d
+		direction2 = 'right';
+		rightkey=true;
+		break;
+	case 83: //s
+		direction2 = 'down';
+		downkey=true;
+		break;
+		
+	case 27: //Esc
 		menu += 1;
 		if(menu > 1){
 			menu = 0;
@@ -459,6 +486,7 @@ function handlekeyup(e){
 	case 32:
 		spacebar=false;
 		break;
+		
 	case 37:
 		leftkey=false;
 		break;
@@ -471,6 +499,19 @@ function handlekeyup(e){
 	case 40:
 		downkey=false;
 		break;
+
+	case 65: //a
+		leftkey2=false;
+		break;
+	case 87: //w
+		upkey2=false;
+		break;
+	case 68: //d
+		rightkey2=false;
+		break;
+	case 83: //s
+		downkey2=false;
+		break;
 	}
 
 
@@ -480,13 +521,14 @@ function handlekeyup(e){
 
 /////movement functions////////////
 var direction = 'none';
+var direction2 = 'none';
 
 function dragSprite(){
 	sprites[selectedImage].X = xcoord - (sprites[selectedImage].image.width/2);
 	sprites[selectedImage].Y = ycoord - (sprites[selectedImage].image.height/2);
 }
 
-function basicDirection(basicMovableObject, backwardsDirection){
+function basicDirection(basicMovableObject, direction, backwardsDirection){
 	///can move left,right, assumes auto move foward, can't move backwards
 
 	switch(direction){

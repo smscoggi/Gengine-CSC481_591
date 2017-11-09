@@ -1,9 +1,24 @@
 /////Snake
 var difficulty = 2;
 
-var snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
+var player1XPos = Math.floor(xcellCount/4)*1-1;
+var player1YPos = Math.floor(ycellCount/2)-1;
+var player2XPos = Math.floor(xcellCount/4)*3-1;
+var player2YPos = Math.floor(ycellCount/2)-1;
 
-function Snake(numLinks, posX, posY){
+var snake1 = new Snake(5, player1XPos, player1YPos, 1);
+var snake2 = new Snake(5, player2XPos, player2YPos, 2);
+
+function newSnake(snakeID){
+	if (snakeID == 1) {
+		snake1 = new Snake(5, player1XPos, player1YPos, 1);
+	}
+	if (snakeID == 2) {
+		snake2 = new Snake(5, player2XPos, player2YPos, 2);
+	}
+}
+
+function Snake(numLinks, posX, posY, snakeID){
 	var segPos = 0;
 	var backwardsDirection = 'none';
 	this.posX = posX;
@@ -11,10 +26,15 @@ function Snake(numLinks, posX, posY){
 	this.snakeLinks = numLinks;
 	this.snakeArray = new Array();
 	this.deadState = 'notDead';
+	this.snakeID = snakeID;
 
 	this.update = function(){
-
-		backwardsDirection=basicDirection(this,backwardsDirection);
+		if(snakeID == 1){
+			backwardsDirection=basicDirection(this, direction,backwardsDirection);
+		}
+		if(snakeID == 2){
+			backwardsDirection=basicDirection(this, direction2,backwardsDirection);
+		}
 		var tempObject =jumpToOtherSideOfScreen(this);
 		this.posX= tempObject.posX;
 		this.posY = tempObject.posY;
@@ -30,25 +50,44 @@ function Snake(numLinks, posX, posY){
 		}
 
 		for(var iter = 0; iter < this.snakeArray.length-1; iter++) {
-			if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, this.posX, this.posY, 0) && direction != 'none') {
-				//make snake shorter
-				/*this.snakeLinks = this.snakeLinks - this.snakeArray[iter].sP;
-				if (this.snakeLinks < 3) {
-					this.snakeLinks = 3;
-				}*/
-				//restart game
-				this.deadState = 'dead';
+			if(snakeID == 1){
+				if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, this.posX, this.posY, 0) && direction != 'none') {
+					this.deadState = 'dead';
+				}
+				for(var jter = 0; jter < snake2.snakeArray.length-1; jter++) {
+					if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, snake2.snakeArray[jter].x, snake2.snakeArray[jter].y, 0) && direction != 'none') {
+						this.deadState = 'dead';
+					}
+				}
+				
+			}
+			if(snakeID == 2){
+				if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, this.posX, this.posY, 0) && direction2 != 'none') {
+					this.deadState = 'dead';
+				}
+				for(var jter = 0; jter < snake1.snakeArray.length-1; jter++) {
+					if (checkdistance(this.snakeArray[iter].x, this.snakeArray[iter].y, snake1.snakeArray[jter].x, snake1.snakeArray[jter].y, 0) && direction2 != 'none') {
+						this.deadState = 'dead';
+					}
+				}
 			}
 		}
 
 		if (this.deadState == 'dead') {
-			snake = new Snake(5, Math.floor(xcellCount/2)-1, Math.floor(ycellCount/2)-1);
-			direction = 'none'
-				score = 0;
+			newSnake(this.snakeID);
+		
+			if(this.snakeID == 1){
+				direction = 'none';
+			}
+			if(this.snakeID == 2){
+				direction2 = 'none';
+			}
+			
+			score = 0;
 
-			resetFood();
+			//resetFood();
 
-			deadState = 'notDead';
+			this.deadState = 'notDead';
 		}
 		//console.log(this.snakeArray[0].x, posX);
 /////test to see if snake ran into food/////
@@ -57,15 +96,15 @@ function Snake(numLinks, posX, posY){
 			foodCollide=foodArray[iter].collision(this.posX,this.posY,0);
 
 			if (foodCollide == 1) { 
-				snake.snakeLinks = snake.snakeLinks - 1;
-				if (snake.snakeLinks < 2) {
-					snake.deadState = 'dead';
+				this.snakeLinks = this.snakeLinks - 1;
+				if (this.snakeLinks < 2) {
+					this.deadState = 'dead';
 				}
 				score--;
 				foodArray[iter].reset();
 			}
 			else if (foodCollide==2) { 
-				snake.snakeLinks++;
+				this.snakeLinks++;
 				score++;
 				foodArray[iter].reset();
 			}
@@ -76,12 +115,22 @@ function Snake(numLinks, posX, posY){
 
 	this.draw = function(){
 		
-
-		for(var iter=0; iter<this.snakeArray.length; iter++){
-			context.fillStyle='green';
-			context.fillRect(this.snakeArray[iter].x*cellWidth, this.snakeArray[iter].y*cellHeight, cellWidth, cellHeight);
-			context.strokeStyle = 'yellow';
-			context.strokeRect(cellWidth*this.snakeArray[iter].x, this.snakeArray[iter].y*cellHeight, cellWidth, cellHeight)
+		if(this.snakeID == 1) {
+			for(var iter=0; iter<this.snakeArray.length; iter++){
+				context.fillStyle='green';
+				context.fillRect(this.snakeArray[iter].x*cellWidth, this.snakeArray[iter].y*cellHeight, cellWidth, cellHeight);
+				context.strokeStyle = 'yellow';
+				context.strokeRect(cellWidth*this.snakeArray[iter].x, this.snakeArray[iter].y*cellHeight, cellWidth, cellHeight)
+			}
+		}
+		
+		if(this.snakeID == 2) {
+			for(var iter=0; iter<this.snakeArray.length; iter++){
+				context.fillStyle='blue';
+				context.fillRect(this.snakeArray[iter].x*cellWidth, this.snakeArray[iter].y*cellHeight, cellWidth, cellHeight);
+				context.strokeStyle = 'yellow';
+				context.strokeRect(cellWidth*this.snakeArray[iter].x, this.snakeArray[iter].y*cellHeight, cellWidth, cellHeight)
+			}
 		}
 
 	};
@@ -135,9 +184,27 @@ function makeWalls(){
 
 		for (var jter = 0; jter < wallArray[iter].xcellWidth; jter++) {
 			for (var kter = 0; kter < wallArray[iter].ycellLength; kter++) {
-				if (checkdistance(wallArray[iter].xWall+jter, wallArray[iter].yWall+kter, snake.posX, snake.posY, 0)) { 	
-					snake.deadState = 'dead';
+				if(singlePlayerMode){
+					if (checkdistance(wallArray[iter].xWall+jter, wallArray[iter].yWall+kter, snake1.posX, snake1.posY, 0)) { 	
+						snake1.deadState = 'dead';
+					}
 				}
+				
+				if(multiPlayerMode){
+					if (checkdistance(wallArray[iter].xWall+jter, wallArray[iter].yWall+kter, snake1.posX, snake1.posY, 0)) { 	
+						snake1.deadState = 'dead';
+					}
+					if (checkdistance(wallArray[iter].xWall+jter, wallArray[iter].yWall+kter, snake2.posX, snake2.posY, 0)) { 	
+						snake2.deadState = 'dead';
+					}
+				}
+				
+				for(var lter = 0; lter < foodArray.length; lter++) {
+					if (checkdistance(wallArray[iter].xWall+jter, wallArray[iter].yWall+kter, foodArray[lter].xfood, foodArray[lter].yfood, 0)) { 	
+						foodArray[lter].reset();
+					}
+				}
+				
 			}
 		}
 
@@ -181,15 +248,21 @@ function setDifficulty(difficulty){
 	switch(difficulty){
 		case 1:
 			setGameLoopInterval(110);
-			snake.deadState = "dead";
+			resetFood();
+			snake1.deadState = "dead";
+			snake2.deadState = "dead";
 			break;
 		case 2:
 			setGameLoopInterval(80);
-			snake.deadState = "dead";
+			resetFood();
+			snake1.deadState = "dead";
+			snake2.deadState = "dead";
 			break;
 		case 3:
 			setGameLoopInterval(50);
-			snake.deadState = "dead";
+			resetFood();
+			snake1.deadState = "dead";
+			snake2.deadState = "dead";
 			break;
 	}
 }
@@ -203,20 +276,117 @@ function changeDifficulty() {
 
 /////////////////////////////////////////////////////////UPDATE + Draw
 
+///menu stuff
+var onMenu = true;
+var title = 'Snake';
+context.font = '48px monospace';
+var titleMeasurement = context.measureText(title);
+var titleXPos = (context.canvas.width - titleMeasurement.width) / 2;
+var titleYPos = context.canvas.height / 2 - 30;
+
+var text1 = 'Single Player';
+context.font = '24px monospace';
+var text1Measurement = context.measureText(text1);
+var text1XPos = (context.canvas.width - text1Measurement.width) / 2;
+var text1YPos = context.canvas.height / 2 + 30;
+var highlightText1 = false;
+
+var text2 = 'Multiplayer';
+context.font = '24px monospace';
+var text2Measurement = context.measureText(text2);
+var text2XPos = (context.canvas.width - text2Measurement.width) / 2;
+var text2YPos = context.canvas.height / 2 + 60;
+var highlightText2 = false;
+
+var singlePlayerMode = false;
+var multiPlayerMode = false;
+
+var snake3 = new Snake(5, Math.floor(xcellCount/4)*2-1, Math.floor(ycellCount/2)-1, 1);
+
+
+function leftmouseupSinglePlayer(e) {
+	singlePlayerMode = true;
+	player1XPos = Math.floor(xcellCount/2)*1-1;
+	player1YPos = Math.floor(ycellCount/2)-1;
+
+	//resets game;
+	snake1.deadState = "dead";
+	menu++;
+}
+
+function leftmouseupMultiplayer(e) {
+	multiPlayerMode = true;
+	player1XPos = Math.floor(xcellCount/4)*1-1;
+	player1YPos = Math.floor(ycellCount/2)-1;
+	player2XPos = Math.floor(xcellCount/4)*3-1;
+	player2YPos = Math.floor(ycellCount/2)-1;
+
+	//resets game;
+	snake1.deadState = "dead";
+	snake2.deadState = "dead";
+	
+	
+	//snake3 = new Snake(5, Math.floor(xcellCount/4)*2-1, Math.floor(ycellCount/2)-1, 2);
+	menu++;
+}
+
+
 function update() {
 	
-	////moved from game_loop
-	snake.update();
-	makeWalls();
-	for(var iter = 0; iter < foodArray.length; iter++){
-		foodArray[iter].update();
-		//foodArray[iter].draw();
+	if(menu == 0) {
+		onMenu = true;
+	} else {
+		onMenu = false;
 	}
 	
-	//////////////////////////
+	if(onMenu) {
+		//context.strokeRect((context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30, measurement.width, -24);
+		//context.strokeRect((context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 60, measurement.width, -24);
+		//checkdistance(text1XPos + text1Measurement.width / 2, 0, xcoord, 0, text1Measurement.width / 2)
+		if(mouseisdown == 'yes'){
+			if(checkdistance(text1XPos + text1Measurement.width / 2, 0, xcoord, 0, text1Measurement.width / 2) &&
+			checkdistance(0, text1YPos - 12, 0, ycoord, 12)) {
+				highlightText1 = true;
+				canvas.addEventListener("mouseup",leftmouseupSinglePlayer);
+			}
 
-	if (highscore < score) {
-		highscore = score;
+		}
+		
+		if(mouseisdown == 'yes'){
+			if(checkdistance(text2XPos + text2Measurement.width / 2, 0, xcoord, 0, text2Measurement.width / 2) &&
+			checkdistance(0, text2YPos - 12, 0, ycoord, 12)) {
+				highlightText2 = true;
+				canvas.addEventListener("mouseup",leftmouseupMultiplayer);
+			}
+
+		}
+		
+	}
+	
+	if(!onMenu){
+		if(singlePlayerMode){
+			canvas.removeEventListener("mouseup",leftmouseupSinglePlayer);
+			snake1.update();
+		}
+		if(multiPlayerMode){
+			canvas.removeEventListener("mouseup",leftmouseupMultiplayer);
+			snake1.update();
+			snake2.update();
+			//snake3.update();
+		}
+		makeWalls();
+		for(var iter = 0; iter < foodArray.length; iter++){
+			foodArray[iter].update();
+			//foodArray[iter].draw();
+		}
+
+		//////////////////////////
+
+		if (highscore < score) {
+			highscore = score;
+		}
+
+		
 	}
 	
 	checkHighscore(score);
@@ -231,9 +401,44 @@ function draw() {
 	//testDrawnSprites();
 	//testSprites();
 
-	snake.draw();
+	if(singlePlayerMode){
+		snake1.draw();
+	}
+	if(multiPlayerMode){
+		snake1.draw();
+		snake2.draw();
+		//snake3.draw();
+	}
+	
 	drawSprites();
 
 	drawStats();
+	
+	if(onMenu){
+		context.fillStyle = 'white';
+		context.font = '48px monospace';
+		context.fillText(title, titleXPos, titleYPos);
 
+		context.fillStyle = 'red';
+		context.strokeStyle = 'red';
+		if(highlightText1 == true) {
+			context.fillStyle = '#ff9999';
+			context.strokeStyle = '#ff9999';
+			highlightText1 = false;
+		}
+		context.font = '24px monospace';
+		context.fillText(text1, text1XPos, text1YPos);
+		context.strokeRect(text1XPos, text1YPos, text1Measurement.width, -24);
+		
+		context.fillStyle = 'green';
+		context.strokeStyle = 'green';
+		if(highlightText2 == true) {
+			context.fillStyle = '#00ff00';
+			context.strokeStyle = '#00ff00';
+			highlightText2 = false;
+		}
+		context.font = '24px monospace';
+		context.fillText(text2, text2XPos, text2YPos);
+		context.strokeRect(text2XPos, text2YPos, text2Measurement.width, -24);
+	} 
 }
