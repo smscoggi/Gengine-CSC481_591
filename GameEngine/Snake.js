@@ -301,8 +301,6 @@ var highlightText2 = false;
 var singlePlayerMode = false;
 var multiPlayerMode = false;
 
-var snake3 = new Snake(5, Math.floor(xcellCount/4)*2-1, Math.floor(ycellCount/2)-1, 1);
-
 
 function leftmouseupSinglePlayer(e) {
 	singlePlayerMode = true;
@@ -311,6 +309,7 @@ function leftmouseupSinglePlayer(e) {
 
 	//resets game;
 	snake1.deadState = "dead";
+	multiPlayerMode = false;
 	menu++;
 }
 
@@ -324,9 +323,7 @@ function leftmouseupMultiplayer(e) {
 	//resets game;
 	snake1.deadState = "dead";
 	snake2.deadState = "dead";
-	
-	
-	//snake3 = new Snake(5, Math.floor(xcellCount/4)*2-1, Math.floor(ycellCount/2)-1, 2);
+	singlePlayerMode = false;
 	menu++;
 }
 
@@ -340,9 +337,6 @@ function update() {
 	}
 	
 	if(onMenu) {
-		//context.strokeRect((context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30, measurement.width, -24);
-		//context.strokeRect((context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 60, measurement.width, -24);
-		//checkdistance(text1XPos + text1Measurement.width / 2, 0, xcoord, 0, text1Measurement.width / 2)
 		if(mouseisdown == 'yes'){
 			if(checkdistance(text1XPos + text1Measurement.width / 2, 0, xcoord, 0, text1Measurement.width / 2) &&
 			checkdistance(0, text1YPos - 12, 0, ycoord, 12)) {
