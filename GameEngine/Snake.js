@@ -1,6 +1,9 @@
 /////Snake
 var difficulty = 2;
 
+var highscore2=0;
+var score2=0;
+
 var player1XPos = Math.floor(xcellCount/4)*1-1;
 var player1YPos = Math.floor(ycellCount/2)-1;
 var player2XPos = Math.floor(xcellCount/4)*3-1;
@@ -78,12 +81,14 @@ function Snake(numLinks, posX, posY, snakeID){
 		
 			if(this.snakeID == 1){
 				direction = 'none';
+				score = 0;
 			}
 			if(this.snakeID == 2){
 				direction2 = 'none';
+				score2 = 0;
 			}
 			
-			score = 0;
+			
 
 			//resetFood();
 
@@ -100,12 +105,18 @@ function Snake(numLinks, posX, posY, snakeID){
 				if (this.snakeLinks < 2) {
 					this.deadState = 'dead';
 				}
-				score--;
+				if(this.snakeID==2){
+					score2--;
+				}
+				else {score--; }
 				foodArray[iter].reset();
 			}
 			else if (foodCollide==2) { 
 				this.snakeLinks++;
-				score++;
+				if(this.snakeID==2){
+					score2++;
+				}
+				else{score++;}
 				foodArray[iter].reset();
 			}
 
@@ -223,15 +234,27 @@ function drawStats(){
 		var textfillstyle = "#FFFFFF";
 		var textsize = 10;
 	
-		var score_text = "Score: " + score ;
+		var score_text = "Player1 Score: " + score ;
 			//context.fillStyle="#FFFFFF";
 			//context.fillText(score_text, 5, canvas.height-5);
 		addText(textsize,textfont,score_text,5, canvas.height-5,textfillstyle);
 	
-		var highscore_text = "Session Highscore: " + highscore ;
+		var highscore_text = "Player1 Highscore: " + highscore ;
 			//context.fillStyle="#FFFFFF";
 			//context.fillText(highscore_text, 5, canvas.height-20);
 		addText(textsize,textfont,highscore_text,5, canvas.height-20,textfillstyle);
+
+		if(multiPlayerMode){
+			var score_text = "Player2 Score: " + score2 ;
+			//context.fillStyle="#FFFFFF";
+			//context.fillText(score_text, 5, canvas.height-5);
+		addText(textsize,textfont,score_text,150, canvas.height-5,textfillstyle);
+	
+		var highscore_text = "Player2 Highscore: " + highscore2 ;
+			//context.fillStyle="#FFFFFF";
+			//context.fillText(highscore_text, 5, canvas.height-20);
+		addText(textsize,textfont,highscore_text,150, canvas.height-20,textfillstyle);
+		}
 	
 	
 		var highscore_text2 = "Alltime Highscore: " + localhighscore;
@@ -379,11 +402,15 @@ function update() {
 		if (highscore < score) {
 			highscore = score;
 		}
+		if(highscore2 < score2){
+			highscore2= score2;
+		}
 
 		
 	}
 	
 	checkHighscore(score);
+	checkHighscore(score2);
 }
 
 
