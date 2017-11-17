@@ -418,6 +418,10 @@ function drawStats(){
 	}
 
 function setDifficulty(difficulty){
+	if(connected2){
+		console.log("Can't change difficulty as client");
+		return;
+	}
 	//difficulty = document.getElementById('difficulty').innerHTML;
 	//console.log(difficulty);
 	switch(difficulty){
@@ -674,7 +678,7 @@ function draw() {
 		else{
 			text3 += "establish a connection"
 		}
-		context.font = '13px monospace'
+		context.font = '12px monospace'
 		var text3Measurement = context.measureText(text3);
 		var text3XPos = (context.canvas.width - text3Measurement.width) / 2;
 		var text3YPos = text2YPos +20;
