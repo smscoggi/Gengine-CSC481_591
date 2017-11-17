@@ -674,12 +674,12 @@ function draw() {
 		else{
 			text3 += "establish a connection"
 		}
-		context.font = '12px monospace'
+		context.font = '13px monospace'
 		var text3Measurement = context.measureText(text3);
 		var text3XPos = (context.canvas.width - text3Measurement.width) / 2;
 		var text3YPos = text2YPos +20;
-		context.fillStyle = 'red';
-		context.strokestyle = 'red';
+		context.fillStyle = 'white';
+		context.strokestyle = 'white';
 		context.font = '12px monospace';
 		context.fillText(text3, text3XPos, text3YPos);
 		//context.strokeRect(text3XPos, text3YPos, text3Measurement.width, -24);
