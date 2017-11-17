@@ -428,6 +428,10 @@ var downkey2= false;
 
 var spacebar=false;
 var menu = 0;
+
+var arrows=true;
+var aswd=true;
+
 /////need to setup changing functions for changing keys meant for controls...
 function handleKeypress(e){
 
@@ -438,38 +442,60 @@ function handleKeypress(e){
 	
 	//arrow keys
 	case 37: //leftkey
-		direction = 'left';
-		leftkey=true;
-		break;
+		if(arrows){
+			direction = 'left';
+			leftkey=true;
+		}
+			break;
+		
 	case 38: //upkey
+		if(arrows){
 		direction = 'up';
 		upkey=true;
+		}
 		break;
+		
 	case 39: //rightkey
+		if(arrows){
 		direction = 'right';
 		rightkey=true;
+		}
 		break;
+		
 	case 40: //downkey
+		if(arrows){
 		direction = 'down';
 		downkey=true;
+		}
 		break;
 		
 	//'wasd' keys
 	case 65: //a
+	if(aswd){
 		direction2 = 'left';
 		leftkey=true;
+	}
 		break;
+
 	case 87: //w
+	if(aswd){
 		direction2 = 'up';
 		upkey=true;
+	}
 		break;
+	
 	case 68: //d
+	if(aswd){
 		direction2 = 'right';
 		rightkey=true;
+	}
 		break;
+	
 	case 83: //s
+	if(aswd){
 		direction2 = 'down';
 		downkey=true;
+	}
 		break;
 		
 	case 27: //Esc

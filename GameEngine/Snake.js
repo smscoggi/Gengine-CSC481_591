@@ -22,6 +22,8 @@ peer1.on('open', function(id) {
 		//console.log("Data received: "+data);
 		drawnSpritesConnectUpdate(data);
 		snakeConnectUpdate(data);
+		directionConnectUpdate(data);
+		scoringConnectUpdate(data);
 
 		//conn.send(" I GOOT YOUUU");
 		//testSend();
@@ -33,6 +35,18 @@ peer1.on('open', function(id) {
 		
 
 	});
+
+function scoringConnectUpdate(data){
+	if(data.constructor === Array){
+		if(data[0]=="statsA"){
+
+			score=data[1];
+			score2=data[2];
+			highscore=data[3];
+			highscore2=data[4];
+			localhighscore=data[5];
+
+	}}}
 
 function snakeConnectUpdate(data){
 	if(data.constructor === Array){
@@ -92,7 +106,9 @@ function connectToPeer2(peer2ID){
 		// Receive messages
 		conn.on('data', function(data) {
 			
-	 		 console.log('Received', data);
+			 // console.log('Received', data);
+			  
+			  directionConnectUpdate(data);
 		});
   
 		// Send messages
@@ -100,6 +116,18 @@ function connectToPeer2(peer2ID){
 	  });
 	  
 	 
+}
+
+function directionConnectUpdate(data){
+	if(data.constructor === Array){
+		if(data[0]=="dir"){
+			direction2=data[1];
+
+			
+		}}
+
+
+
 }
 
 
@@ -206,6 +234,10 @@ function Snake(numLinks, posX, posY, snakeID){
 			if(this.snakeID == 2){
 				direction2 = 'none';
 				score2 = 0;
+
+				if(connected1){
+					conn.send(["dir",'none']);
+				}
 			}
 			
 			
@@ -514,7 +546,9 @@ function update() {
 			snake1.update();
 		}
 		if(multiPlayerMode){
+			
 			canvas.removeEventListener("mouseup",leftmouseupMultiplayer);
+			
 			snake1.update();
 			snake2.update();
 			//snake3.update();
@@ -532,7 +566,7 @@ function update() {
 		if(!connected2){
 			
 			if(connected1){
-				
+				aswd=false;
 				for(var i=0; i<drawnSprites.length; i++){
 					var dsArray= ["ds",drawnSprites[i].X, drawnSprites[i].Y,drawnSprites[i].image.width, drawnSprites[i].image.height, drawnSprites[i].image.src, drawnSprites[i].ID]
 					conn.send(dsArray);
@@ -542,13 +576,20 @@ function update() {
 				var sn2Array=["sn",snake2.numLinks,snake2.posX,snake2.posY,snake2.snakeID,snake2.deadState,snake2.snakeArray];
 					conn.send(sn1Array);
 					conn.send(sn2Array);	
-
+				
+				var statsArray= ["statsA",score,score2,highscore,highscore2,localhighscore];
+				conn.send(statsArray);
 			}
 		}
 
 		if(connected2){
+			arrows=false;
 			foodArray.length=0;
 
+			var DirArray=["dir",direction2];
+			conn.send(DirArray);
+
+			
 
 
 		}
