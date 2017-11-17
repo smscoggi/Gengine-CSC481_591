@@ -52,3 +52,10 @@ Asteroids Refactoring - 11/1/2017
 -BUg fix - Flying bullets are now destroyed when game resets.
 
 -Added border to score box
+
+Snake Multiplayer
+-Added Snake Local multiplayer
+-BUG Fix - apples no longer spawn inside walls.
+
+-BUG Fix - switching from single to multiplayer mode bug fixed. Functions properly
+	pause the game with 'Esc' and switch game mode if wanted.
