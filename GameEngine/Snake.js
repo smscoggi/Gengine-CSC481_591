@@ -3,7 +3,7 @@ var peer1 = new Peer({key: 'rr8fcgawspd2huxr'});
 //var peer2 = new Peer({key: 'riw1ul3wmdjthuxr'});
 var connected1=false;
 var connected2=false;
-var peer1ID;
+var peer1ID =0;
 peer1.on('open', function(id) {
 	peer1ID= id;
 	console.log('My peer1 ID is: ' + id);
@@ -441,6 +441,7 @@ var text2XPos = (context.canvas.width - text2Measurement.width) / 2;
 var text2YPos = context.canvas.height / 2 + 60;
 var highlightText2 = false;
 
+
 var singlePlayerMode = false;
 var multiPlayerMode = false;
 
@@ -624,5 +625,22 @@ function draw() {
 		context.font = '24px monospace';
 		context.fillText(text2, text2XPos, text2YPos);
 		context.strokeRect(text2XPos, text2YPos, text2Measurement.width, -24);
+		
+		var text3 = "To host multiplayer game, "
+		if(peer1ID){
+			text3 += "have friend join " + peer1ID;
+		}
+		else{
+			text3 += "establish a connection"
+		}
+		context.font = '12px monospace'
+		var text3Measurement = context.measureText(text3);
+		var text3XPos = (context.canvas.width - text3Measurement.width) / 2;
+		var text3YPos = text2YPos +20;
+		context.fillStyle = 'red';
+		context.strokestyle = 'red';
+		context.font = '12px monospace';
+		context.fillText(text3, text3XPos, text3YPos);
+		//context.strokeRect(text3XPos, text3YPos, text3Measurement.width, -24);
 	} 
 }
