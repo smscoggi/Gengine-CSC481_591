@@ -79,6 +79,7 @@ function addDrawnSprites(oldSprite,newX,newY,newWidth,newHeight,newid) {
 
 }
 
+
 function removeDrawnSprite(oldSprite){
 	if(oldSprite == null){
 		return;
@@ -712,7 +713,7 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprit
 				//console.log("null founddddddd");
 				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight, this.id);
 			}
-			else if(this.spoilTimer == foodSpoilTime){
+			else if(this.spoilTimer == foodSpoilTime && !connected2){
 
 				//console.log("spoillllleedddd!!!!!!!!!!!!!!");
 				removeDrawnSprite(this.foodSprite);
@@ -720,6 +721,7 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprit
 
 			}
 			//console.log(snake.deadState);
+
 			if (this.spoilTimer < foodMaxLifeTime) {
 				this.spoilTimer++;
 			}
@@ -743,12 +745,14 @@ function makeFood(amountFood, foodSpoilTime, foodMaxLifeTime,goodSprite,badSprit
 			}
 		}
 		food.reset=function(){
-			this.spoilTimer = 0;
-			this.xfood = Math.floor(Math.random()*xcellCount);
-			this.yfood = Math.floor(Math.random()*ycellCount);
-			if(this.foodSprite !=null){
-				removeDrawnSprite(this.foodSprite);
-				addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+			if(!connected2){
+				this.spoilTimer = 0;
+				this.xfood = Math.floor(Math.random()*xcellCount);
+				this.yfood = Math.floor(Math.random()*ycellCount);
+				if(this.foodSprite !=null){
+					removeDrawnSprite(this.foodSprite);
+					addDrawnSprites(goodSprite,this.xfood*cellWidth, this.yfood*cellHeight, cellWidth, cellHeight,this.id);
+				}
 			}
 		}
 		foodArray.push(food);

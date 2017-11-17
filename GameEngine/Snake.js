@@ -1,3 +1,100 @@
+//peer to peer
+var peer1 = new Peer({key: 'rr8fcgawspd2huxr'});
+//var peer2 = new Peer({key: 'riw1ul3wmdjthuxr'});
+var connected1=false;
+var connected2=false;
+var peer1ID;
+peer1.on('open', function(id) {
+	peer1ID= id;
+	console.log('My peer1 ID is: ' + id);
+
+  });
+
+  var conn;
+
+  // Call a peer, providing our mediaStream
+
+  peer1.on('connection', function(dataConnection){
+	connected2=true;
+	conn = dataConnection;
+	multiplayerSnakeSetup();
+	conn.on('data', function(data){
+		//console.log("Data received: "+data);
+		drawnSpritesConnectUpdate(data);
+
+		//conn.send(" I GOOT YOUUU");
+		//testSend();
+
+	});
+
+	console.log("Connected");
+
+		
+
+	});
+
+
+function drawnSpritesConnectUpdate(data){
+	if(data.constructor === Array){
+		if(data[0]=="ds"){
+			//console.log("got the DSSSSS");
+
+			var myDS=findSprite(drawnSprites,data[6]);
+			myDS.X=data[1];
+			myDS.Y=data[2];
+			myDS.image.width=data[3];
+			myDS.image.height=data[4];
+			myDS.image.src=data[5];
+			
+			
+		}
+	}
+
+}
+
+
+
+
+function testSend(){
+	conn.send('This is a test send');
+}
+
+
+function connectToPeer2(peer2ID){
+ 	conn = peer1.connect(peer2ID);
+ 	//peer1.on('connection', function(conn) { });
+	
+ 	conn.on('open', function() {
+		console.log(peer2ID);
+		connected1=true;
+		// Receive messages
+		conn.on('data', function(data) {
+			
+	 		 console.log('Received', data);
+		});
+  
+		// Send messages
+		conn.send('Hello!');
+	  });
+	  
+	 
+}
+
+
+
+  function getOtherPlayer() {
+    var txt;
+    var person = prompt("Your ID is:       "+peer1ID+"\n\nEnter other player's ID", peer1ID);
+    if (person == null || person == "") {
+        txt = "User cancelled the prompt.";
+    } else {
+        txt = "Hello " + person + "! How are you today?";
+    }
+	console.log(txt);
+	return person;
+}
+
+
 /////Snake
 var difficulty = 2;
 
@@ -337,6 +434,14 @@ function leftmouseupSinglePlayer(e) {
 }
 
 function leftmouseupMultiplayer(e) {
+	peerID2=getOtherPlayer()
+	connectToPeer2(peerID2);
+	multiplayerSnakeSetup();
+}
+
+function multiplayerSnakeSetup(){
+	
+
 	multiPlayerMode = true;
 	player1XPos = Math.floor(xcellCount/4)*1-1;
 	player1YPos = Math.floor(ycellCount/2)-1;
@@ -363,7 +468,7 @@ function update() {
 		if(mouseisdown == 'yes'){
 			if(checkdistance(text1XPos + text1Measurement.width / 2, 0, xcoord, 0, text1Measurement.width / 2) &&
 			checkdistance(0, text1YPos - 12, 0, ycoord, 12)) {
-				highlightText1 = true;
+				highlightText1 = true;ikkkkkkkkkkkkkkkkkkkkkkk
 				canvas.addEventListener("mouseup",leftmouseupSinglePlayer);
 			}
 
@@ -395,6 +500,25 @@ function update() {
 		for(var iter = 0; iter < foodArray.length; iter++){
 			foodArray[iter].update();
 			//foodArray[iter].draw();
+			
+		}
+
+		if(!connected2){
+			
+			if(connected1){
+				
+				for(var i=0; i<drawnSprites.length; i++){
+					var myArray= ["ds",drawnSprites[i].X, drawnSprites[i].Y,drawnSprites[i].image.width, drawnSprites[i].image.height, drawnSprites[i].image.src, drawnSprites[i].ID]
+					conn.send(myArray);
+				}
+			}
+		}
+
+		if(connected2){
+
+
+
+
 		}
 
 		//////////////////////////
@@ -411,6 +535,13 @@ function update() {
 	
 	checkHighscore(score);
 	checkHighscore(score2);
+
+
+
+	if(connected1|connected2){
+		testSend();
+	}
+
 }
 
 
