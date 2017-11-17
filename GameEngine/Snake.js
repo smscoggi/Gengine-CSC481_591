@@ -21,6 +21,7 @@ peer1.on('open', function(id) {
 	conn.on('data', function(data){
 		//console.log("Data received: "+data);
 		drawnSpritesConnectUpdate(data);
+		snakeConnectUpdate(data);
 
 		//conn.send(" I GOOT YOUUU");
 		//testSend();
@@ -28,10 +29,31 @@ peer1.on('open', function(id) {
 	});
 
 	console.log("Connected");
-
+		
 		
 
 	});
+
+function snakeConnectUpdate(data){
+	if(data.constructor === Array){
+		if(data[0]=="sn"){
+			if(data[4]==1){
+				//snake1.numLinks=data[1];
+				//snake1.posX= data[2];
+				//snake1.posY= data[3];
+				//snake1.deadState=data[5];
+				
+				snake1.snakeArray=data[6];
+				
+				//console.log(data[6].length);
+			}
+			else{
+				snake2.snakeArray=data[6];
+			}
+
+
+	}}
+}
 
 
 function drawnSpritesConnectUpdate(data){
@@ -129,6 +151,7 @@ function Snake(numLinks, posX, posY, snakeID){
 	this.snakeID = snakeID;
 
 	this.update = function(){
+		if(!connected2){
 		if(snakeID == 1){
 			backwardsDirection=basicDirection(this, direction,backwardsDirection);
 		}
@@ -219,8 +242,8 @@ function Snake(numLinks, posX, posY, snakeID){
 
 		}
 
+	}
 	};
-
 	this.draw = function(){
 		
 		if(this.snakeID == 1) {
@@ -468,7 +491,7 @@ function update() {
 		if(mouseisdown == 'yes'){
 			if(checkdistance(text1XPos + text1Measurement.width / 2, 0, xcoord, 0, text1Measurement.width / 2) &&
 			checkdistance(0, text1YPos - 12, 0, ycoord, 12)) {
-				highlightText1 = true;ikkkkkkkkkkkkkkkkkkkkkkk
+				highlightText1 = true;
 				canvas.addEventListener("mouseup",leftmouseupSinglePlayer);
 			}
 
@@ -495,6 +518,9 @@ function update() {
 			snake1.update();
 			snake2.update();
 			//snake3.update();
+
+			
+
 		}
 		makeWalls();
 		for(var iter = 0; iter < foodArray.length; iter++){
@@ -508,14 +534,20 @@ function update() {
 			if(connected1){
 				
 				for(var i=0; i<drawnSprites.length; i++){
-					var myArray= ["ds",drawnSprites[i].X, drawnSprites[i].Y,drawnSprites[i].image.width, drawnSprites[i].image.height, drawnSprites[i].image.src, drawnSprites[i].ID]
-					conn.send(myArray);
+					var dsArray= ["ds",drawnSprites[i].X, drawnSprites[i].Y,drawnSprites[i].image.width, drawnSprites[i].image.height, drawnSprites[i].image.src, drawnSprites[i].ID]
+					conn.send(dsArray);
 				}
+
+				var sn1Array=["sn",snake1.numLinks,snake1.posX,snake1.posY,snake1.snakeID,snake1.deadState,snake1.snakeArray];
+				var sn2Array=["sn",snake2.numLinks,snake2.posX,snake2.posY,snake2.snakeID,snake2.deadState,snake2.snakeArray];
+					conn.send(sn1Array);
+					conn.send(sn2Array);	
+
 			}
 		}
 
 		if(connected2){
-
+			foodArray.length=0;
 
 
 
