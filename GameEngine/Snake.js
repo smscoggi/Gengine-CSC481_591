@@ -568,10 +568,18 @@ function update() {
 			
 			if(connected1){
 				aswd=false;
-				for(var i=0; i<drawnSprites.length; i++){
-					var dsArray= ["ds",drawnSprites[i].X, drawnSprites[i].Y,drawnSprites[i].image.width, drawnSprites[i].image.height, drawnSprites[i].image.src, drawnSprites[i].ID]
+				//for(var i=0; i<drawnSprites.length; i++){
+				//	var dsArray= ["ds",drawnSprites[i].X, drawnSprites[i].Y,drawnSprites[i].image.width, drawnSprites[i].image.height, drawnSprites[i].image.src, drawnSprites[i].ID]
+				//	conn.send(dsArray);
+				//}
+
+				for(var i=0; i<foodArray.length; i++){
+					fsprite=findSprite(drawnSprites,foodArray[i].id);
+					console.log(fsprite);
+					var dsArray= ["ds",fsprite.X, fsprite.Y,fsprite.image.width, fsprite.image.height, fsprite.image.src, fsprite.ID]
 					conn.send(dsArray);
 				}
+
 
 				var sn1Array=["sn",snake1.numLinks,snake1.posX,snake1.posY,snake1.snakeID,snake1.deadState,snake1.snakeArray];
 				var sn2Array=["sn",snake2.numLinks,snake2.posX,snake2.posY,snake2.snakeID,snake2.deadState,snake2.snakeArray];
