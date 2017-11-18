@@ -103,7 +103,7 @@ function drawnSpritesConnectUpdate(data){
 
 
 function testSend(){
-	conn.send('This is a test send');
+	//conn.send('This is a test send');
 }
 
 
@@ -146,7 +146,7 @@ function directionConnectUpdate(data){
 
   function getOtherPlayer() {
     var txt;
-    var person = prompt("Your ID is:       "+peer1ID+"\n\nEnter other player's ID", peer1ID);
+    var person = prompt("Your ID is:       "+peer1ID+"\n\nEnter other player's ID\nLocalMultiplayer: Select Cancel", peer1ID);
     if (person == null || person == "") {
         txt = "User cancelled the prompt.";
     } else {
