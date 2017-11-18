@@ -24,6 +24,8 @@ peer1.on('open', function(id) {
 		snakeConnectUpdate(data);
 		directionConnectUpdate(data);
 		scoringConnectUpdate(data);
+		menuConnectUpdate(data);
+
 
 		//conn.send(" I GOOT YOUUU");
 		//testSend();
@@ -35,6 +37,15 @@ peer1.on('open', function(id) {
 		
 
 	});
+
+function menuConnectUpdate(data){
+	if(data.constructor === Array){
+		if(data[0]=="menu"){
+			menu=data[1];
+		}}
+
+
+}
 
 function scoringConnectUpdate(data){
 	if(data.constructor === Array){
@@ -109,6 +120,7 @@ function connectToPeer2(peer2ID){
 			 // console.log('Received', data);
 			  
 			  directionConnectUpdate(data);
+			  menuConnectUpdate(data);
 		});
   
 		// Send messages
@@ -518,10 +530,14 @@ function multiplayerSnakeSetup(){
 
 function update() {
 	
+
 	if(menu == 0) {
 		onMenu = true;
 	} else {
 		onMenu = false;
+	}
+	if(connected1){
+		conn.send(["menu",menu]);
 	}
 	
 	if(onMenu) {
@@ -571,6 +587,7 @@ function update() {
 		if(!connected2){
 			
 			if(connected1){
+
 				aswd=false;
 				//for(var i=0; i<drawnSprites.length; i++){
 				//	var dsArray= ["ds",drawnSprites[i].X, drawnSprites[i].Y,drawnSprites[i].image.width, drawnSprites[i].image.height, drawnSprites[i].image.src, drawnSprites[i].ID]
