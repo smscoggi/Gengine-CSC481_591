@@ -596,7 +596,7 @@ function update() {
 
 				for(var i=0; i<foodArray.length; i++){
 					fsprite=findSprite(drawnSprites,foodArray[i].id);
-					console.log(fsprite);
+					//console.log(fsprite);
 					var dsArray= ["ds",fsprite.X, fsprite.Y,fsprite.image.width, fsprite.image.height, fsprite.image.src, fsprite.ID]
 					conn.send(dsArray);
 				}
