@@ -7,23 +7,23 @@ var CRycellCount = Math.floor(canvas.height/CRcellHeight-1);
 
 setCanvasGrid(CRcellWidth,CRcellHeight, CRxcellCount, CRycellCount);
 
-LevelGridArray= [1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-    1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
-    1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
-    1,0,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,0,
-    1,0,1,1,1,1,1,1,0,1,0,0,0,1,0,0,0,0,0,1,1,1,
-    1,0,0,0,1,1,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,
-    1,1,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,1,1,0,0,1,
-    0,1,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,1,1,1,1,
-    0,1,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,0,0,1,0,
-    0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,
-    0,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,
-    0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,
-    0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
-    0,0,0,0,1,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,1,0,
-    0,0,0,0,1,0,0,0,1,1,1,0,0,1,1,1,1,0,0,1,1,0,
-    0,0,0,0,1,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,0,
-    0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0
+LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
+                1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+                1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,
+                1,0,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,0,
+                1,0,1,1,1,1,1,1,0,1,0,0,0,1,0,0,0,0,0,1,1,1,
+                1,0,0,0,1,1,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,
+                1,1,0,0,0,0,0,0,0,1,0,0,0,1,1,1,1,1,1,0,0,1,
+                0,1,1,1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,1,1,1,1,
+                0,1,0,0,0,0,0,0,1,1,0,0,0,1,1,1,1,1,0,0,1,0,
+                0,1,0,0,0,0,1,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,
+                0,1,1,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1,1,0,
+                0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,
+                1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+                1,1,0,0,1,1,1,0,0,0,1,0,0,1,0,0,0,0,0,1,1,0,
+                1,1,0,0,1,0,0,0,1,1,1,0,0,1,1,1,1,0,0,1,1,0,
+                0,1,1,1,1,1,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,0,
+                 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     ];
 
 console.log(canvas.width/cellWidth);
@@ -55,21 +55,27 @@ function draw(){
         context.font = '16px monospace';
         context.fillRect(0,cellHeight*ycellCount,canvas.width,canvas.height-cellHeight*ycellCount);
         context.fillStyle="black";
-        context.strokeRect(0, cellHeight*ycellCount,canvas.width,canvas.height-cellHeight*ycellCount);
-        context.fillRect(0,0,canvas.width,cellHeight*ycellCount);       // drawStats();
+       // context.strokeRect(0, cellHeight*ycellCount,canvas.width,canvas.height-cellHeight*ycellCount);
+        //context.fillRect(0,0,canvas.width,cellHeight*ycellCount);       // drawStats();
 
 
 
         //grid drawing
-        context.fillStyle="white";
+        
        // context.fillRect(0,0,cellWidth,cellHeight);
 
+      
+    
+
         for(var i=0; i<LevelGridArray.length; i++){
+            context.fillStyle="white";
            if(LevelGridArray[i]==1){
-                    var ix = i-Math.floor(i/(xcellCount+1));
-                    var iy =Math.floor(i/(xcellCount+1));
+                    var ix = i-(Math.floor(i/(xcellCount))*xcellCount);
+                    var iy =Math.floor(i/(xcellCount));
                     context.fillRect(ix*cellWidth,iy*cellHeight,cellWidth,cellHeight);
-                    console.log(ix + " "+iy);
+                    context.fillStyle="black";
+                    context.strokeRect(ix*cellWidth,iy*cellHeight,cellWidth,cellHeight);
+                    console.log(ix + " "+iy+ " " +iy*cellHeight);
            }
 
         }
