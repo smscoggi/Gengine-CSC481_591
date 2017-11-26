@@ -108,7 +108,47 @@ function makeRobbers(numRobbers){
        robberArray.push(thisRobber);
 
 
+    
+
+    thisRobber.update= function(){
+      
+        var pposX=this.X/cellWidth;
+        var pposY=this.Y/cellHeight;
+        var moveable=false;
+        while(!moveable){
+             pposX=this.X/cellWidth;
+             pposY=this.Y/cellHeight;
+            randomdirection=Math.floor(Math.random()*4);
+            if(randomdirection<2){
+                if(randomdirection<1){
+                    pposY++;
+                }
+                else{
+                    pposY--;
+                }
+            }
+            else{
+                if(randomdirection<3){
+                    pposX++;
+                }
+                else{
+                    pposX--;
+                }
+
+            }
+            moveable= checkWalkable(pposX,pposY);
+           
+       }
+        this.posX=pposX;
+        this.posY=pposY;
+
+        this.X = pposX*cellWidth;
+        this.Y = pposY*cellHeight;
+        console.log(pposX+" "+pposY);
+
     }
+    }
+
 }  
     
 
@@ -117,12 +157,14 @@ function makeRobbers(numRobbers){
 
 ////////functions... to move to engine??
     function checkWalkable(posX,posY){
+        if(LevelGridArray[posY*xcellCount +posX] !=null){
         if(LevelGridArray[posY*xcellCount +posX] ==1){
             return true;
         }
         else{
             return false;
         }
+    }
 
     }
 
@@ -140,25 +182,32 @@ var waitnumber=6;
 var waitcounter=0;
 function update(){
 
-    if(waitcounter==6){
+    if(waitcounter>=6){
          if(robberturn<robberArray.length){
-             robberArray[robberturn].update;
+             robberArray[robberturn].update();
             robberturn++;
             console.log(robberturn+"robberturn");
+            waitcounter=0;
         }
         else if(copturn<copArray.length){
-             copArray[copturn].update;
+             //copArray[copturn].update();
+
+             //if user... then no update to this...
             copturn++;
             console.log(copturn+"copturn");
+
+            //if user... then waitcounter++ to keep open the turn
+            waitcounter=0;
          }
          else{
             turn++;
             robberturn=0;
             copturn=0;
             console.log(turn+ "turn");
+            waitcounter=0;
 
         }
-     waitcounter=0;
+     
     }
     else{
         waitcounter++;
