@@ -74,7 +74,7 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
 
             thisCop.update=function(){
                 //find nearest robber and get posx,posy of robber;
-                var closestRobber=findClosestRobber(this.posX, this.posY);
+                var closestRobber=findClosest(this.posX, this.posY,robberArray);
                 console.log(closestRobber.posX+ " "+ closestRobber.posY);
 
                // context.fillStyle="red";
@@ -166,14 +166,14 @@ function makeRobbers(numRobbers){
     
 
 
-function findClosestRobber(copPosX,copPosY){
-    closestRobber=robberArray[0];
+function findClosest(copPosX,copPosY,thisArray){
+    closestRobber=thisArray[0];
     crDistance=actualDistance(copPosX,copPosY,closestRobber.posX,closestRobber.posY);
-    for(var i=1; i<robberArray.length; i++){
-        tempDistance=actualDistance(copPosX,copPosY,robberArray[i].posX,robberArray[i].posY);
+    for(var i=1; i<thisArray.length; i++){
+        tempDistance=actualDistance(copPosX,copPosY,robberArray[i].posX,thisArray[i].posY);
         if(tempDistance<crDistance){
             crDistance=tempDistance;
-            closestRobber=robberArray[i];
+            closestRobber=thisArray[i];
         }
     }
     return closestRobber;
