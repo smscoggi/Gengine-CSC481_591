@@ -69,6 +69,19 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
             addDrawnSprites(copsprite, startposX*cellWidth, startposY*cellHeight,copsprite.image.width, copsprite.image.height,"cop"+i);
             var thisCop=findSprite(drawnSprites,"cop"+i);
             copArray.push(thisCop);
+            thisCop.posX=thisCop.X/cellWidth;
+            thisCop.posY=thisCop.Y/cellHeight;
+
+            thisCop.update=function(){
+                //find nearest robber and get posx,posy of robber;
+                var closestRobber=findClosestRobber(this.posX, this.posY);
+                console.log(closestRobber.posX+ " "+ closestRobber.posY);
+
+               // context.fillStyle="red";
+                //context.fillRect(closestRobber.posX*cellWidth, closestRobber.posY*cellHeight,closestRobber.image.width,closestRobber.image.height);
+              //  copDirection= directionByAstar(closestRobber.posX,closestRobber.posY,LevelGridArray);
+
+            }
 
 
         }
@@ -153,7 +166,19 @@ function makeRobbers(numRobbers){
     
 
 
+function findClosestRobber(copPosX,copPosY){
+    closestRobber=robberArray[0];
+    crDistance=actualDistance(copPosX,copPosY,closestRobber.posX,closestRobber.posY);
+    for(var i=1; i<robberArray.length; i++){
+        tempDistance=actualDistance(copPosX,copPosY,robberArray[i].posX,robberArray[i].posY);
+        if(tempDistance<crDistance){
+            crDistance=tempDistance;
+            closestRobber=robberArray[i];
+        }
+    }
+    return closestRobber;
 
+}
 
 ////////functions... to move to engine??
     function checkWalkable(posX,posY){
@@ -190,7 +215,7 @@ function update(){
             waitcounter=0;
         }
         else if(copturn<copArray.length){
-             //copArray[copturn].update();
+             copArray[copturn].update();
 
              //if user... then no update to this...
             copturn++;
