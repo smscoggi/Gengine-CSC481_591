@@ -66,9 +66,9 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
             }
 
             console.log(startposX+" "+ startposY+""+walkable);
-           addDrawnSprites(copsprite, startposX*cellWidth, startposY*cellHeight,copsprite.image.width, copsprite.image.height,"cop"+i);
-           var thisCop=findSprite(drawnSprites,"cop"+i);
-           copArray.push(thisCop);
+            addDrawnSprites(copsprite, startposX*cellWidth, startposY*cellHeight,copsprite.image.width, copsprite.image.height,"cop"+i);
+            var thisCop=findSprite(drawnSprites,"cop"+i);
+            copArray.push(thisCop);
 
 
         }
@@ -133,9 +133,39 @@ function makeRobbers(numRobbers){
 
 
 
-
-
+var turn=0;
+var robberturn=0;
+var copturn=0;
+var waitnumber=6;
+var waitcounter=0;
 function update(){
+
+    if(waitcounter==6){
+         if(robberturn<robberArray.length){
+             robberArray[robberturn].update;
+            robberturn++;
+            console.log(robberturn+"robberturn");
+        }
+        else if(copturn<copArray.length){
+             copArray[copturn].update;
+            copturn++;
+            console.log(copturn+"copturn");
+         }
+         else{
+            turn++;
+            robberturn=0;
+            copturn=0;
+            console.log(turn+ "turn");
+
+        }
+     waitcounter=0;
+    }
+    else{
+        waitcounter++;
+    }
+   
+
+
 
 }
 
