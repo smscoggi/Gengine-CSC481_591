@@ -26,8 +26,16 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
                  0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     ];
 
-console.log(canvas.width/cellWidth);
-console.log(canvas.height/cellHeight);
+
+////sprite setup for cops and robbers
+    //cops
+    addSprite("https://i.imgur.com/lnVxiLL.png","cop");
+    var copsprite= findSprite(sprites,"cop");
+    //robber
+    addSprite("https://i.imgur.com/lnVxiLL.png","robber");
+    var robbersprite= findSprite(sprites,"robber");
+
+    
 
 
 
