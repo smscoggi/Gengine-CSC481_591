@@ -1,0 +1,85 @@
+<!--
+//Samantha Scoggins: smscoggi
+//Giovanni Espinosa: gespino
+//George Yang: ggyang
+
+-->
+<h1 align="center" style="color:aliceblue">Cops and Robbers</h1>
+<div align="center" >
+<canvas  id="whyupdate" width="800" height="600">
+</canvas>
+</div>
+<!--<br />
+<div align="center">
+	<form>
+		<select name ="difficulty" id="difficulty">
+ 		<option selected disabled>Difficulty:</option>
+ 		<option value="1">Easy</option>
+ 		<option value="2">Medium</option>
+ 		<option value="3">Hard</option>
+		</select>
+	</form>
+	<button onclick="changeDifficulty()">Change Difficulty</button>
+</div>
+<br />
+<div align="center" > <button align="center" onclick="resetHighscore()">Reset AllTime HighScore</button> </div>
+-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  
+
+  <script type="text/javascript" src="Engine.js"></script>
+
+  
+  
+  
+  <style type="text/css">
+html{
+
+  /*http://www.colorzilla.com/gradient-editor/ */
+  background: #aebcbf; /* Old browsers */
+  background: -moz-linear-gradient(45deg, #aebcbf 0%, #000cb7 29%, #0a0e0a 51%, #6e7774 89%, #6e7774 89%, #6e7774 89%, #6e7774 89%, #6e7774 89%, #6e7774 89%, #6e7774 89%, #6e7774 89%, #6e7774 89%, #0a0809 100%, #6e7774 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, #aebcbf 0%,#000cb7 29%,#0a0e0a 51%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#0a0809 100%,#6e7774 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, #aebcbf 0%,#000cb7 29%,#0a0e0a 51%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#6e7774 89%,#0a0809 100%,#6e7774 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aebcbf', endColorstr='#6e7774',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  
+  }
+body { margin: 0;
+  
+ }
+
+  </style>
+
+  <title> Asteroids </title>
+
+  
+  <script type="text/javascript" src="Asteroids.js"></script>
+  
+
+</head>
+
+<body>
+ 
+  <canvas id="whyupdate" width="500" height="500">
+</canvas>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "er9vgor1"
+    }], "*")
+  }
+</script>
+	
+
+</body>
+
+</html>
