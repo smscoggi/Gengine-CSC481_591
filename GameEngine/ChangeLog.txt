@@ -59,3 +59,7 @@ Snake Multiplayer
 
 -BUG Fix - switching from single to multiplayer mode bug fixed. Functions properly
 	pause the game with 'Esc' and switch game mode if wanted.
+
+-Cops and robbers Added
+
+Astar search algorithm added to Engine with heapify,road, tile, path functions
