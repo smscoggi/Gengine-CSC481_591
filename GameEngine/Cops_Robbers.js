@@ -75,21 +75,25 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
 
             thisCop.update=function(){
                 //find nearest robber and get posx,posy of robber;
+                if(robberArray.length>0){
                 var closestRobber=findClosest(this.posX, this.posY,robberArray);
+                }
               //  console.log(closestRobber.posX+ " "+ closestRobber.posY);
 
                // context.fillStyle="red";
                 //context.fillRect(closestRobber.posX*cellWidth, closestRobber.posY*cellHeight,closestRobber.image.width,closestRobber.image.height);
               //copDirection=
-              var nextTile= directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
-            if(nextTile!=null){ 
-                this.posX=nextTile.posX;
-              this.posY=nextTile.posY;
-              this.X=this.posX*cellWidth;
-              this.Y=this.posY*cellHeight;
-            }
-              this.collider.update();
-              this.collision();
+              if(closestRobber!=null){
+                var nextTile= directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
+                 if(nextTile!=null){ 
+                    this.posX=nextTile.posX;
+                     this.posY=nextTile.posY;
+                    this.X=this.posX*cellWidth;
+                    this.Y=this.posY*cellHeight;
+                }
+                }
+                this.collider.update();
+                this.collision();
 
             }
 
