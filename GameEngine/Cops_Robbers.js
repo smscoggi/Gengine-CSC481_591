@@ -78,8 +78,6 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
                 var closestRobber=findClosest(this.posX, this.posY,robberArray);
               //  console.log(closestRobber.posX+ " "+ closestRobber.posY);
 
-               this.collider.update();
-               this.collision();
                // context.fillStyle="red";
                 //context.fillRect(closestRobber.posX*cellWidth, closestRobber.posY*cellHeight,closestRobber.image.width,closestRobber.image.height);
               //copDirection=
@@ -88,7 +86,8 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
               this.posY=nextTile.posY;
               this.X=this.posX*cellWidth;
               this.Y=this.posY*cellHeight;
-
+              this.collider.update();
+              this.collision();
             }
 
             thisCop.collision = function(){
@@ -207,8 +206,8 @@ function makeRobbers(numRobbers){
 		numRobbers--;
 		removeDrawnSprite(this);
 		for(var j = 0; j < robberArray.length; j++){
-			if(this.ID == robberArray[j]){
-				robberArray.splicet(j,1);
+			if(this.ID == robberArray[j].ID){
+				robberArray.splice(j,1);
 			}
 		}
     }
