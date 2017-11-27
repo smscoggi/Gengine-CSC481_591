@@ -73,28 +73,71 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
             thisCop.posY=thisCop.Y/cellHeight;
             thisCop.collider = makeSpriteCollider(thisCop, "box");
 
-            thisCop.update=function(){
-                //find nearest robber and get posx,posy of robber;
-                if(robberArray.length>0){
-                var closestRobber=findClosest(this.posX, this.posY,robberArray);
-                }
-              //  console.log(closestRobber.posX+ " "+ closestRobber.posY);
 
-               // context.fillStyle="red";
+            if(thisCop.ID=="cop1"){
+                thisCop.user=true;
+            }
+
+            thisCop.update=function(){
+            
+               if(this.user){
+                   this.moved=false;
+                   walkable=false;
+                    if(direction=="up"){
+                        walkable=checkWalkable(this.posX,this.posY-1);
+                            if(walkable){
+                                this.posY--;
+                                this.moved=true;
+                            }
+                    }
+                    else if(direction=="down"){
+                        walkable=checkWalkable(this.posX,this.posY+1);
+                        if(walkable){
+                            this.posY++;
+                            this.moved=true;
+                        }
+                    }
+                    else if(direction=="left"){
+                        walkable=checkWalkable(this.posX-1,this.posY);
+                        if(walkable){
+                            this.posX--;
+                            this.moved=true;
+                        }
+                    }
+                    else if(direction=="right"){
+                        walkable=checkWalkable(this.posX+1,this.posY);    
+                        if(walkable){
+                            this.posX++;
+                            this.moved=true;
+                        }                  
+                    }
+                    direction="none";
+               }
+               else{
+                    if(robberArray.length>0){
+                    var closestRobber=findClosest(this.posX, this.posY,robberArray);
+                    }
+                //  console.log(closestRobber.posX+ " "+ closestRobber.posY);
+
+                // context.fillStyle="red";
                 //context.fillRect(closestRobber.posX*cellWidth, closestRobber.posY*cellHeight,closestRobber.image.width,closestRobber.image.height);
-              //copDirection=
-              if(closestRobber!=null){
-                var nextTile= directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
-                 if(nextTile!=null){ 
-                    this.posX=nextTile.posX;
-                     this.posY=nextTile.posY;
-                    this.X=this.posX*cellWidth;
-                    this.Y=this.posY*cellHeight;
-                }
-                }
+                //copDirection=
+                 if(closestRobber!=null){
+                 var nextTile= directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
+                    if(nextTile!=null){ 
+                        this.posX=nextTile.posX;
+                        this.posY=nextTile.posY;
+                        this.X=this.posX*cellWidth;
+                        this.Y=this.posY*cellHeight;
+                    }
+                 }
                 this.collider.update();
                 this.collision();
 
+
+            }
+            this.X=this.posX*cellWidth;
+            this.Y=this.posY*cellHeight;
             }
 
             thisCop.collision = function(){
@@ -114,6 +157,7 @@ robbersprite.image.height=cellHeight;
 var robberArray=new Array();
 var numRobbers=2;
 var robberCount = numRobbers;
+var numCaughtRobbers=0;
 //var spawnDistance = 10;
 
 makeRobbers(numRobbers);
@@ -181,8 +225,8 @@ function makeRobbers(numRobbers){
        //if(nextTile!=null){
             //this.posX=nextTile.posX;
            // this.posY=nextTile.posY;
-            this.X = this.posX*cellWidth;
-             this.Y = this.posY*cellHeight;
+            this.X = pposX*cellWidth;
+            this.Y = pposY*cellHeight;
        //}
        // console.log(pposX+" "+pposY);
 
@@ -208,7 +252,8 @@ function makeRobbers(numRobbers){
     	for(var i = 0; i < copArray.length; i++){
     		if(this.posX == copArray[i].posX && this.posY == copArray[i].posY){
     			console.log("a");
-    			this.destroy();
+                this.destroy();
+                numCaughtRobbers++;
     		}
     	}
     }
@@ -285,6 +330,7 @@ var robberturn=0;
 var copturn=0;
 var waitnumber=6;
 var waitcounter=0;
+
 function update(){
 
     if(waitcounter>=6){
@@ -296,13 +342,27 @@ function update(){
         }
         else if(copturn<copArray.length){
              copArray[copturn].update();
-
+            if(copArray[copturn].ID=="cop1"){
+                copArray[copturn].color="green";
+                if (copArray[copturn].moved){
+                    copArray[copturn].color="red";
+                copturn++;
+                waitcounter=0;
+                }
+                else{
+                    waitcounter++
+                }
+        }
+            else{
+                copturn++;
+                waitcounter=0;
+            }
              //if user... then no update to this...
-            copturn++;
+            //copturn++;
          //   console.log(copturn+"copturn");
 
             //if user... then waitcounter++ to keep open the turn
-            waitcounter=0;
+           // waitcounter=0;
          }
          else{
             turn++;
@@ -320,7 +380,7 @@ function update(){
    
 
 
-
+    direction="none";
 }
 
 
@@ -360,7 +420,14 @@ function draw(){
            }
 
         }
+
+        userSprite=findSprite(copArray,"cop1");
+        context.fillStyle=userSprite.color;
+        context.fillRect(userSprite.X,userSprite.Y,userSprite.image.width,userSprite.image.height);
         drawSprites();
+
+        addText("30","comic Sans","Turn:"+turn,10,cellHeight*ycellCount+15,"white");
+        addText("30","comic Sans","Robbers Caught:"+numCaughtRobbers,10,cellHeight*ycellCount+30,"white");
     
        /* if(onMenu){
             context.fillStyle = 'white';
