@@ -5,6 +5,7 @@ var CRcellHeight = 35;
 var CRxcellCount = Math.floor(canvas.width/CRcellWidth);
 var CRycellCount = Math.floor(canvas.height/CRcellHeight-1);
 var gameFinished = 0;
+var maxTurns = 50;
 
 setCanvasGrid(CRcellWidth,CRcellHeight, CRxcellCount, CRycellCount);
 
@@ -113,6 +114,9 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
                         }                  
                     }
                     direction="none";
+                    if(turn >= maxTurns){
+                        gameFinished = -1;
+                    }
                }
                else{
                     if(robberArray.length>0){
@@ -361,7 +365,9 @@ function finishGame(){
 	console.log(numRobbers);
 	robberCount = numRobbers;
 	makeCops(numCops);
-	makeRobbers(numRobbers);
+    makeRobbers(numRobbers);
+    turn = 0;
+	numCaughtRobbers = 0;
 	gameFinished = 0;
 }
 
