@@ -193,6 +193,7 @@ function makeRobbers(numRobbers){
         var pposX=this.X/cellWidth;
         var pposY=this.Y/cellHeight;
         var moveable=false;
+        var whilecounter=0;
         while(!moveable){
              pposX=this.X/cellWidth;
              pposY=this.Y/cellHeight;
@@ -215,7 +216,16 @@ function makeRobbers(numRobbers){
 
             }
             moveable= checkWalkable(pposX,pposY);
-           
+            var copisthere=checkCop(pposX,pposY);
+            if(copisthere){
+                moveable=false;
+            }
+           whilecounter++;
+           if(whilecounter>24){
+               moveable=true;
+               var pposX=this.X/cellWidth;
+               var pposY=this.Y/cellHeight;
+           }
         }
        //var furthestTile= findFurthestSpot(this.posX, this.posY,copArray);
       // var nextTile= directionByAstar(this.posX,this.posY,furthestTile.posX,furthestTile.posY,LevelGridArray);
@@ -319,6 +329,16 @@ function findFurthestSpot(robposX, robposY,copArray){
         }
     }
 
+
+    }
+    function checkCop(posX,posY){
+        var cop=false;
+        for(var i=0; i<copArray.length; i++){
+            if(copArray[i].posX==posX && copArray[i].posY==posY){
+                cop=true;
+            }
+        }
+        return cop;
     }
 
 
