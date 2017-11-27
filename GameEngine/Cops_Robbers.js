@@ -5,6 +5,7 @@ var CRcellHeight = 35;
 var CRxcellCount = Math.floor(canvas.width/CRcellWidth);
 var CRycellCount = Math.floor(canvas.height/CRcellHeight-1);
 var gameFinished = 0;
+var maxTurns = 50;
 
 setCanvasGrid(CRcellWidth,CRcellHeight, CRxcellCount, CRycellCount);
 
@@ -329,7 +330,7 @@ function findFurthestSpot(robposX, robposY,copArray){
 
     }
 
-function finishGame(){
+    function finishGame(){
 	while(copArray.length > 0){
 		copArray[0].destroy();
 		copArray.splice(0,1);
@@ -341,6 +342,8 @@ function finishGame(){
 	robberCount = numRobbers;
 	makeCops(numCops);
 	makeRobbers(numRobbers);
+	turn = 0;
+	numCaughtRobbers = 0;
 	gameFinished = 0;
 }
 
@@ -402,6 +405,9 @@ function update(){
 
 
     direction="none";
+    if(turn >= maxTurns){
+    	gameFinished = -1;
+    }
 }
 
 
