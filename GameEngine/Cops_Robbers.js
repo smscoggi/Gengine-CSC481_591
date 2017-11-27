@@ -5,7 +5,7 @@ var CRcellHeight = 35;
 var CRxcellCount = Math.floor(canvas.width/CRcellWidth);
 var CRycellCount = Math.floor(canvas.height/CRcellHeight-1);
 var gameFinished = 0;
-var maxTurns = 50;
+var maxTurns = 30;
 
 setCanvasGrid(CRcellWidth,CRcellHeight, CRxcellCount, CRycellCount);
 
@@ -474,7 +474,7 @@ function draw(){
         context.fillRect(userSprite.X,userSprite.Y,userSprite.image.width,userSprite.image.height);
         drawSprites();
 
-        addText("30","comic Sans","Turn:"+turn,10,cellHeight*ycellCount+15,"white");
+        addText("30","comic Sans","Turns remaining:"+(maxTurns-turn),10,cellHeight*ycellCount+15,"white");
         addText("30","comic Sans","Robbers Caught:"+numCaughtRobbers,10,cellHeight*ycellCount+30,"white");
         
        /* if(onMenu){
