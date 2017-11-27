@@ -71,6 +71,7 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
             copArray.push(thisCop);
             thisCop.posX=thisCop.X/cellWidth;
             thisCop.posY=thisCop.Y/cellHeight;
+            thisCop.collider = makeSpriteCollider(thisCop, "box");
 
             thisCop.update=function(){
                 //find nearest robber and get posx,posy of robber;
@@ -81,6 +82,7 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
                 //context.fillRect(closestRobber.posX*cellWidth, closestRobber.posY*cellHeight,closestRobber.image.width,closestRobber.image.height);
               //copDirection=
               var nextTile= directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
+<<<<<<< HEAD
              if(nextTile!=null){ 
                 var n=nextTile.posX;
                 this.posX=nextTile.posX;
@@ -88,8 +90,23 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
                 this.X=this.posX*cellWidth;
                 this.Y=this.posY*cellHeight;
              }
+=======
+              this.posX=nextTile.posX;
+              this.posY=nextTile.posY;
+              this.X=this.posX*cellWidth;
+              this.Y=this.posY*cellHeight;
+              this.collider.update();
+              this.collision();
+>>>>>>> 6b478481de4ac38a44ff1bc93a75e6bb38637c8b
             }
 
+            thisCop.collision = function(){
+            	for(var i = 0; i < robberArray.length; i++){
+            		if(this.posX == robberArray[i].posX && this.posY == robberArray[i].posY){
+            			robberArray[i].destroy();
+            		}
+            	}
+            }
 
         }
     }  
@@ -125,6 +142,7 @@ function makeRobbers(numRobbers){
        // console.log(startposX+" "+ startposY+""+walkable);
        addDrawnSprites(robbersprite, startposX*cellWidth, startposY*cellHeight,robbersprite.image.width, robbersprite.image.height,"robber"+i);
        var thisRobber=findSprite(drawnSprites,"robber"+i);
+       thisRobber.collider = makeSpriteCollider(thisRobber, "box");
        robberArray.push(thisRobber);
         thisRobber.posX=thisRobber.X/cellWidth;
         thisRobber.posY=thisRobber.Y/cellHeight;
@@ -171,9 +189,45 @@ function makeRobbers(numRobbers){
        //}
        // console.log(pposX+" "+pposY);
 
+        this.collider.update();
+        this.collision();
     }
-    }
+    
+    thisRobber.collision = function(){
+    	/*console.log(this.collider.top + " robber " + this.collider.bottom);
+    	for(var i=0; i<this.collider.collidedObjectsArray.length; i++){
+    		console.log("aaa");
+			if(this.collider.collidedObjectsArray[i] != null){
+				console.log("fadsd");
+		    	robberCount--;
+		    	removeDrawnSprite(this);
+		    	removeCollider(this.collider);
+		    	if(robberCount == 0){
+		    		finishGame();
+		    	}
 
+			}
+		}*/
+    	for(var i = 0; i < copArray.length; i++){
+    		if(this.posX == copArray[i].posX && this.posY == copArray[i].posY){
+    			console.log("a");
+    			this.destroy();
+    		}
+    	}
+    }
+    
+    thisRobber.destroy = function(){
+    	console.log("collision");
+		numRobbers--;
+		removeDrawnSprite(this);
+		for(var j = 0; j < robberArray.length; j++){
+			if(this.ID == robberArray[j].ID){
+				robberArray.splice(j,1);
+			}
+		}
+    }
+    
+    }
 }  
     
 
