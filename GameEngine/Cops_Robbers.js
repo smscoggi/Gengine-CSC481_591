@@ -82,22 +82,15 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
                 //context.fillRect(closestRobber.posX*cellWidth, closestRobber.posY*cellHeight,closestRobber.image.width,closestRobber.image.height);
               //copDirection=
               var nextTile= directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
-<<<<<<< HEAD
-             if(nextTile!=null){ 
-                var n=nextTile.posX;
+            if(nextTile!=null){ 
                 this.posX=nextTile.posX;
-                this.posY=nextTile.posY;
-                this.X=this.posX*cellWidth;
-                this.Y=this.posY*cellHeight;
-             }
-=======
-              this.posX=nextTile.posX;
               this.posY=nextTile.posY;
               this.X=this.posX*cellWidth;
               this.Y=this.posY*cellHeight;
+            }
               this.collider.update();
               this.collision();
->>>>>>> 6b478481de4ac38a44ff1bc93a75e6bb38637c8b
+
             }
 
             thisCop.collision = function(){
