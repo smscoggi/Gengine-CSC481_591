@@ -834,6 +834,260 @@ function resetHighscore() {
 
 
 
+
+
+///////////////////Planning/Search algorithms and related functions////////////////////////////////////////////
+
+
+    //////astar search planning used for cops to get to robbers/////////////////////////////////////////////////////////////////
+   ////note implemented based on/similar to code by Samantha Scoggins submitted for AI class hw2 csc520///
+   function directionByAstar(srcposX, srcposY,goalposX,goalposY,GridArray){ 
+	////gridArray must have 0 for nonwalkable tiles, and 1 for walkable tiles
+	////needs to return next tile to move based on optimum path
+	var src;
+	var goal;
+
+	var tilelist = loadtiles(GridArray);
+	var roadlist = loadRoads(GridArray,tilelist);
+
+   
+	for(var i=0; i<tilelist.length; i++){
+		if(goalposX==tilelist[i].posX && goalposY==tilelist[i].posY){
+			goal = tilelist[i];
+		}
+		if(srcposX==tilelist[i].posX && srcposY==tilelist[i].posY){
+			src=tilelist[i];
+		}
+		
+	}
+	///calculate distance to goal for all tiles
+	for(var i=0; i<tilelist.length; i++){
+		tilelist[i].calcDistanceToCity(goal);
+	  } 
+	///list setup
+	var SQ = new Array();   //// array of paths
+	var expansionList = new Array(); ///array of expanded tiles
+	///initialize
+	var myPathlist = new Array(); ///array of tiles
+	var myPath= new path(myPathlist,0);
+	myPath.thispath.push(src);
+	myPath.fvalue=src.distanceToGoal;
+	SQ.push(myPath);
+	var myNode;  ///tile
+	var myNodeIndex; ///// to find node in myPath
+	var Goalreached=false;
+	while(SQ.length!=0 && !Goalreached){
+		myPath = SQ.pop();
+		//get last node and check if goal
+		myNodeIndex = myPath.thispath.length-1;
+		myNode= myPath.thispath[myNodeIndex];
+		expansionList.push(myNode);
+		myNode.visited=true;
+		if(goalCheck(myNode.name,goal.name)){
+			Goalreached=true;
+		  
+		  if(myPath.thispath.length>=1){
+		   return myPath.thispath[1];
+		  }
+		  else{
+			  return null;
+		  }
+		  
+		}
+		else{
+			SQ= expand(myPath,myNode,roadlist,SQ);
+		}
+	}
+	for(var c=1; c<tilelist.length; c++){
+		tilelist[c].reset();
+	}
+
+}
+
+function goalCheck(possibleGoal,actualgoal){
+	
+	if(possibleGoal==actualgoal){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+function path(thispath, fvalue){
+	
+	var thispath; ///array of tiles leading to goal
+	var pathcost=0;
+	var fvalue=0;
+	
+	
+	this.thispath= thispath;
+	this.fvalue=fvalue;
+}
+
+function tile(name,pposX,pposY){
+	var name;
+	var posX;
+	var posY;
+	var distanceToGoal=0;
+	var visited= false;
+
+	this.name = name;
+	this.posX = pposX;
+	this.posY = pposY; 
+	
+	
+	this.calcDistanceToCity=function(gc){            
+		distanceToGoal= actualDistance(gc.posX,gc.posY,this.posX,this.posY);
+		//set distanceToGoal
+	}
+	
+	this.reset= function(){
+		visited=false;
+		distanceToGoal=0;
+	}  
+}
+function road(city1,  city2){
+	var tile1;
+	var tile2;
+	var distance=1;
+	
+   
+	this.tile1 = city1;
+	this.tile2 = city2;
+	this.distance = distance;
+}
+
+
+function loadtiles(gridArray){
+tlist=new Array();
+for(var i=0; i<gridArray.length; i++){
+	if(gridArray[i]==1){
+		tlist.push(new tile(i,i-(Math.floor(i/(xcellCount))*xcellCount),Math.floor(i/(xcellCount)) ))
+	}
+}
+
+return tlist;
+}
+function loadRoads(gridArray,tilelist){
+rlist=new Array();
+var tile1;
+var tile2;
+
+for(var i=0; i<tilelist.length; i++){
+	for(var j=i+1; j<tilelist.length; j++){
+		if((tilelist[j].posX==tilelist[i].posX+1 || tilelist[j].posX==tilelist[i].posX-1) &&tilelist[j].posY==tilelist[i].posY){
+			tile1=tilelist[j];
+			tile2=tilelist[i];
+			
+			rlist.push(new road(tile1,tile2));
+		}
+		else if((tilelist[j].posY==tilelist[i].posY+1 ||tilelist[j].posY==tilelist[i].posY-11 )&&tilelist[j].posX==tilelist[i].posX){
+			tile1=tilelist[j];
+			tile2=tilelist[i];
+			
+			rlist.push(new road(tile1,tile2));
+		}
+	}
+}
+return rlist;
+
+
+}
+
+function expand(oldpath,oldnode,roadlist,stackqueue){
+///expands based on astar, could be made to  implement greedy or uniform with a couple lines of code
+var pushList= new Array();
+var ntile1;
+var ntile2;
+for(var i=0; i<roadlist.length; i++){
+	 ntile1=roadlist[i].tile1;
+	 ntile2=roadlist[i].tile2;
+	 if(oldnode.name==ntile1.name || oldnode.name==ntile2.name){
+		 pushList.push(roadlist[i]);
+	 }
+  }
+//////setting f-value
+for(var i=0; i<pushList.length; i++){
+	var pushtile;
+	if(oldnode.name==pushList[i].tile1.name){
+		pushtile=pushList[i].tile2;
+	}
+	else{
+		pushtile=pushList[i].tile1;
+	}
+	if(!pushtile.visited){
+		var newtilepath = new Array();
+		for(var j=0; j<oldpath.thispath.length; j++){
+			newtilepath.push(oldpath.thispath[j]);
+		}
+		newtilepath.push(pushtile);
+		var newfvalue=0;
+		/////set fvalue..... 
+		////astar setting for fvalue
+			newfvalue=oldpath.pathcost+pushList[i].distance + pushtile.distanceToGoal;
+		///////
+		var newpath = new path(newtilepath,newfvalue);
+		newpath.pathcost=oldpath.pathcost+pushList[i].distance;
+		var sameLastNodeIndex = -1;
+		///check for other paths in SQ with same last node
+		for(var iter=0; iter<stackqueue.length; iter++){
+			var lastNodeIndex= stackqueue[iter].thispath.length-1;
+			if(pushtile.name==stackqueue[iter].thispath[lastNodeIndex].name){
+				sameLastNodeIndex=iter;
+			}
+			else{
+				lastNodeIndex=-1;
+			}
+		}
+		if(sameLastNodeIndex>=0){
+			n= new Array();
+			n.splice()
+			if(stackqueue[sameLastNodeIndex].fvalue>newpath.fvalue){
+				stackqueue.pop(sameLastNodeIndex);
+				stackqueue.unshift(newpath);
+				stackqueue=heapify(stackqueue,0);
+			}
+		}
+		else{
+			stackqueue.unshift(newpath);
+			stackqueue=heapify(stackqueue,0);
+		}
+	}
+}
+return stackqueue;
+}
+
+function heapify(stackqueue,i){
+var newi= 2*(i)+1;
+if(newi <stackqueue.length){
+	if(newi+1<stackqueue.length){
+		if(stackqueue[newi].fvalue>stackqueue[newi+1].fvalue){
+			newi++;
+		}
+	}
+	if(stackqueue[i].fvalue>stackqueue[newi].fvalue){
+		var pnewi= stackqueue.pop(newi);
+		var pi= stackqueue.pop(i);
+		stackqueue.push(i,pnewi);
+		stackqueue.push(newi,pi);
+		stackqueue=heapify(stackqueue,newi);
+	}
+}
+return stackqueue;
+}
+
+
+
+
+
+///////end astar functionality
+
+
+
+
+
+
 //////Game Loop functions////////
 function game_loop() {
 	update();
