@@ -320,6 +320,9 @@ function findFurthestSpot(robposX, robposY,copArray){
 
 ////////functions... to move to engine??
     function checkWalkable(posX,posY){
+        if(posX>=xcellCount){
+            return false;
+        }
         if(LevelGridArray[posY*xcellCount +posX] !=null){
         if(LevelGridArray[posY*xcellCount +posX] ==1){
             return true;
