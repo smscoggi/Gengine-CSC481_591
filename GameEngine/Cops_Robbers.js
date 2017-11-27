@@ -4,6 +4,7 @@ var CRcellWidth = 35;
 var CRcellHeight = 35;
 var CRxcellCount = Math.floor(canvas.width/CRcellWidth);
 var CRycellCount = Math.floor(canvas.height/CRcellHeight-1);
+var gameFinished = 0;
 
 setCanvasGrid(CRcellWidth,CRcellHeight, CRxcellCount, CRycellCount);
 
@@ -147,6 +148,10 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
             		}
             	}
             }
+            
+            thisCop.destroy = function(){
+            	removeDrawnSprite(this);
+            }
 
         }
     }  
@@ -251,7 +256,6 @@ function makeRobbers(numRobbers){
 		}*/
     	for(var i = 0; i < copArray.length; i++){
     		if(this.posX == copArray[i].posX && this.posY == copArray[i].posY){
-    			console.log("a");
                 this.destroy();
                 numCaughtRobbers++;
     		}
@@ -259,14 +263,18 @@ function makeRobbers(numRobbers){
     }
     
     thisRobber.destroy = function(){
-    	console.log("collision");
-		numRobbers--;
+    	console.log(numRobbers);
+		robberCount--;
 		removeDrawnSprite(this);
 		for(var j = 0; j < robberArray.length; j++){
 			if(this.ID == robberArray[j].ID){
 				robberArray.splice(j,1);
 			}
 		}
+		if(robberArray.length == 0){
+			gameFinished = 1;
+		}
+		
     }
     
     }
@@ -321,7 +329,20 @@ function findFurthestSpot(robposX, robposY,copArray){
 
     }
 
-
+function finishGame(){
+	while(copArray.length > 0){
+		copArray[0].destroy();
+		copArray.splice(0,1);
+	}
+	while(robberArray.length > 0){
+		robberArray[0].destroy();
+	}
+	console.log(numRobbers);
+	robberCount = numRobbers;
+	makeCops(numCops);
+	makeRobbers(numRobbers);
+	gameFinished = 0;
+}
 
 
 
@@ -428,7 +449,7 @@ function draw(){
 
         addText("30","comic Sans","Turn:"+turn,10,cellHeight*ycellCount+15,"white");
         addText("30","comic Sans","Robbers Caught:"+numCaughtRobbers,10,cellHeight*ycellCount+30,"white");
-    
+        
        /* if(onMenu){
             context.fillStyle = 'white';
             context.font = '48px monospace';
@@ -440,5 +461,28 @@ function draw(){
             measurement = context.measureText(text);
             context.fillText(text, (context.canvas.width - measurement.width) / 2, context.canvas.height / 2 + 30);
         } */	
+        if(gameFinished){
+        	var text;
+        	if(gameFinished == 1){
+        		text = "Congratulations! You've won."
+        	}
+        	else{
+        		text = "The robbers got away."
+        	}
+        	context.font = '50px monospace';
+        	var textMeasurement = context.measureText(text);
+        	var textXPos = (context.canvas.width - textMeasurement.width) / 2;
+        	var textYPos = context.canvas.height / 2 - 50;
+        	context.fillStyle = 'red';
+    		context.fillText(text, textXPos, textYPos);
+    		
+    		var text2 = "Press spacebar to restart.";
+    		var text2Measurement = context.measureText(text2);
+    		var text2XPos = (context.canvas.width - text2Measurement.width) / 2;
+    		context.fillText(text2, text2XPos, textYPos + 100)
+    		
+    		if(spacebar){
+    			finishGame();
+    		}
+        }
     }
-    
