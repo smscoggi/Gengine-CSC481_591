@@ -65,7 +65,7 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
                
             }
 
-            console.log(startposX+" "+ startposY+""+walkable);
+            //console.log(startposX+" "+ startposY+""+walkable);
             addDrawnSprites(copsprite, startposX*cellWidth, startposY*cellHeight,copsprite.image.width, copsprite.image.height,"cop"+i);
             var thisCop=findSprite(drawnSprites,"cop"+i);
             copArray.push(thisCop);
@@ -75,12 +75,16 @@ LevelGridArray=[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,
             thisCop.update=function(){
                 //find nearest robber and get posx,posy of robber;
                 var closestRobber=findClosest(this.posX, this.posY,robberArray);
-                console.log(closestRobber.posX+ " "+ closestRobber.posY);
+              //  console.log(closestRobber.posX+ " "+ closestRobber.posY);
 
                // context.fillStyle="red";
                 //context.fillRect(closestRobber.posX*cellWidth, closestRobber.posY*cellHeight,closestRobber.image.width,closestRobber.image.height);
               //copDirection=
-               directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
+              var nextTile= directionByAstar(this.posX,this.posY,closestRobber.posX,closestRobber.posY,LevelGridArray);
+              this.posX=nextTile.posX;
+              this.posY=nextTile.posY;
+              this.X=this.posX*cellWidth;
+              this.Y=this.posY*cellHeight;
 
             }
 
@@ -116,7 +120,7 @@ function makeRobbers(numRobbers){
            
         }
 
-        console.log(startposX+" "+ startposY+""+walkable);
+       // console.log(startposX+" "+ startposY+""+walkable);
        addDrawnSprites(robbersprite, startposX*cellWidth, startposY*cellHeight,robbersprite.image.width, robbersprite.image.height,"robber"+i);
        var thisRobber=findSprite(drawnSprites,"robber"+i);
        robberArray.push(thisRobber);
@@ -158,7 +162,7 @@ function makeRobbers(numRobbers){
 
         this.X = pposX*cellWidth;
         this.Y = pposY*cellHeight;
-        console.log(pposX+" "+pposY);
+       // console.log(pposX+" "+pposY);
 
     }
     }
@@ -211,25 +215,21 @@ function findClosest(copPosX,copPosY,thisArray){
 
         var tilelist = loadtiles(GridArray);
         var roadlist = loadRoads(GridArray,tilelist);
-        //get goal and src setup..
+
+       
         for(var i=0; i<tilelist.length; i++){
             if(goalposX==tilelist[i].posX && goalposY==tilelist[i].posY){
                 goal = tilelist[i];
             }
             if(srcposX==tilelist[i].posX && srcposY==tilelist[i].posY){
-
-                console.log("found the source!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 src=tilelist[i];
             }
             
         }
-        console.log(srcposX+" "+srcposY+"srourceee");
-        
         ///calculate distance to goal for all tiles
         for(var i=0; i<tilelist.length; i++){
             tilelist[i].calcDistanceToCity(goal);
-          }
-      
+          } 
         ///list setup
         var SQ = new Array();   //// array of paths
         var expansionList = new Array(); ///array of expanded tiles
@@ -251,15 +251,18 @@ function findClosest(copPosX,copPosY,thisArray){
             myNode.visited=true;
             if(goalCheck(myNode.name,goal.name)){
                 Goalreached=true;
-                console.log("found goal");
-               // console.log(myPath[1].posX+" "+myPath[1].posY);
+              
+              if(myPath.thispath.length>=1){
+               return myPath.thispath[1];
+              }
+              else{
+                  return null;
+              }
+              
             }
             else{
                 SQ= expand(myPath,myNode,roadlist,SQ);
             }
-
-
-
         }
         for(var c=1; c<tilelist.length; c++){
             tilelist[c].reset();
@@ -277,7 +280,6 @@ function goalCheck(possibleGoal,actualgoal){
         }
     }
     
-
 function path(thispath, fvalue){
         
         var thispath; ///array of tiles leading to goal
@@ -340,7 +342,13 @@ function loadRoads(gridArray,tilelist){
 
     for(var i=0; i<tilelist.length; i++){
         for(var j=i+1; j<tilelist.length; j++){
-            if(tilelist[j].posX==tilelist[i].posX+1 || tilelist[j].posX==tilelist[i].posX-1 ||tilelist[j].posY==tilelist[i].posY+1 ||tilelist[j].posY==tilelist[i].posY-11 ){
+            if((tilelist[j].posX==tilelist[i].posX+1 || tilelist[j].posX==tilelist[i].posX-1) &&tilelist[j].posY==tilelist[i].posY){
+                tile1=tilelist[j];
+                tile2=tilelist[i];
+                
+                rlist.push(new road(tile1,tile2));
+            }
+            else if((tilelist[j].posY==tilelist[i].posY+1 ||tilelist[j].posY==tilelist[i].posY-11 )&&tilelist[j].posX==tilelist[i].posX){
                 tile1=tilelist[j];
                 tile2=tilelist[i];
                 
@@ -424,7 +432,6 @@ function heapify(stackqueue,i){
                 newi++;
             }
         }
-        
         if(stackqueue[i].fvalue>stackqueue[newi].fvalue){
             var pnewi= stackqueue.pop(newi);
             var pi= stackqueue.pop(i);
@@ -432,9 +439,7 @@ function heapify(stackqueue,i){
             stackqueue.push(newi,pi);
             stackqueue=heapify(stackqueue,newi);
         }
-        
     }
-    
     return stackqueue;
 }
 
@@ -477,7 +482,7 @@ function update(){
          if(robberturn<robberArray.length){
              robberArray[robberturn].update();
             robberturn++;
-            console.log(robberturn+"robberturn");
+           // console.log(robberturn+"robberturn");
             waitcounter=0;
         }
         else if(copturn<copArray.length){
@@ -485,7 +490,7 @@ function update(){
 
              //if user... then no update to this...
             copturn++;
-            console.log(copturn+"copturn");
+         //   console.log(copturn+"copturn");
 
             //if user... then waitcounter++ to keep open the turn
             waitcounter=0;
@@ -494,7 +499,7 @@ function update(){
             turn++;
             robberturn=0;
             copturn=0;
-            console.log(turn+ "turn");
+          //  console.log(turn+ "turn");
             waitcounter=0;
 
         }
