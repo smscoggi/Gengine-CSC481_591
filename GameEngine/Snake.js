@@ -469,11 +469,7 @@ function changeDifficulty() {
 
 ///menu stuff
 var onMenu = true;
-var title = 'Snake';
-context.font = '48px monospace';
-var titleMeasurement = context.measureText(title);
-var titleXPos = (context.canvas.width - titleMeasurement.width) / 2;
-var titleYPos = context.canvas.height / 2 - 30;
+var titleScreen = new Menu('Snake', '48px', 'monospace', 'white', context.canvas.width, context.canvas.height / 2 - 30, 'centered');
 
 var text1 = 'Single Player';
 context.font = '24px monospace';
@@ -670,10 +666,8 @@ function draw() {
 	drawStats();
 	
 	if(onMenu){
-		context.fillStyle = 'white';
-		context.font = '48px monospace';
-		context.fillText(title, titleXPos, titleYPos);
-
+		drawMenu(titleScreen);
+		
 		context.fillStyle = 'red';
 		context.strokeStyle = 'red';
 		if(highlightText1 == true) {
@@ -681,8 +675,7 @@ function draw() {
 			context.strokeStyle = '#ff9999';
 			highlightText1 = false;
 		}
-		context.font = '24px monospace';
-		context.fillText(text1, text1XPos, text1YPos);
+		addText('24px', 'monospace', text1, text1XPos, text1YPos);
 		context.strokeRect(text1XPos, text1YPos, text1Measurement.width, -24);
 		
 		context.fillStyle = 'green';
@@ -692,9 +685,9 @@ function draw() {
 			context.strokeStyle = '#00ff00';
 			highlightText2 = false;
 		}
-		context.font = '24px monospace';
-		context.fillText(text2, text2XPos, text2YPos);
+		addText('24px', 'monospace', text2, text2XPos, text2YPos);
 		context.strokeRect(text2XPos, text2YPos, text2Measurement.width, -24);
+
 		
 		var text3 = "To host multiplayer game, "
 		if(peer1ID){
