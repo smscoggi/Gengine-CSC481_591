@@ -1195,8 +1195,123 @@ return stackqueue;
 
 
 
+////networking/////////////////////////////
+//implements basic peer to peer using peer.js library and peerServer
+//uses one peer object
+
+var peer1;
+//var peer2 = new Peer({key: 'riw1ul3wmdjthuxr'});
+var connected1=false;
+var connected2=false;
+var peer1ID =0;
+var conn;
+var peer1OnStartConnection=function(){}
+var peer1OnGetConnection=function(){}
+
+function peerTopeerStart(){
+	peer1= new Peer({key: 'rr8fcgawspd2huxr'});
+}
 
 
+peer1.on('open', function(id) {
+	peer1ID= id;
+	console.log('My peer1 ID is: ' + id);
+
+  });
+
+peer1.on('connection', function(dataConnection){
+	connected2=true;
+	conn = dataConnection;
+	
+	conn.on('data', function(data){
+		//console.log("Data received: "+data);
+		peer1OnStartConnection();
+	});
+
+	console.log("Connected");
+	});
+	
+function connectToPeer2(peer2ID){
+	conn = peer1.connect(peer2ID);
+	//peer1.on('connection', function(conn) { });
+   
+	conn.on('open', function() {
+	   console.log(peer2ID);
+	   connected1=true;
+	   // Receive messages
+	   conn.on('data', function(data) {
+			// console.log('Received', data);
+			 peer1OnGetConnection();
+	   });
+	   // Send messages
+	   conn.send('Hello!');
+	 });
+}
+ 
+
+
+function getOtherPlayer() {
+///basic ui to get other players id.
+    var txt;
+    var person = prompt("Your ID is:       "+peer1ID+"\n\nEnter other player's ID\nLocalMultiplayer: Select Cancel", peer1ID);
+    if (person == null || person == "") {
+        txt = "User cancelled the prompt.";
+    } else {
+        txt = "Hello " + person + "! How are you today?";
+    }
+	console.log(txt);
+	return person;
+}
+
+	/////useful functions set up for basic sending information specific to this engine
+
+function menuConnectUpdate(data){
+		if(data.constructor === Array){
+			if(data[0]=="menu"){
+				menu=data[1];
+			}}
+	
+	
+	}
+	
+function scoringConnectUpdate(data){
+		if(data.constructor === Array){
+			if(data[0]=="statsA"){
+	
+				score=data[1];
+				score2=data[2];
+				highscore=data[3];
+				highscore2=data[4];
+				localhighscore=data[5];
+	
+		}}}
+		
+
+function drawnSpritesConnectUpdate(data){
+	if(data.constructor === Array){
+		if(data[0]=="ds"){
+			//console.log("got the DSSSSS");
+
+			var myDS=findSprite(drawnSprites,data[6]);
+			myDS.X=data[1];
+			myDS.Y=data[2];
+			myDS.image.width=data[3];
+			myDS.image.height=data[4];
+			myDS.image.src=data[5];
+		}
+	}
+}
+
+
+function directionConnectUpdate(data){
+	if(data.constructor === Array){
+		if(data[0]=="dir"){
+			direction2=data[1];
+		}}
+}
+
+
+////////////End Networking
 
 //////Game Loop functions////////
 function game_loop() {
