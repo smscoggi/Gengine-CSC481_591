@@ -69,3 +69,6 @@ Astar search algorithm added to Engine with heapify,road, tile, path functions
 	from a specified point. All particle attributes that have asteroid presets have flexibility to manipulate them for game specific content.
 
 -refactored menu function and draw menu moved to engine to hold menu details specified by game.
+
+-refactored peer to peer code in snake.js for more generalization and moved relevant functions to engine. Developer can manipulate functions
+	called on connections to fit game specific needs
