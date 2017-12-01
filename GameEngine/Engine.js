@@ -119,6 +119,24 @@ function adjustXYByCenterPoint(MovableObject){
 
 
 ///////////////////////////////////////
+function Menu(title, size, font, fillStyle, X, Y, alignment){
+	this.title = title;
+	this.size = size;
+	this.font = font;
+	this.fillStyle = fillStyle;
+	context.font = this.size+" "+this.font
+	this.titleMeasurement = context.measureText(title);
+	this.titleXPos = X;
+	if(alignment == 'centered'){
+		this.titleXPos = (X - this.titleMeasurement.width) / 2;
+	}
+	this.titleYPos = Y;
+	
+}
+
+function drawMenu(menu){
+	addText(menu.size, menu.font, menu.title, menu.titleXPos, menu.titleYPos, menu.fillStyle);
+}
 
 function addText(size,font,text, xLocation, yLocation,fillstyle){
 	context.font = size+" "+font;
@@ -414,6 +432,7 @@ function mousemove(e) {
 	ycoord = Math.round((e.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height);
 	mouseismoving = 'yes';
 }
+
 
 //////keys///////
 var leftkey=false;
