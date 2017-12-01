@@ -63,3 +63,9 @@ Snake Multiplayer
 -Cops and robbers Added
 
 Astar search algorithm added to Engine with heapify,road, tile, path functions
+
+-Converted MakeAsteroid function into a MakeParticles function for generalized particle use. Asteroid specific functionality taken out 
+	to another function. MakeParticles allows for randomly moving sprites, of varying size, speed, and rotation, allows for spawn distance
+	from a specified point. All particle attributes that have asteroid presets have flexibility to manipulate them for game specific content.
+
+-refactored menu function and draw menu moved to engine to hold menu details specified by game.
