@@ -59,7 +59,7 @@ function makeRocket(){
 
 		for(var i=0; i<drawnRocket.collider.collidedObjectsArray.length; i++){
 
-			if(drawnRocket.collider.collidedObjectsArray[i].type=="asteroid"){
+			if(drawnRocket.collider.collidedObjectsArray[i].type=="ast"){
 				makeExplosion(drawnRocket);
 				removeCollider(this.collider);
 				game_reset();           /////will reset the game
@@ -158,110 +158,36 @@ var asteroidSprite1= findSprite(sprites,"asteroid1");
 asteroidSprite1.image.width= 2*cellWidth;
 asteroidSprite1.image.height=2*cellHeight;
 var AsteroidArray=new Array();
-var numAster=6;
-var astCount = numAster;
-var spawnDistance = 10;
-
-makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
 
 
+makeAsteroids();
 
-function makeAsteroids(numAsteroids,iter,scalew,scaleh,startposX,startposY){
+function makeAsteroids(){
+	var numAster=6;
+	var astCount = numAster;
+	var spawnDistance = 10;
+	
+	makeParticles(asteroidSprite1,numAster,1,cellWidth,cellHeight,rocketStartX/cellWidth,rocketStartY/cellHeight,spawnDistance,AsteroidArray,"ast");
 
-	for(var i=0; i<numAsteroids; i++){
-
-		if(iter==1){ 
-			startposX= Math.random()*xcellCount;
-			startposY= Math.random()*ycellCount;
-			while(Math.abs(startposX - rocketStartX/cellWidth) <= spawnDistance || Math.abs(startposY - rocketStartY/cellHeight) <= spawnDistance) {
-				startposX= Math.random()*xcellCount;
-				startposY= Math.random()*ycellCount;
-				console.log("restereitn");
-			}
-		}
-		addDrawnSprites(asteroidSprite1, startposX*cellWidth, startposY*cellHeight,asteroidSprite1.image.width, asteroidSprite1.image.height,"ast"+i);
-		var ast=findSprite(drawnSprites,"ast"+i);
-		AsteroidArray.push(ast);
-		var randDimension=(1.5+Math.random()*2);
-		ast.image.width= randDimension*scalew;
-		ast.image.height= randDimension*scaleh;
-		ast.rotateDegree=Math.random()*360;
-		ast.rotating=true;
-		ast.rotatedirection=Math.floor(Math.random()*2);
-		ast.trajectory=Math.random()*360;
-		ast.maxVelocity = 300;
-		ast.speed=Math.random()*15;
-		ast.type="asteroid";
-		ast.collider=makeSpriteCollider(ast,"circle");
-		ast.iteration=iter;
-
-
-		ast.update=function(){
-			adjustPosXYByCenterPoint(this);
-			//update center from new possible position to jump...
-			jumpToOtherSideOfScreen(this);
-			this.centerX=this.posX*cellWidth;
-			this.centerY=this.posY*cellHeight;
-			adjustXYByCenterPoint(this);
-
-			if(this.rotatedirection==0){
-				leftRotation(this,10);
-			}
-			else if(this.rotatedirection==1){
-				rightRotation(this,10);
-			}
-
-
-
-			this.X += this.speed*Math.sin(this.trajectory*Math.PI/180);
-			this.Y -= this.speed*Math.cos(this.trajectory*Math.PI/180);
-			this.centerX = this.cXrelation + this.X;
-			this.centerY = this.cYrelation + this.Y;
-			///update based on trajectory...
-			this.collider.update();
-			this.collision();
-
-			if(astCount <= 0) {
-				numAster=Math.floor(numAster*1.25);
-				astCount = numAster;
-				if(AsteroidArray.length>0){
-					for(var i = 0; i<AsteroidArray.length; i++){
-						removeCollider(AsteroidArray[i].collider);
-						removeDrawnSprite(AsteroidArray[i]);
-					}
-				}
-				makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
-			}
-
-		}
-
-		ast.collision=function(){
+	for(var i=0; i<AsteroidArray.length; i++){
+		AsteroidArray[i].collision=function(){
 			for(var i=0; i<this.collider.collidedObjectsArray.length; i++){
-
-				if(this.collider.collidedObjectsArray[i].type=="bullet"){
-					if(this.iteration==1){
-						if(astCount > 0 ) {
-							astCount--;
+					if(this.collider.collidedObjectsArray[i].type=="bullet"){
+						if(this.iteration==1){
+							if(astCount > 0 ) {
+								astCount--;
+							}
+							this.reset();
+							makeExplosion(this);             
 						}
-						this.reset();
-						makeExplosion(this);             
 					}
-				}
 			}
 		}
-
-		ast.reset=function(){
-			removeDrawnSprite(this);
-			removeCollider(this.collider);
-			for(var j=0; j<AsteroidArray.length; j++){
-				if(this == AsteroidArray[j]){
-					AsteroidArray.splice(j,1);
-				}
-			}
-
-		}   
 	}
+
 }
+
+
 
 
 ////bullets
@@ -365,7 +291,7 @@ function game_reset(){
 			removeDrawnSprite(AsteroidArray[i]);
 		}
 	}
-	makeAsteroids(numAster,1,cellWidth,cellHeight,0,0);
+	makeParticles(asteroidSprite1,numAster,1,cellWidth,cellHeight,rocketStartX/cellWidth,rocketStartY/cellHeight,spawnDistance,AsteroidArray,"ast");
 	removeBooster();
 	makeRocket();
 	score = 0;

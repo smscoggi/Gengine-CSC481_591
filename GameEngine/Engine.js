@@ -137,20 +137,6 @@ function selectedOutline(){
 	}
 }
 
-function updateVelocity(){
-
-	for (var iter = 0; iter < drawnSprites.length; iter++) {
-		var signX = Math.sign(drawnSprites[iter].velocityX);
-		var signY = Math.sign(drawnSprites[iter].velocityY);
-		drawnSprites[iter].velocityX = signX*Math.min(Math.abs(drawnSprites[iter].velocityX), drawnSprites[iter].maxVelocity);
-		drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
-		drawnSprites[iter].X += drawnSprites[iter].velocityX;
-		drawnSprites[iter].Y += drawnSprites[iter].velocityY;
-		//drawnSprites[iter].centerX=drawnSprites[iter].cXrelation;
-		//drawnSprites[iter].centerY=drawnSprites[iter].cYrelation;
-	}
-}
-
 function drawSprites(){
 
 
@@ -375,6 +361,111 @@ function removeCollider(rcollider){
 
 
 ///////////////////////////////////////////////End--collsions
+
+/////Other physics related functions and features
+
+//particle "system"-
+function makeParticles(astSprite,numAsteroids,iter,scalew,scaleh,OriginStartposX,OriginStartposY,spawnDistance,ParticleArray,id){
+	///ast used because this was origionally an asteroid function that allowed for randomly moving circlular varying scale particles
+		for(var i=0; i<numAsteroids; i++){
+			thisid= id+""+i;
+			if(iter==1){ 
+				startposX= Math.random()*xcellCount;
+				startposY= Math.random()*ycellCount;
+				while(Math.abs(startposX - OriginStartposX) <= spawnDistance || Math.abs(startposY - OriginStartposX) <= spawnDistance) {
+					startposX= Math.random()*xcellCount;
+					startposY= Math.random()*ycellCount;
+					console.log("restereitn");
+				}
+			}
+			addDrawnSprites(astSprite, startposX*cellWidth, startposY*cellHeight,asteroidSprite1.image.width, asteroidSprite1.image.height,thisid);
+			var ast=findSprite(drawnSprites,thisid);
+			ParticleArray.push(ast);
+			var randDimension=(1.5+Math.random()*2);
+			ast.image.width= randDimension*scalew;
+			ast.image.height= randDimension*scaleh;
+			ast.rotateDegree=Math.random()*360;
+			ast.rotating=true;
+			ast.rotatedirection=Math.floor(Math.random()*2);
+			ast.trajectory=Math.random()*360;
+			ast.maxVelocity = 300;
+			ast.speed=Math.random()*15;
+			ast.type=id;
+			ast.collider=makeSpriteCollider(ast,"circle");
+			ast.iteration=iter;
+			ast.rotationSpeed=10;
+	
+			ast.update=function(){
+				adjustPosXYByCenterPoint(this);
+				//update center from new possible position to jump...
+				jumpToOtherSideOfScreen(this);
+				this.centerX=this.posX*cellWidth;
+				this.centerY=this.posY*cellHeight;
+				adjustXYByCenterPoint(this);
+	
+				if(this.rotatedirection==0){
+					leftRotation(this,this.rotationSpeed);
+				}
+				else if(this.rotatedirection==1){
+					rightRotation(this,this.rotationSpeed);
+				}
+	
+	
+	
+				this.X += this.speed*Math.sin(this.trajectory*Math.PI/180);
+				this.Y -= this.speed*Math.cos(this.trajectory*Math.PI/180);
+				this.centerX = this.cXrelation + this.X;
+				this.centerY = this.cYrelation + this.Y;
+				///update based on trajectory...
+				this.collider.update();
+				this.collision();
+	
+				if(astCount <= 0) {
+					numAster=Math.floor(numAster*1.25);
+					astCount = numAster;
+					if(ParticleArray.length>0){
+						for(var i = 0; i<ParticleArray.length; i++){
+							removeCollider(ParticleArray[i].collider);
+							removeDrawnSprite(ParticleArray[i]);
+						}
+					}
+					makeParticles(astSprite,numAster,1,cellWidth,cellHeight,OriginStartposX,OriginStartposY,spawnDistance,ParticleArray,thisid);
+				}
+	
+			}
+	
+			ast.collision=function(){
+			}
+	
+			ast.reset=function(){
+				removeDrawnSprite(this);
+				removeCollider(this.collider);
+				for(var j=0; j<ParticleArray.length; j++){
+					if(this == ParticleArray[j]){
+						ParticleArray.splice(j,1);
+					}
+				}
+	
+			}   
+		}
+	}
+
+////velocity function to be used for velocity related needs
+	function updateVelocity(){
+		
+			for (var iter = 0; iter < drawnSprites.length; iter++) {
+				var signX = Math.sign(drawnSprites[iter].velocityX);
+				var signY = Math.sign(drawnSprites[iter].velocityY);
+				drawnSprites[iter].velocityX = signX*Math.min(Math.abs(drawnSprites[iter].velocityX), drawnSprites[iter].maxVelocity);
+				drawnSprites[iter].velocityY = signY*Math.min(Math.abs(drawnSprites[iter].velocityY), drawnSprites[iter].maxVelocity);
+				drawnSprites[iter].X += drawnSprites[iter].velocityX;
+				drawnSprites[iter].Y += drawnSprites[iter].velocityY;
+				//drawnSprites[iter].centerX=drawnSprites[iter].cXrelation;
+				//drawnSprites[iter].centerY=drawnSprites[iter].cYrelation;
+			}
+		}
+	
+
 
 //KeyBoard and Mouse events
 canvas.addEventListener("mousedown",mousedown);
