@@ -1,5 +1,5 @@
 //peer to peer
-peerTopeerStart();
+
 
 peer1OnStartConnection= function(){
 	drawnSpritesConnectUpdate(data);

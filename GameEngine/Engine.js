@@ -1208,18 +1208,18 @@ var conn;
 var peer1OnStartConnection=function(){}
 var peer1OnGetConnection=function(){}
 
-function peerTopeerStart(){
-	peer1= new Peer({key: 'rr8fcgawspd2huxr'});
-}
+
+peer1= new Peer({key: 'rr8fcgawspd2huxr'});
 
 
-peer1.on('open', function(id) {
+
+	peer1.on('open', function(id) {
 	peer1ID= id;
 	console.log('My peer1 ID is: ' + id);
 
   });
 
-peer1.on('connection', function(dataConnection){
+	peer1.on('connection', function(dataConnection){
 	connected2=true;
 	conn = dataConnection;
 	
@@ -1230,7 +1230,7 @@ peer1.on('connection', function(dataConnection){
 
 	console.log("Connected");
 	});
-	
+
 function connectToPeer2(peer2ID){
 	conn = peer1.connect(peer2ID);
 	//peer1.on('connection', function(conn) { });
