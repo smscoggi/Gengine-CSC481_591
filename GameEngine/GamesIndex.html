@@ -5,7 +5,6 @@
 
 -->
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,71 +13,116 @@
   <meta name="googlebot" content="noindex, nofollow">
   
 
-  <script type="text/javascript" src="/js/lib/dummy.js"></script>
-
-  
-    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
-  
-  
   <style type="text/css">
+ html, body{
+    float: left;
+    margin:0 0 0px 0;
+    padding: 0px 0 0 0 ;
+   width: 100%;
     
-  </style>
+    
+ }
   
-  <style>
-  	html, body {
-    height: 100%;
+  #header{
+    float: left;
+    margin:0px 0 0px 0;
+    padding: 5px 0px 5px 30px ;
+    width: 100%;
 
-	background: #e2e2e2; /* Old browsers */
+
+  /*http://www.colorzilla.com/gradient-editor/ */    
+background: #e2e2e2; /* Old browsers */
 background: -moz-linear-gradient(45deg, #e2e2e2 0%, #dbdbdb 50%, #d1d1d1 51%, #fefefe 100%); /* FF3.6-15 */
 background: -webkit-linear-gradient(45deg, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* Chrome10-25,Safari5.1-6 */
 background: linear-gradient(45deg, #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
-	}
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */ 
+  }
 
-	html {
-  	 display: table;
-  	  margin: auto;
-	}
+  div.tabbar{
+    float: left;
+    margin:0px 0 30px 0;
+    padding: 0px 0px 0px 10px ;
+    width: 100%;
+    height:40px;
 
-	body {
-   	 display: table-cell;
-	}
+    overflow: hidden;
+    color: white;
+    background-color: #262673;
+  }
+  div.tab{
+      float:left;
+     
+      padding:10px 20px 10px 20px;
+      
+      
+  }
+  div.tab:hover{
+      background-color:#d1d1d1;
+  }
+  div.tab a:link{
+      color:white;
+      text-decoration: none;
+  }
+  div.tab a:visited{
+    color:white;
+  }
+div.pageContent{
+      
+      padding:20px 0px 0px 30px;
+    color: Black;
+  }
+    
   </style>
-
-  <title> Games runnable on game engine </title>
   
+
+  <title> SGG Engine </title>
 
 </head>
 
- <body>
- 	<h1 align="center">Pick a game to play!</h1>
- 	<div align="center">
- 		<div  style="float: left; width:50%">
- 			<img src="https://i.imgur.com/DsBjzj7.jpg" style=" width: 60%; height: 250px; margin-right: 8%; margin-bottom: 0.5em;">
- 			<p>
- 				<a href="AlchemyIndex.html">Alchemy</a>
- 			</p>
- 		</div>
- 		<div  style="float: left; width:50%">
- 			<img src="https://i.imgur.com/aqHJjsx.jpg" style=" width: 60%; height: 250px; margin-right: 1%; margin-bottom: 0.5em;">
- 			<p>
- 				<a href="Snake.html">Snake</a>
- 			</p>
- 		</div>
- 		<div style="float: left; width:50%">
- 			<img src="https://i.imgur.com/3omq1QN.jpg" style=" width:60%; height: 250px; margin-right: 8%; margin-bottom: 0.5em;">
- 			<p>
- 				<a href="Asteroids.html">Asteroids</a>
-		 </div>
-		 <div style="float: left; width:50%">
-			<img src="https://i.imgur.com/0bYJD6m.png" style=" width:60%; height: 250px; margin-right: 8%; margin-bottom: 0.5em;">
-			<p>
-				<a href="Cops_Robbers.html">Cops and Robbers</a>
-		</div>
- 	</div>
+<body >
+ 
+<div id="header">
+    <h1> SGG Engine</h1>
+</div>
+
+<div class= "tabbar">
+   <div class="tab" ><a href="index.html" >Intro</a></div>
+   <div class="tab"><a href="features.html">Features</a></div>
+   <div class="tab"><a href="getStarted.html">Get Started</a></div>
+   <div class="tab"><a href="GamesIndex.html">Games Gallery</a></div>
+</div>
 
 
-  
- </body>
+
+<div class="pageContent">
+	<h2 align="center">Pick a game to play!</h2>
+<div align="center">
+	<div  style="float: left; width:50%">
+		<img src="https://i.imgur.com/DsBjzj7.jpg" style=" width: 60%; height: 250px; margin-right: 8%; margin-bottom: 0.5em;">
+		<p>
+			<a href="AlchemyIndex.html">Alchemy</a>
+		</p>
+	</div>
+	<div  style="float: left; width:50%">
+		<img src="https://i.imgur.com/aqHJjsx.jpg" style=" width: 60%; height: 250px; margin-right: 1%; margin-bottom: 0.5em;">
+		<p>
+			<a href="Snake.html">Snake</a>
+		</p>
+	</div>
+	<div style="float: left; width:50%">
+		<img src="https://i.imgur.com/3omq1QN.jpg" style=" width:60%; height: 250px; margin-right: 8%; margin-bottom: 0.5em;">
+		<p>
+			<a href="Asteroids.html">Asteroids</a>
+	</div>
+	<div style="float: left; width:50%">
+	   <img src="https://i.imgur.com/0bYJD6m.png" style=" width:60%; height: 250px; margin-right: 8%; margin-bottom: 0.5em;">
+	   <p>
+		   <a href="Cops_Robbers.html">Cops and Robbers</a>
+   </div>
+</div>
+</div>
+
+</body>
+
 
 </html>
