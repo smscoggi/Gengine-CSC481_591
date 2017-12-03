@@ -158,14 +158,13 @@ var asteroidSprite1= findSprite(sprites,"asteroid1");
 asteroidSprite1.image.width= 2*cellWidth;
 asteroidSprite1.image.height=2*cellHeight;
 var AsteroidArray=new Array();
-
+var spawnDistance = 10;
 
 makeAsteroids();
 
 function makeAsteroids(){
 	var numAster=6;
 	var astCount = numAster;
-	var spawnDistance = 10;
 	
 	makeParticles(asteroidSprite1,numAster,1,cellWidth,cellHeight,rocketStartX/cellWidth,rocketStartY/cellHeight,spawnDistance,AsteroidArray,"ast");
 

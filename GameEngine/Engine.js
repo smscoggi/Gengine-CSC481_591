@@ -438,7 +438,7 @@ function makeParticles(astSprite,numAsteroids,iter,scalew,scaleh,OriginStartposX
 				this.collider.update();
 				this.collision();
 	
-				if(astCount <= 0) {
+				if(numAsteroids <= 0) {
 					numAster=Math.floor(numAster*1.25);
 					astCount = numAster;
 					if(ParticleArray.length>0){
@@ -447,7 +447,7 @@ function makeParticles(astSprite,numAsteroids,iter,scalew,scaleh,OriginStartposX
 							removeDrawnSprite(ParticleArray[i]);
 						}
 					}
-					makeParticles(astSprite,numAster,1,cellWidth,cellHeight,OriginStartposX,OriginStartposY,spawnDistance,ParticleArray,thisid);
+					makeParticles(astSprite,numAsteroids,1,cellWidth,cellHeight,OriginStartposX,OriginStartposY,spawnDistance,ParticleArray,thisid);
 				}
 	
 			}
