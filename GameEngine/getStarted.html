@@ -98,8 +98,51 @@ div.pageContent{
 
 
 <div class="pageContent">
-<h2>Welcome to the SGG Engine!</h2>
-hello
+<h2>Getting started</h2>
+<div> 
+<textarea rows="40" cols="120" readonly>
+Installation: 
+	Clone repository from 
+	 	
+External dependencies:
+	Online multiplayer functionality depends on PeerJS. A currently up to date library is included
+	with the game engine, but may need to be updated over time.
+
+File Organization: 
+	all javascript game code as well as the game engine are expected to be in the root GameEngine
+	folder. New games and htmml should be placed in this folder.
+	
+Main Callbacks:
+	addSprite: will add the sprite at the given path (local or online) with the specified ID to memory.
+	
+	addDrawnSprite: will add given sprite to list of sprites that are actually being drawn. Function
+		may be called with optional location parameters to spawn sprite in a specific location. If 
+		location is not specified, Engine will attempt to automatically place sprite.
+		
+	removeDrawnSprite: will remove sprite from list of sprites to be drawn.
+	
+	makeSpriteCollider: will create a collider for the given object. Collider can be of type box
+		or circle, which will affect the bounds of the collider based on the object.
+		
+	Collider: object used for detecting collisions. Once a collider for an object has been made
+		the collider.update function should be called as the object's position is updated to 
+		update the collider position. A collider object also has a collisionArray field which
+		can be used to determine what other objects have collided with this one since the
+		last update call.
+		
+	key booleans: engine will set these boolean values to indicate whether a given key is 
+		currently being pressed. Support for more keys can be added by appending to the
+		handlekeypress and handlekeyup functions
+		
+	makeFood: creates a sprite object which will morph into another object after a given period of
+		time as well as completely disappearing after another set time period
+		
+	Peer: will create a connection to which other players can connect to for online multiplayer
+	
+	connectToPeer2: will connect to specified peer for online multiplayer
+	
+</textarea>
+</div>
 </div>
 
 </body>
