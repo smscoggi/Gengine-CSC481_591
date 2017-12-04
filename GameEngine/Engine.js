@@ -1225,7 +1225,7 @@ peer1= new Peer({key: 'rr8fcgawspd2huxr'});
 	
 	conn.on('data', function(data){
 		//console.log("Data received: "+data);
-		peer1OnStartConnection();
+		peer1OnStartConnection(data);
 	});
 
 	console.log("Connected");
@@ -1241,7 +1241,7 @@ function connectToPeer2(peer2ID){
 	   // Receive messages
 	   conn.on('data', function(data) {
 			// console.log('Received', data);
-			 peer1OnGetConnection();
+			 peer1OnGetConnection(data);
 	   });
 	   // Send messages
 	   conn.send('Hello!');
@@ -1289,15 +1289,18 @@ function scoringConnectUpdate(data){
 
 function drawnSpritesConnectUpdate(data){
 	if(data.constructor === Array){
+		console.log(data[6]);
 		if(data[0]=="ds"){
-			//console.log("got the DSSSSS");
+			
 
 			var myDS=findSprite(drawnSprites,data[6]);
+			if(myDS!= null){
 			myDS.X=data[1];
 			myDS.Y=data[2];
 			myDS.image.width=data[3];
 			myDS.image.height=data[4];
 			myDS.image.src=data[5];
+			}
 		}
 	}
 }

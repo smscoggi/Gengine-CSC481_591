@@ -1,7 +1,7 @@
 //peer to peer
 
 
-peer1OnStartConnection= function(){
+peer1OnStartConnection= function(data){
 	drawnSpritesConnectUpdate(data);
 	snakeConnectUpdate(data);
 	directionConnectUpdate(data);
@@ -9,7 +9,7 @@ peer1OnStartConnection= function(){
 	menuConnectUpdate(data);
 
 }
-peer1OnGetConnection=function(){
+peer1OnGetConnection=function(data){
 	directionConnectUpdate(data);
 	menuConnectUpdate(data);
 }
@@ -513,11 +513,6 @@ function update() {
 	checkHighscore(score);
 	checkHighscore(score2);
 
-
-
-	if(connected1|connected2){
-		testSend();
-	}
 
 }
 
