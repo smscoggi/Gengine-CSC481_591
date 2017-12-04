@@ -1207,7 +1207,7 @@ var peer1ID =0;
 var conn;
 var peer1OnStartConnection=function(){}
 var peer1OnGetConnection=function(){}
-
+var gotAConnection=false;
 
 peer1= new Peer({key: 'rr8fcgawspd2huxr'});
 
@@ -1222,7 +1222,7 @@ peer1= new Peer({key: 'rr8fcgawspd2huxr'});
 	peer1.on('connection', function(dataConnection){
 	connected2=true;
 	conn = dataConnection;
-	
+	gotAConnection=true;
 	conn.on('data', function(data){
 		//console.log("Data received: "+data);
 		peer1OnStartConnection(data);

@@ -1,6 +1,5 @@
 //peer to peer
 
-
 peer1OnStartConnection= function(data){
 	drawnSpritesConnectUpdate(data);
 	snakeConnectUpdate(data);
@@ -16,6 +15,7 @@ peer1OnGetConnection=function(data){
 function snakeConnectUpdate(data){
 	if(data.constructor === Array){
 		if(data[0]=="sn"){
+			//console.log("snakkke"+ data[6]);
 			if(data[4]==1){
 				//snake1.numLinks=data[1];
 				//snake1.posX= data[2];
@@ -485,8 +485,13 @@ function update() {
 				conn.send(statsArray);
 			}
 		}
+		if(gotAConnection){
+			multiplayerSnakeSetup();
+			gotAConnection=false;
+		}
 
 		if(connected2){
+
 			arrows=false;
 			foodArray.length=0;
 
