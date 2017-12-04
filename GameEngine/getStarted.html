@@ -105,11 +105,13 @@ div.pageContent{
 	 	
 <b>External dependencies:</b><br/>
 	&emsp;Online multiplayer functionality depends on PeerJS. A currently up to date library is included,<br/>
-	&emsp;with the game engine, but may need to be updated over time.<br/><br/>
+	&emsp;with the game engine, but may need to be updated over time.<br/>
+	&emsp;Must be run on Google Chrome as other browsers may not support certain functionalities of SGG Engine<br/><br/>
 
 <b>File Organization:</b><br/>
 	&emsp;all javascript game code as well as the game engine are expected to be in the root GameEngine<br/>
-	&emsp;folder. New games and html should be placed in this folder.<br/><br/>
+	&emsp;folder. New games and html should be placed in this folder.<br/>
+	&emsp;Html page hosting your game should include both the Engine.js file and Peer.js file for functionality without errors<br/><br/>
 	
 <b>Main Callbacks:</b><br/>
 	&emsp;<b>addSprite:</b> will add the sprite at the given path (local or online) with the specified ID to memory.<br/><br/>
