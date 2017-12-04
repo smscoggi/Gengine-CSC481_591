@@ -100,48 +100,46 @@ div.pageContent{
 <div class="pageContent">
 <h2>Getting started</h2>
 <div> 
-<textarea rows="40" cols="120" readonly>
-Installation: 
-	Clone repository from 
+<b>Installation:</b><br/>
+	 &emsp;Clone repository from https://github.com/smscoggi/Gengine-CSC481_591.git<br/><br/>
 	 	
-External dependencies:
-	Online multiplayer functionality depends on PeerJS. A currently up to date library is included
-	with the game engine, but may need to be updated over time.
+<b>External dependencies:</b><br/>
+	&emsp;Online multiplayer functionality depends on PeerJS. A currently up to date library is included,<br/>
+	&emsp;with the game engine, but may need to be updated over time.<br/><br/>
 
-File Organization: 
-	all javascript game code as well as the game engine are expected to be in the root GameEngine
-	folder. New games and htmml should be placed in this folder.
+<b>File Organization:</b><br/>
+	&emsp;all javascript game code as well as the game engine are expected to be in the root GameEngine<br/>
+	&emsp;folder. New games and html should be placed in this folder.<br/><br/>
 	
-Main Callbacks:
-	addSprite: will add the sprite at the given path (local or online) with the specified ID to memory.
+<b>Main Callbacks:</b><br/>
+	&emsp;<b>addSprite:</b> will add the sprite at the given path (local or online) with the specified ID to memory.<br/><br/>
 	
-	addDrawnSprite: will add given sprite to list of sprites that are actually being drawn. Function
-		may be called with optional location parameters to spawn sprite in a specific location. If 
-		location is not specified, Engine will attempt to automatically place sprite.
+	&emsp;<b>addDrawnSprite:</b> will add given sprite to list of sprites that are actually being drawn. Function<br/>
+		&emsp;&emsp;may be called with optional location parameters to spawn sprite in a specific location. If <br/>
+		&emsp;&emsp;location is not specified, Engine will attempt to automatically place sprite.<br/><br/>
 		
-	removeDrawnSprite: will remove sprite from list of sprites to be drawn.
+	&emsp;<b>removeDrawnSprite:</b> will remove sprite from list of sprites to be drawn.<br/><br/>
 	
-	makeSpriteCollider: will create a collider for the given object. Collider can be of type box
-		or circle, which will affect the bounds of the collider based on the object.
+	&emsp;<b>makeSpriteCollider:</b> will create a collider for the given object. Collider can be of type box<br/>
+		&emsp;&emsp;or circle, which will affect the bounds of the collider based on the object.<br/><br/>
 		
-	Collider: object used for detecting collisions. Once a collider for an object has been made
-		the collider.update function should be called as the object's position is updated to 
-		update the collider position. A collider object also has a collisionArray field which
-		can be used to determine what other objects have collided with this one since the
-		last update call.
+	&emsp;<b>Collider:</b> object used for detecting collisions. Once a collider for an object has been made<br/>
+		&emsp;&emsp;the collider.update function should be called as the object's position is updated to <br/>
+		&emsp;&emsp;update the collider position. A collider object also has a collisionArray field which<br/>
+		&emsp;&emsp;can be used to determine what other objects have collided with this one since the<br/>
+		&emsp;&emsp;last update call.<br/><br/>
 		
-	key booleans: engine will set these boolean values to indicate whether a given key is 
-		currently being pressed. Support for more keys can be added by appending to the
-		handlekeypress and handlekeyup functions
+	&emsp;<b>key booleans:</b> engine will set these boolean values to indicate whether a given key is <br/>
+		&emsp;&emsp;currently being pressed. Support for more keys can be added by appending to the<br/>
+		&emsp;&emsp;handlekeypress and handlekeyup functions<br/><br/>
 		
-	makeFood: creates a sprite object which will morph into another object after a given period of
-		time as well as completely disappearing after another set time period
+	&emsp;<b>makeFood:</b> creates a sprite object which will morph into another object after a given period of<br/>
+		&emsp;&emsp;time as well as completely disappearing after another set time period<br/><br/>
 		
-	Peer: will create a connection to which other players can connect to for online multiplayer
+	&emsp;<b>Peer:</b> will create a connection to which other players can connect to for online multiplayer<br/><br/>
 	
-	connectToPeer2: will connect to specified peer for online multiplayer
-	
-</textarea>
+	&emsp;<b>connectToPeer2:</b> will connect to specified peer for online multiplayer<br/>
+
 </div>
 </div>
 
