@@ -181,6 +181,9 @@ function makeAsteroids(){
 						}
 					}
 			}
+			if(AsteroidArray.length == 0){
+				game_reset();
+			}
 		}
 	}
 
@@ -284,13 +287,14 @@ function testBulletArray() {
 function game_reset(){
 	numAster= 6;
 	astCount = numAster;
-	if(AsteroidArray.length>0){
-		for(var i = 0; i<AsteroidArray.length; i++){
-			removeCollider(AsteroidArray[i].collider);
-			removeDrawnSprite(AsteroidArray[i]);
-		}
+	while(AsteroidArray.length>0){
+		//for(var i = 0; i<AsteroidArray.length; i++){
+			removeCollider(AsteroidArray[0].collider);
+			removeDrawnSprite(AsteroidArray[0]);
+			AsteroidArray.splice(0,1);
+		//}
 	}
-	makeParticles(asteroidSprite1,numAster,1,cellWidth,cellHeight,rocketStartX/cellWidth,rocketStartY/cellHeight,spawnDistance,AsteroidArray,"ast");
+	makeAsteroids();//makeParticles(asteroidSprite1,numAster,1,cellWidth,cellHeight,rocketStartX/cellWidth,rocketStartY/cellHeight,spawnDistance,AsteroidArray,"ast");
 	removeBooster();
 	makeRocket();
 	score = 0;
