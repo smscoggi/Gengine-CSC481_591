@@ -1289,7 +1289,7 @@ function scoringConnectUpdate(data){
 
 function drawnSpritesConnectUpdate(data){
 	if(data.constructor === Array){
-		console.log(data[6]);
+		
 		if(data[0]=="ds"){
 			
 
